@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROOF — 3D NFC Customer Experience &amp; Progressive Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#050811; --navy-dark:#0a0f1d; --navy-card:#0e1526; --navy-glass:rgba(14,21,38,0.76);
+  --gold-primary:#e6ca97; --gold-light:#f7e7c4; --gold-deep:#ab8b52; --gold-glow:rgba(230,202,151,0.22);
+  --brass:#d4af37; --brass-dark:#8c6f42;
+  --paper:#080c16; --ink:#f4f6fb; --muted:#8f9bb3; --muted-dim:rgba(143,155,179,0.5);
+  --border-glass:rgba(230,202,151,0.18); --border-subtle:rgba(255,255,255,0.08);
+  --green:#2ecc71; --green-glow:rgba(46,204,113,0.25);
+  --warn:#e74c3c; --warn-glow:rgba(231,76,60,0.25);
+  --c-bg:#080b12; --c-gold:var(--gold-primary); --c-white:#f5f2ea;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:radial-gradient(ellipse at 50% -10%, #15223e 0%, #070a13 55%, #03050a 100%);
+  color:var(--ink);
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Subtle background ambient mesh */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 18% 25%, rgba(230,202,151,0.04) 0%, transparent 45%),
+    radial-gradient(circle at 82% 70%, rgba(21,43,90,0.18) 0%, transparent 50%),
+    linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size:100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  pointer-events:none;
+  z-index:0;
+}
+
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Cormorant Garamond',serif}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ═══ HEADER ═══ */
+header{
+  position:relative;
+  z-index:2;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  background:linear-gradient(180deg, rgba(10,15,29,0.85) 0%, rgba(5,8,17,0.7) 100%);
+  backdrop-filter:blur(20px);
+  padding:26px 24px 20px;
+}
+header .w{max-width:1220px;margin:0 auto}
+.header-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand-lockup{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:linear-gradient(135deg, #f7e7c4 0%, #ab8b52 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;
+  font-size:22px;
+  color:#070a13;
+  box-shadow:0 0 20px var(--gold-glow);
+}
+.brand-text h1{
+  font-size:clamp(1.2rem,2.4vw,1.6rem);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  background:linear-gradient(135deg, #fff 40%, var(--gold-primary) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{content:"";width:14px;height:1px;background:var(--gold-primary)}
+header p{
+  color:var(--muted);
+  margin-top:8px;
+  font-size:13.5px;
+  max-width:760px;
+  line-height:1.6;
+}
+.proto-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(230,202,151,0.06);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:99px;
+  padding:6px 14px;
+}
+.proto-badge .live-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#2ecc71;
+  box-shadow:0 0 8px #2ecc71;
+  animation:pulse-dot 2s infinite ease-in-out;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.proto-badge span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+}
+
+/* ═══ MAIN STAGE ═══ */
+main{max-width:1220px;margin:0 auto;padding:36px 24px 70px;position:relative;z-index:2}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+@media(max-width:960px){.stage{grid-template-columns:1fr}}
+
+/* ═══ PANELS & GLASS CONTAINERS ═══ */
+.panel{
+  background:var(--navy-glass);
+  border:1px solid var(--border-glass);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -15px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter:blur(24px) saturate(180%);
+  position:relative;
+}
+.panel::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:24px;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(230,202,151,0.3) 0%, transparent 40%, rgba(230,202,151,0.05) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.panel-head{
+  padding:18px 24px;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(90deg, rgba(230,202,151,0.05) 0%, transparent 100%);
+}
+.panel-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.panel-label b{
+  color:var(--gold-primary);
+  width:20px;
+  height:20px;
+  border-radius:6px;
+  background:rgba(230,202,151,0.14);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(230,202,151,0.25);
+  font-size:10px;
+}
+.step-dots{display:flex;gap:6px}
+.step-dots i{
+  width:6px;
+  height:6px;
+  border-radius:99px;
+  background:rgba(255,255,255,0.15);
+  transition:all .3s ease;
+}
+.step-dots i.on{
+  width:18px;
+  background:linear-gradient(90deg, var(--gold-light), var(--gold-deep));
+  box-shadow:0 0 10px var(--gold-glow);
+}
+
+/* ═══ 3D PHONE WRAPPER & CHASSIS ═══ */
+.phone-wrap{
+  background:radial-gradient(circle at 50% 30%, #0d1424 0%, #050811 80%);
+  padding:32px 20px 38px;
+  display:flex;
+  justify-content:center;
+  perspective:1000px;
+}
+.phone{
+  width:100%;
+  max-width:338px;
+  background:linear-gradient(160deg, #1c2230 0%, #0e121c 50%, #05070c 100%);
+  border:1.5px solid rgba(230,202,151,0.3);
+  border-radius:36px;
+  padding:10px;
+  box-shadow:
+    0 40px 90px -20px rgba(0,0,0,0.85),
+    0 0 35px rgba(230,202,151,0.12),
+    inset 0 0 0 1.5px rgba(255,255,255,0.08);
+  position:relative;
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.phone-notch{
+  width:84px;
+  height:18px;
+  background:#05070c;
+  border-radius:99px;
+  margin:0 auto 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.phone-camera{width:8px;height:8px;border-radius:50%;background:#101726;border:1px solid #1a2538}
+.phone-speaker{width:36px;height:3px;border-radius:99px;background:#182030}
+
+.phone-screen{
+  background:linear-gradient(180deg, #090e18 0%, #05080e 100%);
+  border-radius:28px;
+  min-height:540px;
+  position:relative;
+  overflow:hidden;
+  padding:24px 20px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:inset 0 0 30px rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+/* Screen Status Bar */
+.screen-status-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:rgba(255,255,255,0.5);
+  padding:0 4px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  margin-bottom:12px;
+}
+.screen-status-icons{display:flex;gap:5px;align-items:center;font-size:9px}
+
+/* Faces transitions */
+.c-face{
+  display:none;
+  position:relative;
+  z-index:2;
+  height:100%;
+  flex:1;
+  flex-direction:column;
+  animation:faceFadeUp .45s cubic-bezier(.16,1,.3,1) both;
+}
+.c-face.on{display:flex}
+@keyframes faceFadeUp{
+  from{opacity:0;transform:translateY(14px) scale(0.98)}
+  to{opacity:1;transform:none}
+}
+
+/* ═══ FACE 0: PREMIUM 3D NFC TAP STAGE ═══ */
+.nfc-hero{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  perspective:900px;
+}
+.nfc-stage-3d{
+  position:relative;
+  width:100%;
+  height:240px;
+  margin:10px 0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform-style:preserve-3d;
+}
+
+/* 3D Floating Phone Mockup inside tap zone */
+.floating-phone-3d{
+  position:absolute;
+  width:120px;
+  height:180px;
+  background:linear-gradient(145deg, #182236 0%, #0d1422 100%);
+  border:1.5px solid rgba(230,202,151,0.5);
+  border-radius:20px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.7),
+    0 0 25px rgba(230,202,151,0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  z-index:4;
+  transform:translateY(-18px) rotateX(20deg) rotateY(-8deg);
+  transition:all .5s cubic-bezier(.22,1,.36,1);
+  animation:phoneHover 4.5s ease-in-out infinite alternate;
+}
+@keyframes phoneHover{
+  0%{transform:translateY(-22px) rotateX(18deg) rotateY(-10deg)}
+  100%{transform:translateY(-12px) rotateX(24deg) rotateY(-4deg)}
+}
+.floating-phone-3d.tapping{
+  transform:translateY(24px) rotateX(10deg) rotateY(0deg) scale(0.94)!important;
+  border-color:var(--gold-light);
+  box-shadow:0 0 40px rgba(230,202,151,0.6);
+}
+.fp-screen{
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle at 50% 30%, #15223e 0%, #070b14 100%);
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid rgba(230,202,151,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.fp-screen::after{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%);
+  animation:screenGlare 5s infinite linear;
+}
+@keyframes screenGlare{
+  0%{transform:translateX(-100%) translateY(-100%)}
+  100%{transform:translateX(100%) translateY(100%)}
+}
+.fp-nfc-glyph{
+  font-size:26px;
+  color:var(--gold-primary);
+  filter:drop-shadow(0 0 8px var(--gold-glow));
+}
+.fp-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  background:rgba(230,202,151,0.12);
+  padding:2px 6px;
+  border-radius:99px;
+  border:0.5px solid rgba(230,202,151,0.3);
+}
+
+/* 3D NFC Reader Plate on Table */
+.nfc-reader-plate{
+  position:absolute;
+  bottom:6px;
+  width:190px;
+  height:76px;
+  background:linear-gradient(180deg, #141c2e 0%, #080d18 100%);
+  border-radius:50%;
+  border:2px solid rgba(230,202,151,0.35);
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.8),
+    inset 0 2px 10px rgba(230,202,151,0.2),
+    0 0 30px rgba(230,202,151,0.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotateX(62deg);
+}
+.reader-inner-ring{
+  width:140px;
+  height:54px;
+  border-radius:50%;
+  border:1.5px dashed rgba(230,202,151,0.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.reader-core{
+  width:50px;
+  height:20px;
+  border-radius:50%;
+  background:radial-gradient(ellipse, rgba(230,202,151,0.6) 0%, transparent 70%);
+  box-shadow:0 0 20px var(--gold-glow);
+}
+
+/* Concentric Scanning Waves */
+.scan-waves{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.scan-wave{
+  position:absolute;
+  border-radius:50%;
+  border:1.5px solid rgba(230,202,151,0.3);
+  opacity:0;
+}
+.scan-wave:nth-child(1){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) infinite}
+.scan-wave:nth-child(2){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) .9s infinite}
+.scan-wave:nth-child(3){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) 1.8s infinite}
+@keyframes wavePulse{
+  0%{width:40px;height:20px;opacity:.9;transform:rotateX(60deg) scale(0.6)}
+  100%{width:240px;height:120px;opacity:0;transform:rotateX(60deg) scale(1.6)}
+}
+
+/* Tap Target Trigger Zone */
+.nfc-tap-action{
+  width:100%;
+  margin-top:4px;
+  background:rgba(230,202,151,0.04);
+  border:1.5px dashed rgba(230,202,151,0.35);
+  border-radius:18px;
+  padding:14px 16px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:all .25s ease;
+}
+.nfc-tap-action:hover{
+  background:rgba(230,202,151,0.08);
+  border-color:var(--gold-primary);
+  box-shadow:0 0 25px rgba(230,202,151,0.18);
+  transform:translateY(-2px);
+}
+.nfc-tap-action:active{transform:scale(0.98)}
+.nfc-tap-action .nl{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.nfc-tap-action .ns{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+/* Contact burst ripple */
+.ripple{
+  position:absolute;
+  border-radius:999px;
+  background:radial-gradient(circle, rgba(247,231,196,0.8) 0%, rgba(230,202,151,0.2) 50%, transparent 80%);
+  opacity:0;
+  pointer-events:none;
+}
+.ripple.go{animation:rippleBurst .85s ease-out forwards}
+@keyframes rippleBurst{
+  from{width:10px;height:10px;opacity:.95;transform:scale(1)}
+  to{width:360px;height:360px;opacity:0;transform:scale(1.2)}
+}
+
+/* High-tech connecting state */
+.connecting{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:var(--gold-primary);
+  letter-spacing:.14em;
+  text-align:center;
+  margin-top:10px;
+  opacity:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-transform:uppercase;
+  transition:opacity .3s;
+}
+.connecting.show{opacity:1}
+.connecting .conn-spinner{
+  width:12px;
+  height:12px;
+  border:1.5px solid rgba(230,202,151,0.2);
+  border-top-color:var(--gold-primary);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ COMMONS & FORM STYLING ═══ */
+.c-biz{text-align:center;margin-bottom:18px}
+.c-biz h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;
+  color:var(--c-white);
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+.c-biz p{
+  font-size:10.5px;
+  color:var(--gold-primary);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-top:3px;
+  font-family:'IBM Plex Mono',monospace;
+}
+
+/* Progress Step Pill */
+.step-progress-indicator{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:99px;
+  padding:5px 12px;
+  margin-bottom:16px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  color:var(--muted);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.step-track{
+  width:60px;
+  height:3px;
+  background:rgba(255,255,255,0.1);
+  border-radius:99px;
+  overflow:hidden;
+  position:relative;
+}
+.step-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold-deep), var(--gold-light));
+  border-radius:99px;
+  transition:width .4s ease;
+}
+
+.c-field{margin-bottom:14px;position:relative}
+.c-field label{
+  display:block;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:500;
+}
+.c-field label i{opacity:.55;text-transform:none;letter-spacing:0;font-style:normal}
+.c-field input, .c-field select{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:12px;
+  padding:12px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  color:var(--c-white);
+  outline:none;
+  transition:all .25s ease;
+  backdrop-filter:blur(8px);
+}
+.c-field input:focus, .c-field select:focus{
+  border-color:var(--gold-primary);
+  background:rgba(230,202,151,0.07);
+  box-shadow:0 0 0 3px rgba(230,202,151,0.18), 0 8px 20px rgba(0,0,0,0.4);
+}
+.c-field select option{background:#0e1526;color:#f5f2ea}
+
+/* Phone row with flags */
+.c-phone-row{display:flex;gap:0;width:100%;border-radius:12px;overflow:hidden}
+.c-phone-row select{
+  width:116px;
+  flex-shrink:0;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(230,202,151,0.25);
+  border-right:none;
+  border-radius:12px 0 0 12px;
+  padding:12px 6px 12px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  color:var(--c-white);
+  outline:none;
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23e6ca97' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  transition:all .25s ease;
+}
+.c-phone-row select:focus{border-color:var(--gold-primary);background-color:rgba(230,202,151,0.08)}
+.c-phone-row input{
+  flex:1;
+  min-width:0;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:0 12px 12px 0;
+  padding:12px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  color:var(--c-white);
+  outline:none;
+}
+.c-phone-row input::placeholder{color:rgba(245,242,234,0.3)}
+
+/* Error pill */
+.c-field-err{
+  font-size:11px;
+  color:#ff9688;
+  margin-top:6px;
+  display:none;
+  line-height:1.4;
+  padding:4px 10px;
+  background:rgba(231,76,60,0.14);
+  border:1px solid rgba(231,76,60,0.3);
+  border-radius:8px;
+  animation:shake .3s ease-in-out;
+}
+.c-field-err.show{display:flex;align-items:center;gap:6px}
+.c-field-err::before{content:"⚠";font-size:10px}
+.c-field.invalid .c-phone-row input, .c-field.invalid .c-phone-row select, .c-field.invalid>input{
+  border-color:#ff9688;
+  background:rgba(231,76,60,0.06);
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+
+/* Consent checkbox */
+.c-consent{
+  display:flex;
+  gap:10px;
+  margin:14px 0 18px;
+  align-items:flex-start;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.c-consent input{
+  margin-top:3px;
+  width:16px;
+  height:16px;
+  accent-color:var(--gold-primary);
+  cursor:pointer;
+}
+.c-consent label{font-size:10px;line-height:1.55;color:var(--muted);cursor:pointer}
+
+/* Buttons */
+.c-btn{
+  width:100%;
+  background:linear-gradient(135deg, #f7e7c4 0%, #d4af37 50%, #ab8b52 100%);
+  color:#090d16;
+  border:none;
+  border-radius:14px;
+  padding:13px 18px;
+  font-weight:700;
+  font-size:13.5px;
+  letter-spacing:.02em;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 25px rgba(212,175,55,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  position:relative;
+  overflow:hidden;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.c-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.5);
+  filter:brightness(1.04);
+}
+.c-btn:active{transform:translateY(1px) scale(0.99)}
+.c-btn-ghost{
+  width:100%;
+  background:rgba(255,255,255,0.03);
+  color:var(--c-white);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:14px;
+  padding:12px 18px;
+  font-weight:600;
+  font-size:13px;
+  cursor:pointer;
+  margin-top:10px;
+  font-family:'DM Sans',sans-serif;
+  transition:all .25s ease;
+  backdrop-filter:blur(8px);
+}
+.c-btn-ghost:hover{
+  background:rgba(230,202,151,0.08);
+  border-color:var(--gold-primary);
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+/* ═══ 3D SELECTION CARDS (FACE 1) ═══ */
+.gate-options-stack{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:16px;
+}
+.choice-card-3d{
+  width:100%;
+  background:linear-gradient(145deg, rgba(20,29,50,0.85) 0%, rgba(10,16,29,0.9) 100%);
+  border:1.5px solid rgba(230,202,151,0.22);
+  border-radius:18px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all .3s cubic-bezier(.22,1,.36,1);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+.choice-card-3d::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 10% 50%, rgba(230,202,151,0.15) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .3s;
+}
+.choice-card-3d:hover{
+  border-color:var(--gold-primary);
+  transform:translateY(-3px) scale(1.01);
+  box-shadow:0 16px 35px rgba(0,0,0,0.6), 0 0 25px var(--gold-glow);
+}
+.choice-card-3d:hover::before{opacity:1}
+.choice-card-3d:active{transform:translateY(1px) scale(0.99)}
+.card-icon-emblem{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(230,202,151,0.18) 0%, rgba(230,202,151,0.05) 100%);
+  border:1px solid rgba(230,202,151,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  color:var(--gold-primary);
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.card-text-block{flex:1}
+.card-tag-pill{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  margin-bottom:3px;
+  display:inline-block;
+}
+.card-title{
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-0.01em;
+}
+.card-subtext{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+.card-arrow{
+  font-size:16px;
+  color:var(--gold-primary);
+  opacity:.6;
+  transition:transform .25s ease, opacity .25s ease;
+}
+.choice-card-3d:hover .card-arrow{transform:translateX(3px);opacity:1}
+
+/* ═══ 3D AVATAR & MEDALLIONS ═══ */
+.c-center{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:10px;
+}
+.c-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:25px;
+  color:var(--c-white);
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+.c-sub{
+  font-size:12px;
+  color:var(--muted);
+  max-width:260px;
+  line-height:1.6;
+}
+.c-err{
+  font-size:11px;
+  color:#ff9688;
+  max-width:260px;
+  line-height:1.5;
+  display:none;
+  margin-top:10px;
+  padding:8px 12px;
+  background:rgba(231,76,60,0.12);
+  border:1px solid rgba(231,76,60,0.3);
+  border-radius:10px;
+}
+
+/* 3D Success / Profile Medallion */
+.medallion-3d{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff1d4 0%, #d4af37 50%, #7d5e23 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  color:#080c14;
+  box-shadow:
+    0 15px 35px rgba(212,175,55,0.45),
+    0 0 25px rgba(212,175,55,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.7);
+  position:relative;
+  margin-bottom:6px;
+  animation:medallionFloat 4s ease-in-out infinite alternate;
+}
+@keyframes medallionFloat{
+  0%{transform:translateY(0) rotate(0deg)}
+  100%{transform:translateY(-6px) rotate(4deg)}
+}
+.medallion-orbit{
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:1.5px dashed rgba(230,202,151,0.45);
+  animation:spin 12s linear infinite;
+}
+
+/* 3D Profile Card in Face 8 */
+.profile-success-card{
+  background:linear-gradient(145deg, rgba(230,202,151,0.08) 0%, rgba(20,29,50,0.6) 100%);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:16px;
+  padding:16px 18px;
+  text-align:center;
+  margin:12px 0 10px;
+  width:100%;
+  box-shadow:0 12px 30px rgba(0,0,0,0.4);
+}
+.profile-pill-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(46,204,113,0.15);
+  border:1px solid rgba(46,204,113,0.35);
+  padding:3px 10px;
+  border-radius:99px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.1em;
+  color:#2ecc71;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.profile-success-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  color:var(--gold-primary);
+  font-weight:600;
+}
+.profile-success-desc{
+  font-size:11.5px;
+  color:var(--muted);
+  margin-top:4px;
+  line-height:1.5;
+}
+
+/* ═══ PANEL 2: PROOF DISPLAY (COUNTER KIOSK HARDWARE) ═══ */
+.device-wrap{
+  padding:32px 20px 38px;
+  display:flex;
+  justify-content:center;
+  background:radial-gradient(circle at 50% 25%, #0f1629 0%, #060913 85%);
+  perspective:1000px;
+}
+.device-shell{
+  width:100%;
+  max-width:370px;
+  background:linear-gradient(160deg, #1f2738 0%, #121724 45%, #070a12 100%);
+  border-radius:28px;
+  padding:18px;
+  border:1.5px solid rgba(230,202,151,0.3);
+  box-shadow:
+    0 40px 90px -15px rgba(0,0,0,0.9),
+    0 0 35px rgba(230,202,151,0.14),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  position:relative;
+}
+.device-shell::after{
+  content:"";
+  position:absolute;
+  bottom:-14px;
+  left:15%;
+  right:15%;
+  height:14px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(230,202,151,0.35) 0%, transparent 70%);
+  filter:blur(6px);
+  pointer-events:none;
+}
+.device-kiosk-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  margin-bottom:14px;
+}
+.kiosk-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.kiosk-status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#2ecc71;
+  box-shadow:0 0 6px #2ecc71;
+}
+.kiosk-time{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  color:var(--muted);
+}
+
+.device-screen{
+  background:linear-gradient(160deg, #0b1428 0%, #050b18 100%);
+  border-radius:18px;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:28px 22px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(230,202,151,0.18);
+  box-shadow:inset 0 0 40px rgba(0,0,0,0.7);
+  transition:all .4s ease;
+}
+.device-screen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 30%, rgba(230,202,151,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.device-screen.st-event{
+  background:radial-gradient(circle at 50% 20%, #103626 0%, #061912 70%, #030a07 100%);
+  border-color:rgba(46,204,113,0.35);
+  box-shadow:inset 0 0 40px rgba(46,204,113,0.15), 0 0 30px rgba(46,204,113,0.1);
+}
+
+/* Idle Screen Elements */
+.d-stars{
+  display:flex;
+  gap:4px;
+  color:#f1c40f;
+  font-size:18px;
+  text-shadow:0 0 10px rgba(241,196,15,0.5);
+  animation:starShimmer 3s ease-in-out infinite alternate;
+}
+@keyframes starShimmer{0%{opacity:.85;transform:scale(0.98)}100%{opacity:1;transform:scale(1.02)}}
+.d-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+.device-screen.st-event .d-label{color:#2ecc71}
+.d-value{
+  font-family:'Archivo',sans-serif;
+  font-weight:800;
+  font-size:42px;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg, #fff 40%, var(--gold-light) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.d-reviews-badge{
+  font-size:10.5px;
+  color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(255,255,255,0.04);
+  padding:3px 10px;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.d-nfc-active-bar{
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  background:rgba(230,202,151,0.08);
+  padding:5px 12px;
+  border-radius:99px;
+  border:1px solid rgba(230,202,151,0.2);
+}
+.d-nfc-active-bar .pulse-ring{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold-primary);
+  box-shadow:0 0 8px var(--gold-primary);
+  animation:pulse-dot 1.5s infinite;
+}
+
+/* Event Screen Elements */
+.d-icon{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff 0%, #2ecc71 60%, #196f3d 100%);
+  color:#061912;
+  font-size:24px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 25px rgba(46,204,113,0.4);
+  margin-bottom:4px;
+  animation:medallionFloat 3s ease-in-out infinite alternate;
+}
+.d-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-0.01em;
+  text-align:center;
+}
+.d-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:#d4eedc;
+  text-align:center;
+  max-width:240px;
+}
+.d-tag{
+  margin-top:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.08em;
+  padding:4px 12px;
+  border-radius:99px;
+  font-weight:600;
+  text-transform:uppercase;
+}
+.d-tag.capture{background:rgba(230,202,151,0.2);color:var(--gold-light);border:1px solid rgba(230,202,151,0.4)}
+.d-tag.signin{background:rgba(46,204,113,0.2);color:#2ecc71;border:1px solid rgba(46,204,113,0.4)}
+.d-tag.promo, .d-tag.profile{background:rgba(230,202,151,0.2);color:var(--gold-light);border:1px solid rgba(230,202,151,0.4)}
+
+.device-note{
+  margin-top:16px;
+  font-size:11.5px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.6;
+}
+.nfc-dot{
+  width:9px;
+  height:9px;
+  border-radius:99px;
+  background:var(--gold-deep);
+  margin:14px auto 0;
+  position:relative;
+}
+.nfc-dot::after{
+  content:'';
+  position:absolute;
+  inset:-6px;
+  border:1px solid rgba(230,202,151,0.4);
+  border-radius:99px;
+}
+
+/* ═══ VISIT LOG PANEL ═══ */
+.log-panel{
+  margin-top:30px;
+  background:var(--navy-glass);
+  border:1px solid var(--border-glass);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -15px rgba(0,0,0,0.7);
+  backdrop-filter:blur(24px);
+}
+.log-head{
+  padding:18px 24px;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(90deg, rgba(230,202,151,0.05) 0%, transparent 100%);
+  flex-wrap:wrap;
+  gap:12px;
+}
+.log-title{
+  font-weight:700;
+  font-size:15px;
+  color:#fff;
+}
+.log-title span{
+  color:var(--muted);
+  font-weight:400;
+  font-size:12.5px;
+  margin-left:10px;
+}
+.btn-reset{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.08em;
+  padding:6px 14px;
+  border-radius:99px;
+  border:1px solid rgba(231,76,60,0.3);
+  background:rgba(231,76,60,0.08);
+  color:#ff9688;
+  cursor:pointer;
+  text-transform:uppercase;
+  transition:all .2s ease;
+}
+.btn-reset:hover{
+  background:rgba(231,76,60,0.2);
+  border-color:#ff9688;
+  color:#fff;
+  transform:translateY(-1px);
+}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:left;
+  padding:12px 24px;
+  background:rgba(0,0,0,0.3);
+  color:var(--gold-primary);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+td{
+  padding:12px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--ink);
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(230,202,151,0.03)}
+.log-empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}
+.tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.06em;
+  padding:3px 10px;
+  border-radius:99px;
+  font-weight:500;
+}
+.tag.capture{background:rgba(230,202,151,0.15);color:var(--gold-light);border:1px solid rgba(230,202,151,0.3)}
+.tag.signin{background:rgba(46,204,113,0.15);color:#2ecc71;border:1px solid rgba(46,204,113,0.3)}
+.tag.promo, .tag.profile{background:rgba(230,202,151,0.15);color:var(--gold-light);border:1px solid rgba(230,202,151,0.3)}
+
+/* Footer Note */
+.note{
+  margin-top:24px;
+  background:rgba(14,21,38,0.6);
+  border:1px solid rgba(230,202,151,0.15);
+  border-radius:16px;
+  padding:16px 20px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.note b{color:var(--gold-primary)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="w">
+    <div class="header-top">
+      <div class="brand-lockup">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <div class="eyebrow">Smart Countertop Interaction</div>
+          <h1>PROOF · 3D NFC Customer Experience</h1>
+        </div>
+      </div>
+      <div class="proto-badge">
+        <div class="live-dot"></div>
+        <span>NFC Kiosk Engine · Active Simulation</span>
+      </div>
+    </div>
+    <p>Every customer journey begins with an NFC tap. First-time guests register friction-free with mobile only. Returning guests enjoy personalized progressive profile completion and instant VIP recognition.</p>
+  </div>
+</header>
+
+<main>
+  <div class="stage">
+
+    <!-- ═══ CUSTOMER PHONE (PANEL 1) ═══ -->
+    <div class="panel">
+      <div class="panel-head customer">
+        <div class="panel-label"><b>①</b> Customer Smartphone Interface</div>
+        <div class="step-dots" id="custDots">
+          <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch">
+            <div class="phone-camera"></div>
+            <div class="phone-speaker"></div>
+          </div>
+          <div class="phone-screen">
+
+            <!-- Screen Top Status -->
+            <div class="screen-status-bar">
+              <span>PROOF PASS</span>
+              <div class="screen-status-icons">
+                <span>5G</span>
+                <span>● 100%</span>
+              </div>
+            </div>
+
+            <!-- FACE 0: NFC 3D TAP HERO -->
+            <div class="c-face on" data-face="0">
+              <div class="nfc-hero">
+                <div class="c-title" style="font-size:27px">Welcome to PROOF</div>
+                <div class="c-sub">Tap your phone to get started.</div>
+
+                <!-- 3D Interactive NFC Visual Stage -->
+                <div class="nfc-stage-3d">
+                  <!-- Scanning Wave Ripples -->
+                  <div class="scan-waves">
+                    <div class="scan-wave"></div>
+                    <div class="scan-wave"></div>
+                    <div class="scan-wave"></div>
+                  </div>
+
+                  <!-- 3D Floating Phone -->
+                  <div class="floating-phone-3d" id="stagePhone3d">
+                    <div class="fp-screen">
+                      <div class="fp-nfc-glyph">⟡</div>
+                      <div class="fp-badge">NFC Ready</div>
+                    </div>
+                  </div>
+
+                  <!-- 3D Metallic Reader Base Plate -->
+                  <div class="nfc-reader-plate">
+                    <div class="reader-inner-ring">
+                      <div class="reader-core"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Button / Tap Trigger -->
+                <div class="nfc-tap-action" id="nfcZone">
+                  <div class="ripple" id="ripple"></div>
+                  <div class="nl"><span>📱</span> Tap Phone Here</div>
+                  <div class="ns">Hold your phone near the counter reader</div>
+                </div>
+
+                <!-- Animated Connecting State -->
+                <div class="connecting" id="connectingText">
+                  <div class="conn-spinner"></div>
+                  <span>Authenticating NFC Signal…</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FACE 1: GATE SELECTION SCREEN -->
+            <div class="c-face" data-face="1">
+              <div class="c-center">
+                <div class="c-biz" style="margin-bottom:8px">
+                  <h2>Welcome</h2>
+                  <p>Customer Identification</p>
+                </div>
+                <div class="c-title" style="font-size:24px">Been here before?</div>
+                <div class="c-sub">This decides whether we create a new profile or sign you into an existing one.</div>
+
+                <div class="gate-options-stack">
+                  <!-- Card 1: New Guest -->
+                  <div class="choice-card-3d" id="gateNewBtn">
+                    <div class="card-icon-emblem">✨</div>
+                    <div class="card-text-block">
+                      <span class="card-tag-pill">First Visit</span>
+                      <div class="card-title">No — First Time Here</div>
+                      <div class="card-subtext">Instant registration with phone number</div>
+                    </div>
+                    <div class="card-arrow">→</div>
+                  </div>
+
+                  <!-- Card 2: Returning Guest -->
+                  <div class="choice-card-3d" id="gateReturnBtn">
+                    <div class="card-icon-emblem">👑</div>
+                    <div class="card-text-block">
+                      <span class="card-tag-pill">Returning Guest</span>
+                      <div class="card-title">Yes — I've Signed In Before</div>
+                      <div class="card-subtext">Access your visit history &amp; perks</div>
+                    </div>
+                    <div class="card-arrow">→</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FACE 2: FIRST VISIT — PHONE REGISTRATION -->
+            <div class="c-face" data-face="2">
+              <div class="step-progress-indicator">
+                <span>Step 1 of 2 · Mobile ID</span>
+                <div class="step-track"><div class="step-fill" style="width:50%"></div></div>
+              </div>
+              <div class="c-biz">
+                <h2>Let's Get You Started</h2>
+                <p>PROOF Membership Pass</p>
+              </div>
+              <div class="c-sub" style="margin:0 auto 16px;text-align:center">
+                Enter your mobile number to begin your PROOF experience.
+              </div>
+              <div class="c-field" id="regPhoneField">
+                <label>Mobile Number</label>
+                <div class="c-phone-row">
+                  <select id="regCountryCode"></select>
+                  <input type="tel" id="regPhone" placeholder="Mobile number" autocomplete="tel-national">
+                </div>
+                <div class="c-field-err" id="regPhoneErr">Please enter a valid phone number.</div>
+              </div>
+              <div class="c-consent">
+                <input type="checkbox" id="regConsent" checked>
+                <label for="regConsent">I agree to receive my PROOF digital pass and visit confirmations via SMS. Reply STOP anytime.</label>
+              </div>
+              <button class="c-btn" id="submitCapture">Sign Up</button>
+            </div>
+
+            <!-- FACE 3: SIGN-UP SUCCESS -->
+            <div class="c-face" data-face="3">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title" style="font-size:26px">You're In!</div>
+                <div class="c-sub" id="signupSuccessMsg">Visit #1 logged. Welcome aboard!</div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">Membership Active</div>
+                  <div class="profile-success-title">Digital Loyalty Pass Created</div>
+                  <div class="profile-success-desc">Your visits will be automatically counted on every NFC tap.</div>
+                </div>
+                <button class="c-btn" id="backToStart3" style="margin-top:12px">Back to Start →</button>
+              </div>
+            </div>
+
+            <!-- FACE 4: RETURNING CUSTOMER SIGN-IN -->
+            <div class="c-face" data-face="4">
+              <div class="c-center">
+                <div class="c-biz" style="margin-bottom:6px">
+                  <h2>Member Sign-In</h2>
+                  <p>Quick Identification</p>
+                </div>
+                <div class="c-title">Welcome Back!</div>
+                <div class="c-sub">Great to see you again. Let's continue your PROOF experience.</div>
+                <div class="c-field" id="siPhoneField" style="width:100%;margin-top:16px;text-align:left">
+                  <label>Mobile Number</label>
+                  <div class="c-phone-row">
+                    <select id="siCountryCode"></select>
+                    <input type="tel" id="pSignin" placeholder="Mobile number" autocomplete="tel-national">
+                  </div>
+                  <div class="c-field-err" id="siPhoneErr">Please enter a valid phone number.</div>
+                </div>
+                <button class="c-btn" id="signinBtn" style="margin-top:4px">Continue</button>
+                <div class="c-err" id="signinErr">No customer found with that number. Please check and try again.</div>
+              </div>
+            </div>
+
+            <!-- FACE 5: WELCOME BACK (TERMINAL SCREEN) -->
+            <div class="c-face" data-face="5">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>👑</span>
+                </div>
+                <div class="c-title" id="welcomeTitle">Welcome back, <span id="welcomeName">Guest</span></div>
+                <div class="c-sub">Visit #<span id="visitNum">2</span> logged successfully.</div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">VIP Member</div>
+                  <div class="profile-success-title">Visit Confirmed</div>
+                  <div class="profile-success-desc">Thank you for visiting today! Your presence has been registered at the counter.</div>
+                </div>
+                <button class="c-btn" id="backToStart5" style="margin-top:12px">Back to Start →</button>
+              </div>
+            </div>
+
+            <!-- FACE 6: PROFILE COMPLETION INTRO -->
+            <div class="c-face" data-face="6">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>👤</span>
+                </div>
+                <div class="c-title" id="promoGreeting">Welcome Back!</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-primary);margin-top:-4px">
+                  Let's Get to Know You Better
+                </div>
+                <div class="c-sub" style="margin-top:8px">
+                  We'd love to complete your customer profile and make your PROOF experience more personal.
+                </div>
+                <button class="c-btn" id="promoYesBtn" style="margin-top:20px">Continue</button>
+                <button class="c-btn-ghost" id="promoNoBtn">Maybe Later</button>
+              </div>
+            </div>
+
+            <!-- FACE 7: PROFILE DETAILS SCREEN -->
+            <div class="c-face" data-face="7">
+              <div class="step-progress-indicator">
+                <span>Step 2 of 2 · Profile Details</span>
+                <div class="step-track"><div class="step-fill" style="width:100%"></div></div>
+              </div>
+              <div class="c-biz">
+                <h2>Complete Your Profile</h2>
+                <p>Personalized Experience</p>
+              </div>
+              <div class="c-sub" style="margin:0 auto 16px;text-align:center">
+                Just a couple of details to help us personalize your experience.
+              </div>
+              <div class="c-field" id="promoNameField">
+                <label>Your Name</label>
+                <input id="promoName" placeholder="Full name (e.g. Priya Sharma)" autocomplete="name">
+                <div class="c-field-err" id="promoNameErr">Please enter your name (at least 2 characters).</div>
+              </div>
+              <div class="c-field" id="promoEmailField">
+                <label>Email Address</label>
+                <input id="promoEmail" type="email" placeholder="email@example.com" autocomplete="email">
+                <div class="c-field-err" id="promoEmailErr">Please enter a valid email address.</div>
+              </div>
+              <button class="c-btn" id="submitPromoBtn" style="margin-top:6px">Save My Details</button>
+            </div>
+
+            <!-- FACE 8: PROFILE SUCCESS SCREEN -->
+            <div class="c-face" data-face="8">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title" style="font-size:26px">Thank You!</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-primary);margin-top:-4px">
+                  Your Details Have Been Saved
+                </div>
+                <div class="c-sub" style="margin-top:6px">
+                  Your customer profile has been updated successfully. Thank you for being part of PROOF!
+                </div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">Profile Updated</div>
+                  <div class="profile-success-title">Account Personalized</div>
+                  <div class="profile-success-desc">We've linked your contact details to your NFC identity pass.</div>
+                </div>
+                <button class="c-btn" id="offerDoneBtn" style="margin-top:10px">Continue</button>
+              </div>
+            </div>
+
+            <!-- FACE 9: BIRTHDAY + ADDITIONAL DETAILS (3RD+ VISIT) -->
+            <div class="c-face" data-face="9">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>🎂</span>
+                </div>
+                <div class="c-title" id="bdayGreeting">Help Us Celebrate You</div>
+                <div class="c-sub">Share your birthday and we'll have a special surprise ready for you!</div>
+                <div class="c-field" style="width:100%;margin-top:14px;text-align:left">
+                  <label>Birthday <i>(optional)</i></label>
+                  <input type="date" id="bdayInput">
+                </div>
+                <button class="c-btn" id="bdaySubmitBtn" style="margin-top:4px">Save</button>
+                <button class="c-btn-ghost" id="bdaySkipBtn">Maybe Later</button>
+              </div>
+            </div>
+
+            <!-- FACE 10: ADDITIONAL DETAILS SAVED -->
+            <div class="c-face" data-face="10">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title">Details Saved!</div>
+                <div class="c-sub" id="bdaySuccessMsg">Thank you! We'll make your next visit extra special.</div>
+                <button class="c-btn" id="bdayDoneBtn" style="margin-top:16px">Continue</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROOF DISPLAY (PANEL 2: PHYSICAL COUNTER KIOSK) ═══ -->
+    <div class="panel">
+      <div class="panel-head device">
+        <div class="panel-label"><b>②</b> PROOF Counter Display — Physical Terminal Screen</div>
+      </div>
+      <div class="device-wrap">
+        <div class="device-shell">
+          <div class="device-kiosk-head">
+            <div class="kiosk-brand">
+              <span class="kiosk-status-dot"></span>
+              <span>PROOF TERMINAL 4K</span>
+            </div>
+            <div class="kiosk-time">COIMBATORE HUB</div>
+          </div>
+          <div class="device-screen" id="deviceScreen">
+            <div class="d-stars">★★★★★</div>
+            <div class="d-label">Google Verified Rating</div>
+            <div class="d-value">4.8★</div>
+            <div class="d-reviews-badge">Based on 1,240+ Customer Reviews</div>
+            <div class="d-nfc-active-bar">
+              <div class="pulse-ring"></div>
+              <span>NFC Sensor Ready · Tap Device</span>
+            </div>
+          </div>
+          <div class="nfc-dot"></div>
+          <div class="device-note">
+            Mounted directly at business checkout. Updates in real-time as customers tap their smartphones.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ VISIT LOG (PANEL 3) ═══ -->
+  <div class="log-panel">
+    <div class="log-head">
+      <div class="log-title">Live Kiosk Audit Log<span>All events persist locally in browser localStorage</span></div>
+      <div><button class="btn-reset" id="resetBtn">Reset All Data</button></div>
+    </div>
+    <div id="logBody">
+      <div class="log-empty">No events yet — walk through the flow above to populate this.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Progressive profile architecture:</b> First visit collects only a phone number. Subsequent visits smoothly prompt for name, email, and birthday without disrupting customer flow. All state is maintained in localStorage with normalized E.164 phone identity.
+  </div>
+
+</main>
+
+<script>
+(function(){
+
+  // ═══════════════════════════════════════════════════════
+  // COUNTRY CODES (WITH EMOJI FLAGS & CLEAN LABELS)
+  // ═══════════════════════════════════════════════════════
+
+  var countryCodes = [
+    { code:'+91',  label:'🇮🇳 +91 (India)',         country:'IN' },
+    { code:'+1',   label:'🇺🇸 +1 (United States)',  country:'US' },
+    { code:'+44',  label:'🇬🇧 +44 (United Kingdom)',country:'GB' },
+    { code:'+1',   label:'🇨🇦 +1 (Canada)',         country:'CA' },
+    { code:'+61',  label:'🇦🇺 +61 (Australia)',      country:'AU' },
+    { code:'+971', label:'🇦🇪 +971 (UAE)',            country:'AE' },
+    { code:'+65',  label:'🇸🇬 +65 (Singapore)',      country:'SG' },
+    { code:'+60',  label:'🇲🇾 +60 (Malaysia)',       country:'MY' },
+    { code:'+81',  label:'🇯🇵 +81 (Japan)',          country:'JP' },
+    { code:'+86',  label:'🇨🇳 +86 (China)',          country:'CN' },
+    { code:'+82',  label:'🇰🇷 +82 (South Korea)',    country:'KR' },
+    { code:'+49',  label:'🇩🇪 +49 (Germany)',        country:'DE' },
+    { code:'+33',  label:'🇫🇷 +33 (France)',         country:'FR' },
+    { code:'+39',  label:'🇮🇹 +39 (Italy)',          country:'IT' },
+    { code:'+34',  label:'🇪🇸 +34 (Spain)',          country:'ES' },
+    { code:'+31',  label:'🇳🇱 +31 (Netherlands)',    country:'NL' },
+    { code:'+46',  label:'🇸🇪 +46 (Sweden)',         country:'SE' },
+    { code:'+47',  label:'🇳🇴 +47 (Norway)',         country:'NO' },
+    { code:'+45',  label:'🇩🇰 +45 (Denmark)',        country:'DK' },
+    { code:'+41',  label:'🇨🇭 +41 (Switzerland)',    country:'CH' },
+    { code:'+43',  label:'🇦🇹 +43 (Austria)',        country:'AT' },
+    { code:'+32',  label:'🇧🇪 +32 (Belgium)',        country:'BE' },
+    { code:'+48',  label:'🇵🇱 +48 (Poland)',         country:'PL' },
+    { code:'+353', label:'🇮🇪 +353 (Ireland)',       country:'IE' },
+    { code:'+351', label:'🇵🇹 +351 (Portugal)',      country:'PT' },
+    { code:'+420', label:'🇨🇿 +420 (Czech Rep)',     country:'CZ' },
+    { code:'+358', label:'🇫🇮 +358 (Finland)',       country:'FI' },
+    { code:'+7',   label:'🇷🇺 +7 (Russia)',          country:'RU' },
+    { code:'+90',  label:'🇹🇷 +90 (Turkey)',         country:'TR' },
+    { code:'+55',  label:'🇧🇷 +55 (Brazil)',         country:'BR' },
+    { code:'+52',  label:'🇲🇽 +52 (Mexico)',         country:'MX' },
+    { code:'+64',  label:'🇳🇿 +64 (New Zealand)',    country:'NZ' },
+    { code:'+27',  label:'🇿🇦 +27 (South Africa)',   country:'ZA' },
+    { code:'+234', label:'🇳🇬 +234 (Nigeria)',       country:'NG' },
+    { code:'+254', label:'🇰🇪 +254 (Kenya)',         country:'KE' },
+    { code:'+20',  label:'🇪🇬 +20 (Egypt)',          country:'EG' },
+    { code:'+966', label:'🇸🇦 +966 (Saudi Arabia)',  country:'SA' },
+    { code:'+972', label:'🇮🇱 +972 (Israel)',        country:'IL' },
+    { code:'+92',  label:'🇵🇰 +92 (Pakistan)',       country:'PK' },
+    { code:'+880', label:'🇧🇩 +880 (Bangladesh)',     country:'BD' },
+    { code:'+94',  label:'🇱🇰 +94 (Sri Lanka)',      country:'LK' },
+    { code:'+977', label:'🇳🇵 +977 (Nepal)',          country:'NP' },
+    { code:'+63',  label:'🇵🇭 +63 (Philippines)',    country:'PH' },
+    { code:'+62',  label:'🇮🇩 +62 (Indonesia)',      country:'ID' },
+    { code:'+66',  label:'🇹🇭 +66 (Thailand)',       country:'TH' },
+    { code:'+84',  label:'🇻🇳 +84 (Vietnam)',        country:'VN' },
+    { code:'+852', label:'🇭🇰 +852 (Hong Kong)',     country:'HK' },
+    { code:'+886', label:'🇹🇼 +886 (Taiwan)',        country:'TW' }
+  ];
+
+  function detectCountry(){
+    var lang = (navigator.language || navigator.userLanguage || 'en-IN');
+    var parts = lang.replace('_','-').split('-');
+    var country = (parts[1] || '').toUpperCase();
+    for(var i = 0; i < countryCodes.length; i++){
+      if(countryCodes[i].country === country) return country;
+    }
+    return 'IN';
+  }
+
+  function populateCountrySelect(selectEl){
+    var detected = detectCountry();
+    selectEl.innerHTML = '';
+    for(var i = 0; i < countryCodes.length; i++){
+      var opt = document.createElement('option');
+      opt.value = countryCodes[i].code;
+      opt.textContent = countryCodes[i].label;
+      opt.dataset.country = countryCodes[i].country;
+      if(countryCodes[i].country === detected) opt.selected = true;
+      selectEl.appendChild(opt);
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // DATA LAYER — LOCALSTORAGE-BACKED MOCK STORAGE
+  // ═══════════════════════════════════════════════════════
+
+  var STORAGE_CUSTOMERS = 'proof_customers';
+  var STORAGE_EVENTS    = 'proof_events';
+
+  function loadCustomers(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_CUSTOMERS)) || []; }
+    catch(e){ return []; }
+  }
+  function saveCustomers(list){
+    localStorage.setItem(STORAGE_CUSTOMERS, JSON.stringify(list));
+  }
+  function loadEvents(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_EVENTS)) || []; }
+    catch(e){ return []; }
+  }
+  function saveEventsData(list){
+    localStorage.setItem(STORAGE_EVENTS, JSON.stringify(list));
+  }
+
+  function normalizePhone(countryCode, localNumber){
+    var digits = (localNumber || '').replace(/[^0-9]/g, '');
+    if(digits.length > 1 && digits[0] === '0') digits = digits.substring(1);
+    return (countryCode || '') + digits;
+  }
+
+  function findCustomerByPhone(normalized){
+    var customers = loadCustomers();
+    for(var i = 0; i < customers.length; i++){
+      if(customers[i].phoneNumber === normalized) return customers[i];
+    }
+    return null;
+  }
+
+  function createCustomer(countryCode, localNumber){
+    var normalized = normalizePhone(countryCode, localNumber);
+    var existing = findCustomerByPhone(normalized);
+    if(existing) return null;
+
+    var now = new Date().toISOString();
+    var customer = {
+      id: 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      phoneNumber: normalized,
+      countryCode: countryCode,
+      localNumber: localNumber.replace(/[^0-9]/g, ''),
+      name: null,
+      email: null,
+      birthday: null,
+      visits: 1,
+      visitHistory: [{ date: now, type: 'signup', visit: 1 }],
+      profileStage: 'PHONE_ONLY',
+      promotionDetails: { offered: false, accepted: false },
+      createdAt: now,
+      updatedAt: now
+    };
+
+    var customers = loadCustomers();
+    customers.push(customer);
+    saveCustomers(customers);
+    return customer;
+  }
+
+  function updateCustomer(customer, updates){
+    var customers = loadCustomers();
+    for(var i = 0; i < customers.length; i++){
+      if(customers[i].id === customer.id){
+        for(var key in updates){
+          if(updates.hasOwnProperty(key)){
+            customers[i][key] = updates[key];
+          }
+        }
+        customers[i].updatedAt = new Date().toISOString();
+        saveCustomers(customers);
+        return customers[i];
+      }
+    }
+    return customer;
+  }
+
+  function recordVisit(customer){
+    var now = new Date().toISOString();
+    var newVisits = customer.visits + 1;
+    var history = (customer.visitHistory || []).slice();
+    history.push({ date: now, type: 'signin', visit: newVisits });
+    return updateCustomer(customer, {
+      visits: newVisits,
+      visitHistory: history
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FORM VALIDATION
+  // ═══════════════════════════════════════════════════════
+
+  function validatePhone(phone){
+    var digits = (phone || '').replace(/[^0-9]/g, '');
+    return digits.length >= 6 && digits.length <= 15;
+  }
+
+  function validateEmail(email){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
+  }
+
+  function validateName(name){
+    return (name || '').trim().length >= 2;
+  }
+
+  function showFieldError(errEl, show, msg){
+    if(msg) errEl.textContent = msg;
+    errEl.classList.toggle('show', show);
+    var field = errEl.closest('.c-field');
+    if(field) field.classList.toggle('invalid', show);
+  }
+
+  function clearFieldError(errEl){
+    showFieldError(errEl, false);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // UI NAVIGATION & RENDERING
+  // ═══════════════════════════════════════════════════════
+
+  var custFaces = document.querySelectorAll('.c-face');
+  var custDots  = document.querySelectorAll('#custDots i');
+
+  function showFace(n, dot){
+    custFaces.forEach(function(f){ f.classList.toggle('on', f.dataset.face == n); });
+    if(dot !== undefined){
+      custDots.forEach(function(d, i){ d.classList.toggle('on', i === dot); });
+    }
+  }
+
+  var tagLabels = {
+    capture: 'SIGNED UP',
+    signin:  'SIGNED IN',
+    promo:   'PROFILE UPDATED',
+    profile: 'PROFILE COMPLETED'
+  };
+
+  function addEvent(name, action, tag){
+    var evts = loadEvents();
+    evts.unshift({
+      time: new Date().toLocaleTimeString(),
+      name: name,
+      action: action,
+      tag: tag,
+      date: new Date().toISOString()
+    });
+    saveEventsData(evts);
+    renderLog();
+  }
+
+  function renderLog(){
+    var evts = loadEvents();
+    var body = document.getElementById('logBody');
+    if(evts.length === 0){
+      body.innerHTML = '<div class="log-empty">No events yet — walk through the flow above to populate this.</div>';
+      return;
+    }
+    var rows = evts.map(function(e){
+      var label = tagLabels[e.tag] || e.tag;
+      return '<tr><td class="mono">' + e.time + '</td><td>' + escHtml(e.name) + '</td><td>' + escHtml(e.action) + '</td><td><span class="tag ' + e.tag + '">' + label + '</span></td></tr>';
+    }).join('');
+    body.innerHTML = '<table><tr><th>Time</th><th>Customer</th><th>Event</th><th>Type</th></tr>' + rows + '</table>';
+  }
+
+  function escHtml(s){
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  var deviceScreen = document.getElementById('deviceScreen');
+
+  function deviceIdle(){
+    deviceScreen.classList.remove('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-stars">★★★★★</div>' +
+      '<div class="d-label">Google Verified Rating</div>' +
+      '<div class="d-value">4.8★</div>' +
+      '<div class="d-reviews-badge">Based on 1,240+ Customer Reviews</div>' +
+      '<div class="d-nfc-active-bar">' +
+        '<div class="pulse-ring"></div>' +
+        '<span>NFC Sensor Ready · Tap Device</span>' +
+      '</div>';
+  }
+
+  function deviceShow(kind, name, sub, tag){
+    deviceScreen.classList.add('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-icon">✓</div>' +
+      '<div class="d-label">' + escHtml(kind) + '</div>' +
+      '<div class="d-name">' + escHtml(name) + '</div>' +
+      '<div class="d-sub">' + escHtml(sub) + '</div>' +
+      '<div class="d-tag ' + tag + '">' + (tagLabels[tag] || tag) + '</div>';
+  }
+
+  function displayName(cust){
+    if(cust.name) return cust.name.split(' ')[0];
+    return cust.phoneNumber;
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // STATE MANAGEMENT
+  // ═══════════════════════════════════════════════════════
+
+  var activeCustomer = null;
+
+
+  // ═══════════════════════════════════════════════════════
+  // INITIALIZE ON LOAD
+  // ═══════════════════════════════════════════════════════
+
+  populateCountrySelect(document.getElementById('regCountryCode'));
+  populateCountrySelect(document.getElementById('siCountryCode'));
+  renderLog();
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 0: NFC TAP INTERACTION (3D DYNAMIC MOTION)
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('nfcZone').addEventListener('click', function(){
+    var ripple = document.getElementById('ripple');
+    var stagePhone = document.getElementById('stagePhone3d');
+
+    // Trigger phone downward tap motion in 3D
+    stagePhone.classList.add('tapping');
+
+    // Trigger electromagnetic ripple
+    var zone = this.getBoundingClientRect();
+    ripple.style.left = (zone.width / 2 - 5) + 'px';
+    ripple.style.top  = (zone.height / 2 - 5) + 'px';
+    ripple.classList.remove('go');
+    void ripple.offsetWidth;
+    ripple.classList.add('go');
+
+    document.getElementById('connectingText').classList.add('show');
+
+    setTimeout(function(){
+      stagePhone.classList.remove('tapping');
+      document.getElementById('connectingText').classList.remove('show');
+      activeCustomer = null;
+      showFace(1, 1);
+    }, 900);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 1: GATE SELECTION
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('gateNewBtn').addEventListener('click', function(){
+    document.getElementById('regPhone').value = '';
+    document.getElementById('regConsent').checked = true;
+    clearFieldError(document.getElementById('regPhoneErr'));
+    showFace(2, 2);
+  });
+
+  document.getElementById('gateReturnBtn').addEventListener('click', function(){
+    document.getElementById('pSignin').value = '';
+    document.getElementById('signinErr').style.display = 'none';
+    clearFieldError(document.getElementById('siPhoneErr'));
+    showFace(4, 2);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 2: FIRST-TIME REGISTRATION (PHONE ONLY)
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('submitCapture').addEventListener('click', function(){
+    var countryCode = document.getElementById('regCountryCode').value;
+    var phone       = document.getElementById('regPhone').value.trim();
+    var errEl       = document.getElementById('regPhoneErr');
+
+    if(!validatePhone(phone)){
+      showFieldError(errEl, true, 'Please enter a valid phone number (6–15 digits).');
+      return;
+    }
+
+    var newCust = createCustomer(countryCode, phone);
+    if(!newCust){
+      showFieldError(errEl, true, 'This number is already registered. Please select "I\'ve Signed In Before".');
+      return;
+    }
+    clearFieldError(errEl);
+
+    activeCustomer = newCust;
+    var label = displayName(activeCustomer);
+
+    document.getElementById('signupSuccessMsg').textContent = 'Visit #1 logged. Welcome aboard!';
+    addEvent(label, 'Signed up — loyalty pass issued', 'capture');
+    deviceShow('New Member', label, 'Visit #1 · Loyalty Pass Created', 'capture');
+    showFace(3, 3);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 3: SIGN-UP SUCCESS → BACK TO START
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('backToStart3').addEventListener('click', function(){
+    deviceIdle();
+    showFace(0, 0);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 4: RETURNING CUSTOMER SIGN-IN
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('signinBtn').addEventListener('click', function(){
+    var countryCode = document.getElementById('siCountryCode').value;
+    var phone       = document.getElementById('pSignin').value.trim();
+    var phoneErr    = document.getElementById('siPhoneErr');
+    var notFoundErr = document.getElementById('signinErr');
+
+    if(!validatePhone(phone)){
+      showFieldError(phoneErr, true, 'Please enter a valid phone number (6–15 digits).');
+      notFoundErr.style.display = 'none';
+      return;
+    }
+    clearFieldError(phoneErr);
+
+    var normalized = normalizePhone(countryCode, phone);
+    var customer = findCustomerByPhone(normalized);
+
+    if(!customer){
+      notFoundErr.style.display = 'block';
+      return;
+    }
+    notFoundErr.style.display = 'none';
+    activeCustomer = customer;
+
+    // Record visit strictly once
+    activeCustomer = recordVisit(activeCustomer);
+
+    var label = displayName(activeCustomer);
+    addEvent(label, 'Signed in — visit #' + activeCustomer.visits, 'signin');
+    deviceShow('Welcome Back VIP', label, 'Visit #' + activeCustomer.visits + ' Logged', 'signin');
+
+    // Route based on progressive profile stage
+    if(activeCustomer.profileStage === 'PHONE_ONLY'){
+      var greeting = activeCustomer.name
+        ? ('Welcome back, ' + activeCustomer.name.split(' ')[0] + '!')
+        : 'Welcome Back!';
+      document.getElementById('promoGreeting').textContent = greeting;
+      showFace(6, 3);
+
+    } else if(activeCustomer.profileStage === 'CONTACT_DETAILS_COMPLETED' && !activeCustomer.birthday){
+      var bdayName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+      document.getElementById('bdayGreeting').textContent =
+        bdayName ? ('Hey ' + bdayName + ', Help Us Celebrate You!') : 'Help Us Celebrate You';
+      document.getElementById('bdayInput').value = '';
+      showFace(9, 3);
+
+    } else {
+      showWelcomeBack(3);
+    }
+  });
+
+  function showWelcomeBack(dot){
+    var label = activeCustomer.name
+      ? activeCustomer.name.split(' ')[0]
+      : 'Guest';
+    document.getElementById('welcomeName').textContent = label;
+    document.getElementById('visitNum').textContent = activeCustomer.visits;
+    showFace(5, dot);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 5: WELCOME BACK TERMINAL → BACK TO START
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('backToStart5').addEventListener('click', function(){
+    deviceIdle();
+    showFace(0, 0);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 6: PROFILE COMPLETION INTRO
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('promoYesBtn').addEventListener('click', function(){
+    activeCustomer = updateCustomer(activeCustomer, {
+      promotionDetails: { offered: true, accepted: true }
+    });
+
+    document.getElementById('promoName').value  = activeCustomer.name || '';
+    document.getElementById('promoEmail').value = activeCustomer.email || '';
+    clearFieldError(document.getElementById('promoNameErr'));
+    clearFieldError(document.getElementById('promoEmailErr'));
+    showFace(7, 4);
+  });
+
+  document.getElementById('promoNoBtn').addEventListener('click', function(){
+    activeCustomer = updateCustomer(activeCustomer, {
+      promotionDetails: { offered: true, accepted: false }
+    });
+    showWelcomeBack(4);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 7: NAME & EMAIL FORM
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('submitPromoBtn').addEventListener('click', function(){
+    var name     = document.getElementById('promoName').value.trim();
+    var email    = document.getElementById('promoEmail').value.trim();
+    var nameErr  = document.getElementById('promoNameErr');
+    var emailErr = document.getElementById('promoEmailErr');
+
+    var valid = true;
+
+    if(!validateName(name)){
+      showFieldError(nameErr, true);
+      valid = false;
+    } else {
+      clearFieldError(nameErr);
+    }
+
+    if(!validateEmail(email)){
+      showFieldError(emailErr, true);
+      valid = false;
+    } else {
+      clearFieldError(emailErr);
+    }
+
+    if(!valid) return;
+
+    activeCustomer = updateCustomer(activeCustomer, {
+      name: name,
+      email: email,
+      profileStage: 'CONTACT_DETAILS_COMPLETED',
+      promotionDetails: { offered: true, accepted: true }
+    });
+
+    var firstName = name.split(' ')[0];
+    addEvent(firstName, 'Completed profile details', 'promo');
+    deviceShow('Profile Updated', firstName, 'Profile Linked · Visit #' + activeCustomer.visits, 'promo');
+
+    showFace(8, 5);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 8: PROFILE SUCCESS → WELCOME BACK
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('offerDoneBtn').addEventListener('click', function(){
+    showWelcomeBack(6);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 9: BIRTHDAY + ADDITIONAL DETAILS
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('bdaySubmitBtn').addEventListener('click', function(){
+    var bday = document.getElementById('bdayInput').value;
+
+    if(!bday){
+      showWelcomeBack(4);
+      return;
+    }
+
+    activeCustomer = updateCustomer(activeCustomer, {
+      birthday: bday,
+      profileStage: 'ADDITIONAL_DETAILS_COMPLETED'
+    });
+
+    var label = displayName(activeCustomer);
+    addEvent(label, 'Birthday saved — profile completed', 'profile');
+    deviceShow('Profile Completed', label, 'Birthday Saved · Visit #' + activeCustomer.visits, 'profile');
+
+    var firstName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+    document.getElementById('bdaySuccessMsg').textContent =
+      firstName
+        ? ('Thank you, ' + firstName + '! We\'ll make your birthday extra special.')
+        : 'Thank you! We\'ll make your next visit extra special.';
+
+    showFace(10, 4);
+  });
+
+  document.getElementById('bdaySkipBtn').addEventListener('click', function(){
+    showWelcomeBack(4);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 10: DETAILS SAVED → WELCOME BACK
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('bdayDoneBtn').addEventListener('click', function(){
+    showWelcomeBack(5);
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // RESET ALL DATA
+  // ═══════════════════════════════════════════════════════
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(confirm('Reset all customer records and event audit log? This cannot be undone.')){
+      localStorage.removeItem(STORAGE_CUSTOMERS);
+      localStorage.removeItem(STORAGE_EVENTS);
+      activeCustomer = null;
+      renderLog();
+      deviceIdle();
+      showFace(0, 0);
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
