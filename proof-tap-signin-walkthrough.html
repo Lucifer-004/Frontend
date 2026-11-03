@@ -1232,6 +1232,845 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   line-height:1.6;
 }
 .note b{color:var(--gold-primary)}
+
+/* ═══ 3D SPIN & WIN SLOT MACHINE (REFERENCE IMAGE 2) ═══ */
+.spin-header{text-align:center;margin-bottom:8px;position:relative}
+.spin-brand-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  background:rgba(230,202,151,0.08);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:99px;
+  padding:2px 8px;
+  display:inline-block;
+  margin-bottom:4px;
+}
+.spin-header-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.sound-toggle-btn{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:8px;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold-primary);
+  cursor:pointer;
+  font-size:12px;
+  transition:all .2s ease;
+}
+.sound-toggle-btn:hover{background:rgba(230,202,151,0.15)}
+
+/* Cabinet Housing */
+.slot-machine-cabinet{
+  background:linear-gradient(180deg, #181410 0%, #0d0b09 60%, #070605 100%);
+  border:2.5px solid #d4af37;
+  border-radius:20px;
+  padding:8px 6px;
+  box-shadow:
+    0 16px 36px rgba(0,0,0,0.85),
+    0 0 25px rgba(212,175,55,0.25),
+    inset 0 0 25px rgba(0,0,0,0.9);
+  position:relative;
+  margin:4px auto 10px;
+  width:100%;
+  max-width:284px;
+  user-select:none;
+}
+.slot-machine-cabinet::before{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border:1px solid rgba(230,202,151,0.3);
+  border-radius:16px;
+  pointer-events:none;
+}
+
+/* Marquee Bulbs Layout */
+.bulb-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:2px 8px;
+}
+.slot-cabinet-middle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:4px;
+  margin:4px 0;
+}
+.bulb-col{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-around;
+  height:120px;
+  padding:0 2px;
+}
+
+/* ═══ SLOT BULB ANIMATION (PERIMETER CHASE & CELEBRATION) ═══ */
+.slot-bulb {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #f7c844 50%, #996e14 100%);
+  display: inline-block;
+  animation: bulbIdleGlow 2.4s ease-in-out infinite;
+  transition: all .25s ease;
+}
+
+/* Clockwise perimeter staggered chase across 22 bulbs */
+.bulb-row.top-bulbs .slot-bulb:nth-child(1) { animation-delay: 0.0s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(2) { animation-delay: 0.15s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(3) { animation-delay: 0.3s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(4) { animation-delay: 0.45s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(5) { animation-delay: 0.6s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(6) { animation-delay: 0.75s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(7) { animation-delay: 0.9s; }
+.bulb-row.top-bulbs .slot-bulb:nth-child(8) { animation-delay: 1.05s; }
+
+.bulb-col.right-bulbs .slot-bulb:nth-child(1) { animation-delay: 1.2s; }
+.bulb-col.right-bulbs .slot-bulb:nth-child(2) { animation-delay: 1.35s; }
+.bulb-col.right-bulbs .slot-bulb:nth-child(3) { animation-delay: 1.5s; }
+
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(8) { animation-delay: 1.65s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(7) { animation-delay: 1.8s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(6) { animation-delay: 1.95s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(5) { animation-delay: 2.1s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(4) { animation-delay: 2.25s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(3) { animation-delay: 2.4s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(2) { animation-delay: 0.15s; }
+.bulb-row.bottom-bulbs .slot-bulb:nth-child(1) { animation-delay: 0.3s; }
+
+.bulb-col.left-bulbs .slot-bulb:nth-child(3) { animation-delay: 0.45s; }
+.bulb-col.left-bulbs .slot-bulb:nth-child(2) { animation-delay: 0.6s; }
+.bulb-col.left-bulbs .slot-bulb:nth-child(1) { animation-delay: 0.75s; }
+
+@keyframes bulbIdleGlow {
+  0%, 100% {
+    opacity: 0.42;
+    box-shadow: 0 0 3px rgba(247, 200, 68, 0.35);
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 16px rgba(212, 175, 55, 0.6);
+    transform: scale(1.12);
+  }
+}
+
+/* Active Spinning State: Fast High-Energy Chase */
+.slot-machine-cabinet.spinning .slot-bulb {
+  animation: bulbSpinChase 0.35s linear infinite !important;
+}
+@keyframes bulbSpinChase {
+  0%, 100% { opacity: 0.35; box-shadow: 0 0 2px rgba(247,200,68,0.2); transform: scale(0.9); }
+  50% { opacity: 1; box-shadow: 0 0 14px rgba(255, 225, 120, 1), 0 0 22px rgba(212, 175, 55, 0.85); transform: scale(1.22); }
+}
+
+/* Celebratory Lighting Sequence on Win */
+.slot-machine-cabinet.celebrating .slot-bulb {
+  animation: bulbCelebration 0.45s ease-in-out infinite alternate !important;
+}
+@keyframes bulbCelebration {
+  0% { opacity: 0.55; box-shadow: 0 0 5px rgba(255,215,0,0.45); transform: scale(0.95); }
+  100% { opacity: 1; box-shadow: 0 0 18px rgba(255,235,120,1), 0 0 28px rgba(255,215,0,0.95); transform: scale(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot-bulb,
+  .slot-machine-cabinet.spinning .slot-bulb,
+  .slot-machine-cabinet.celebrating .slot-bulb {
+    animation: none !important;
+    opacity: 0.85;
+    box-shadow: 0 0 6px rgba(247,200,68,0.7);
+  }
+}
+
+/* ═══ RESTORED HORIZONTAL THREE-REEL SLOT MACHINE LAYOUT ═══ */
+.slot-reels-box {
+  background: radial-gradient(circle at center, #181410 0%, #0a0807 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.65);
+  border-radius: 14px;
+  padding: 6px 8px 8px 8px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.95),
+    0 0 12px rgba(212, 175, 55, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reels-accent-dots {
+  text-align: center;
+  font-size: 11px;
+  color: var(--gold-primary);
+  letter-spacing: 4px;
+  margin-bottom: 4px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.reels-stage {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.slot-reel-frame {
+  flex: 1;
+  min-width: 0;
+  max-width: 76px;
+  height: 102px; /* Exactly REEL_WIN_H */
+  background: linear-gradient(180deg, #100e0b 0%, #080706 50%, #100e0b 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    inset 0 4px 12px rgba(0, 0, 0, 0.9),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.reel-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+}
+
+.reel-sym-card {
+  height: 44px; /* Exactly REEL_ITEM_H */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* 3D Cylindrical drum overlay with center payline highlight */
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.25) 24%,
+    rgba(255, 255, 255, 0.04) 48%,
+    rgba(255, 255, 255, 0.04) 52%,
+    rgba(0, 0, 0, 0.25) 76%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.slot-good-luck {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.8px;
+  color: #f7e6c4;
+  margin-top: 6px;
+  text-shadow: 0 0 8px rgba(247, 200, 68, 0.5);
+  text-align: center;
+}
+
+/* ═══ AUTHENTIC 5 SYMBOLS (7, ♥, ♣, ♠, ♦) ═══ */
+.sym-7 {
+  font-family: 'Cormorant Garamond', 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(180deg, #ffffff 0%, #fbd561 45%, #d4af37 75%, #8c6a12 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+  line-height: 1;
+}
+
+.sym-heart {
+  font-size: 26px;
+  color: #e74c3c;
+  filter: drop-shadow(0 2px 5px rgba(231, 76, 60, 0.6));
+  line-height: 1;
+}
+
+.sym-diamond {
+  font-size: 26px;
+  color: #e67e22;
+  filter: drop-shadow(0 2px 5px rgba(230, 126, 34, 0.6));
+  line-height: 1;
+}
+
+.sym-spade {
+  font-size: 26px;
+  color: #f5f5f5;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+  line-height: 1;
+}
+
+.sym-clover {
+  font-size: 26px;
+  color: #d4af37;
+  filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.5));
+  line-height: 1;
+}
+
+/* ═══ ANIMATED ONE SPIN AVAILABILITY MESSAGE ═══ */
+.spin-avail-box {
+  margin: 10px auto 10px;
+  text-align: center;
+  padding: 8px 14px;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1.5px solid rgba(212, 175, 55, 0.32);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  animation: spinAvailPulse 2.4s ease-in-out infinite;
+  transform-origin: center center;
+  transition: opacity 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes spinAvailPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 rgba(212, 175, 55, 0);
+    border-color: rgba(212, 175, 55, 0.28);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(212, 175, 55, 0.45);
+    border-color: rgba(212, 175, 55, 0.7);
+  }
+}
+
+.spin-avail-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.spin-avail-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: #e5e5e5;
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+
+/* Pause animation while spinning */
+.slot-machine-cabinet.spinning ~ .spin-avail-box,
+.spin-avail-box.paused {
+  animation-play-state: paused;
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-avail-box {
+    animation: none !important;
+  }
+}
+
+/* ═══ LOCKED SPIN & WIN BUTTON STATE ═══ */
+.spin-btn.locked {
+  background: linear-gradient(135deg, #2b2e38 0%, #1a1c24 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  filter: grayscale(0.4);
+}
+.spin-btn.locked:hover {
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ═══ GOOGLE WALLET BUTTON (SAME SCREEN) ═══ */
+.google-wallet-btn {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: all .25s ease;
+  box-sizing: border-box;
+}
+.google-wallet-btn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+}
+.google-wallet-btn.needs-reg {
+  animation: gwPulseOutline 2s infinite;
+  border-color: rgba(66, 133, 244, 0.75);
+}
+@keyframes gwPulseOutline {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(66, 133, 244, 0);
+    border-color: rgba(212, 175, 55, 0.85);
+  }
+}
+.gw-badge-icon { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ═══ FACE 11: IN-PLACE ACTIVE GOOGLE WALLET PASS CARD ═══ */
+.face11-active-pass-card {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(20, 36, 26, 0.85) 0%, rgba(10, 20, 15, 0.95) 100%);
+  border: 1.5px solid rgba(46, 204, 113, 0.45);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(46, 204, 113, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.face11-active-pass-card .active-pass-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 40%, rgba(255, 255, 255, 0.08) 50%, transparent 60%);
+  animation: cardShimmer 4s infinite;
+  pointer-events: none;
+}
+@keyframes cardShimmer {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(100%); }
+}
+.active-pass-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.active-pass-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.active-pass-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.active-pass-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2ecc71;
+  letter-spacing: 0.01em;
+}
+.active-pass-sub {
+  font-size: 11px;
+  color: #d1d5db;
+  margin-top: 1px;
+}
+.active-pass-id {
+  font-size: 9.5px;
+  color: var(--gold-primary);
+  font-family: monospace;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+.active-pass-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.4);
+  color: #2ecc71;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.active-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 6px #2ecc71;
+  animation: pulseDot 1.5s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* ═══ WALLET REQUIREMENT REMINDER BANNER (BELOW WALLET BUTTON) ═══ */
+.wallet-req-reminder {
+  background: rgba(243, 156, 18, 0.14);
+  border: 1.5px solid rgba(243, 156, 18, 0.45);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: #f39c12;
+  margin-top: 8px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  line-height: 1.35;
+  animation: reminderShake 0.45s ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+@keyframes reminderShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+.wallet-rem-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* ═══ 3D SCALLOPED LOYALTY STAMPS (GREEN & BLUE) ═══ */
+.stamp-3d-graphic {
+  display: inline-block;
+  vertical-align: middle;
+  transform-origin: center center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stamp-3d-graphic.awarded {
+  animation: stampAwardPop 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes stampAwardPop {
+  0% {
+    transform: scale(0.4) rotateY(-70deg) rotateZ(-15deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18) rotateY(15deg) rotateZ(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg) rotateZ(0deg);
+    opacity: 1;
+  }
+}
+
+/* ═══ FACE 9: 3D STAMP COLLECTION CARDS & WALLET ═══ */
+.wallet-reg-action-box {
+  background: rgba(66, 133, 244, 0.08);
+  border: 1.5px solid rgba(66, 133, 244, 0.35);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.wallet-reg-action-box.registered {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: rgba(46, 204, 113, 0.35);
+}
+.wallet-reg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.wallet-reg-headline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+}
+.wallet-reg-action-box.registered .wallet-reg-headline {
+  color: #2ecc71;
+}
+.wallet-reg-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.wallet-activate-btn {
+  background: linear-gradient(135deg, #4285F4 0%, #1a73e8 100%);
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+}
+.wallet-pass-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+}
+.pass-chip-id {
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+.pass-sync-status {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.stamp-3d-card {
+  border-radius: 18px;
+  padding: 15px 18px;
+  text-align: left;
+  margin: 10px 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.stamp-3d-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.stamp-3d-card.green-stamp-card {
+  background: linear-gradient(145deg, rgba(46, 204, 113, 0.12) 0%, rgba(12, 24, 20, 0.9) 100%);
+  border: 1.5px solid rgba(46, 204, 113, 0.38);
+}
+.stamp-3d-card.blue-stamp-card {
+  background: linear-gradient(145deg, rgba(52, 152, 219, 0.12) 0%, rgba(10, 20, 38, 0.9) 100%);
+  border: 1.5px solid rgba(52, 152, 219, 0.38);
+}
+.stamp-3d-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.stamp-3d-emblem {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.stamp-3d-emblem.green {
+  background: radial-gradient(circle at 35% 35%, #2ecc71 0%, #1e8449 70%, #145a32 100%);
+}
+.stamp-3d-emblem.blue {
+  background: radial-gradient(circle at 35% 35%, #3498db 0%, #2471a3 70%, #1b4f72 100%);
+}
+.stamp-3d-meta { flex: 1; }
+.stamp-3d-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.green-stamp-card .stamp-3d-label { color: #2ecc71; }
+.blue-stamp-card .stamp-3d-label { color: #3498db; }
+
+.stamp-3d-balance {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.stamp-3d-progress-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 8px 0 6px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.stamp-3d-progress-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stamp-3d-progress-bar.green {
+  background: linear-gradient(90deg, #1abc9c, #2ecc71, #a3e4d7);
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
+}
+.stamp-3d-progress-bar.blue {
+  background: linear-gradient(90deg, #2980b9, #3498db, #aed6f1);
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+}
+
+.stamp-3d-instruction {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+.stamp-3d-reward-banner {
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--gold-primary);
+  font-weight: 700;
+  margin-top: 8px;
+  animation: pulse-dot 2s infinite;
+}
+.stamp-3d-redeem-btn {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 8px;
+}
+.stamp-3d-redeem-btn.green {
+  background: linear-gradient(135deg, #2ecc71 0%, #1e8449 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+}
+.stamp-3d-redeem-btn.blue {
+  background: linear-gradient(135deg, #3498db 0%, #1f618d 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(52,152,219,0.3);
+}
+
+/* ═══ REWARD SHOWCASE BUNDLE (FACE 12 SINGLE REWARD) ═══ */
+.dual-reward-bundle{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin:10px 0;
+  width:100%;
+}
+.bundle-row-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:12px;
+  padding:12px 14px;
+  text-align:left;
+  animation:fadeInUp 0.4s ease;
+}
+.bundle-item-icon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:rgba(230,202,151,0.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+  border:1px solid rgba(230,202,151,0.25);
+}
+.bundle-item-content{flex:1}
+.bundle-item-type{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  margin-bottom:2px;
+}
+.bundle-item-title{
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  line-height:1.3;
+}
+.bundle-item-desc{
+  font-size:10.5px;
+  color:var(--muted);
+  margin-top:2px;
+}
+.bundle-item-status{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.08em;
+  padding:3px 8px;
+  border-radius:99px;
+  text-transform:uppercase;
+  font-weight:600;
+  background:rgba(46,204,113,0.15);
+  color:#2ecc71;
+  border:1px solid rgba(46,204,113,0.3);
+}
+
 </style>
 </head>
 <body>
@@ -1407,7 +2246,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
                   <div class="profile-success-title">Digital Loyalty Pass Created</div>
                   <div class="profile-success-desc">Your visits will be automatically counted on every NFC tap.</div>
                 </div>
-                <button class="c-btn" id="backToStart3" style="margin-top:12px">Back to Start →</button>
+                <button class="c-btn" id="startSpinBtn" style="margin-top:16px;box-shadow:0 10px 28px rgba(212,175,55,0.45)">Spin &amp; Win →</button>
               </div>
             </div>
 
@@ -1447,7 +2286,8 @@ tr:hover td{background:rgba(230,202,151,0.03)}
                   <div class="profile-success-title">Visit Confirmed</div>
                   <div class="profile-success-desc">Thank you for visiting today! Your presence has been registered at the counter.</div>
                 </div>
-                <button class="c-btn" id="backToStart5" style="margin-top:12px">Back to Start →</button>
+                <button class="c-btn" id="returningSpinBtn" style="margin-top:12px;background:linear-gradient(135deg, #f7e7c4 0%, #d4af37 50%, #ab8b52 100%)">Play Spin &amp; Win 🎰</button>
+                <button class="c-btn-ghost" id="backToStart5" style="margin-top:8px">Back to Start →</button>
               </div>
             </div>
 
@@ -1519,8 +2359,90 @@ tr:hover td{background:rgba(230,202,151,0.03)}
               </div>
             </div>
 
-            <!-- FACE 9: BIRTHDAY + ADDITIONAL DETAILS (3RD+ VISIT) -->
-            <div class="c-face" data-face="9">
+            <!-- FACE 9: PROOF LOYALTY WALLET (DIGITAL PASS & 3D STAMP COLLECTIONS) -->
+            <div class="c-face" data-face="9" id="faceLoyaltyWallet">
+              <div class="spin-brand-badge" style="margin-bottom:6px">DIGITAL LOYALTY PASS</div>
+              <div class="c-title" style="font-size:22px;letter-spacing:-0.01em">PROOF LOYALTY PASS</div>
+              <div class="c-sub" style="font-size:12px;margin:2px auto 12px">Your rewards, all in one place.</div>
+
+              <!-- Google Wallet Active Pass Card -->
+              <div class="wallet-reg-action-box registered" id="walletRegActionBox">
+                <div class="wallet-reg-header">
+                  <span class="gw-badge-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                      <path fill="#4285F4" d="M21.5 12c0-.7-.1-1.4-.2-2H12v4.3h5.4c-.2 1.3-.9 2.5-2 3.2v2.7h3.3c1.9-1.8 3-4.4 3-7.5z"/>
+                      <path fill="#34A853" d="M12 21.6c2.6 0 4.8-.9 6.4-2.4l-3.3-2.7c-.9.6-2 1-3.1 1-2.4 0-4.5-1.6-5.2-3.8H3.3v2.8C5 19.8 8.2 21.6 12 21.6z"/>
+                      <path fill="#FBBC05" d="M6.8 13.7c-.2-.6-.3-1.2-.3-1.9 0-.7.1-1.3.3-1.9V7.1H3.3C2.7 8.3 2.3 9.7 2.3 11.8s.4 3.5 1 4.7l3.5-2.8z"/>
+                      <path fill="#EA4335" d="M12 6.2c1.4 0 2.7.5 3.7 1.5l2.8-2.8C16.8 3.3 14.6 2.4 12 2.4 8.2 2.4 5 4.2 3.3 7.6l3.5 2.8c.7-2.2 2.8-3.8 5.2-3.8z"/>
+                    </svg>
+                  </span>
+                  <span class="wallet-reg-headline" id="walletRegHeadline">Google Wallet Pass Active</span>
+                </div>
+                <div class="wallet-reg-desc" id="walletRegDesc">Your PROOF Loyalty Pass is ready.</div>
+                <div class="wallet-pass-meta" id="walletPassMeta" style="display:flex">
+                  <span class="pass-chip-id" id="walletPassChipId">PASS: GW-PROOF-PASS</span>
+                  <span class="pass-sync-status">● Live Sync Active</span>
+                </div>
+              </div>
+
+              <!-- 3D Green Stamp Collection Card -->
+              <div class="stamp-3d-card green-stamp-card" id="greenStampCard3d">
+                <div class="stamp-3d-top">
+                  <div class="stamp-3d-emblem green" id="face9GreenStampEmblem" style="background:transparent;box-shadow:none;border:none">
+                    <!-- Dynamic 3D Green Stamp SVG -->
+                  </div>
+                  <div class="stamp-3d-meta">
+                    <div class="stamp-3d-label">GREEN STAMP COLLECTION</div>
+                    <div class="stamp-3d-balance" id="face9GreenBalance">0 / 10 Green Stamps</div>
+                  </div>
+                </div>
+                <div class="stamp-3d-progress-track">
+                  <div class="stamp-3d-progress-bar green" id="face9GreenProgress" style="width: 0%"></div>
+                </div>
+                <div class="stamp-3d-instruction" id="face9GreenInstruction">
+                  Collect 10 Green Stamps to redeem your reward.
+                </div>
+                <div class="stamp-3d-reward-banner" id="face9GreenRewardBanner" style="display:none">
+                  🎉 Reward Available!
+                </div>
+                <button class="stamp-3d-redeem-btn green" id="face9RedeemGreenBtn" type="button" disabled style="display:none">
+                  Redeem Reward (10 Stamps)
+                </button>
+              </div>
+
+              <!-- 3D Blue Stamp Collection Card -->
+              <div class="stamp-3d-card blue-stamp-card" id="blueStampCard3d">
+                <div class="stamp-3d-top">
+                  <div class="stamp-3d-emblem blue" id="face9BlueStampEmblem" style="background:transparent;box-shadow:none;border:none">
+                    <!-- Dynamic 3D Blue Stamp SVG -->
+                  </div>
+                  <div class="stamp-3d-meta">
+                    <div class="stamp-3d-label">BLUE STAMP COLLECTION</div>
+                    <div class="stamp-3d-balance" id="face9BlueBalance">0 / 5 Blue Stamps</div>
+                  </div>
+                </div>
+                <div class="stamp-3d-progress-track">
+                  <div class="stamp-3d-progress-bar blue" id="face9BlueProgress" style="width: 0%"></div>
+                </div>
+                <div class="stamp-3d-instruction" id="face9BlueInstruction">
+                  Collect 5 Blue Stamps to redeem your reward.
+                </div>
+                <div class="stamp-3d-reward-banner" id="face9BlueRewardBanner" style="display:none">
+                  🎉 Reward Available!
+                </div>
+                <button class="stamp-3d-redeem-btn blue" id="face9RedeemBlueBtn" type="button" disabled style="display:none">
+                  Redeem Reward (5 Stamps)
+                </button>
+              </div>
+
+              <!-- Bottom Action: ONLY Return to Start -->
+              <button class="c-btn" id="walletReturnStartBtn" type="button" style="margin-top:12px">
+                Return to Start
+              </button>
+            </div>
+
+            <!-- FACE 13: BIRTHDAY + ADDITIONAL DETAILS (3RD+ VISIT) -->
+            <div class="c-face" data-face="13">
               <div class="c-center">
                 <div class="medallion-3d">
                   <div class="medallion-orbit"></div>
@@ -1537,8 +2459,8 @@ tr:hover td{background:rgba(230,202,151,0.03)}
               </div>
             </div>
 
-            <!-- FACE 10: ADDITIONAL DETAILS SAVED -->
-            <div class="c-face" data-face="10">
+            <!-- FACE 14: ADDITIONAL DETAILS SAVED -->
+            <div class="c-face" data-face="14">
               <div class="c-center">
                 <div class="medallion-3d">
                   <div class="medallion-orbit"></div>
@@ -1550,6 +2472,182 @@ tr:hover td{background:rgba(230,202,151,0.03)}
               </div>
             </div>
 
+            <!-- FACE 11: SPIN & WIN 3D SLOT MACHINE (REFERENCE IMAGE 2) -->
+            <div class="c-face" data-face="11">
+              <div class="spin-header">
+                <div class="spin-brand-badge">PROOF LOYALTY REWARDS</div>
+                <div class="spin-header-row">
+                  <div class="c-title" style="font-size:22px;letter-spacing:-0.01em">PROOF SPIN &amp; WIN</div>
+                  <button class="sound-toggle-btn" id="soundToggleBtn" type="button" aria-label="Toggle sound" title="Mute/Unmute audio">🔇</button>
+                </div>
+                <div class="c-sub" style="font-size:11px;margin:2px auto 6px">Your next reward is just one spin away!</div>
+              </div>
+
+              <!-- 3D Marquee Slot Machine Housing (Reference Image 2) -->
+              <div class="slot-machine-cabinet" id="slotMachineCabinet">
+                <!-- Top Bulbs (8 bulbs) -->
+                <div class="bulb-row top-bulbs">
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                </div>
+
+                <!-- Middle Row: Left Bulbs + Reels Box + Right Bulbs -->
+                <div class="slot-cabinet-middle">
+                  <div class="bulb-col left-bulbs">
+                    <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  </div>
+
+                  <div class="slot-reels-box">
+                    <div class="reels-accent-dots">···</div>
+                    <div class="reels-stage">
+                      <!-- Reel 1 -->
+                      <div class="slot-reel-frame" id="reel1">
+                        <div class="reel-strip" id="reelStrip1"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                      <!-- Reel 2 -->
+                      <div class="slot-reel-frame" id="reel2">
+                        <div class="reel-strip" id="reelStrip2"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                      <!-- Reel 3 -->
+                      <div class="slot-reel-frame" id="reel3">
+                        <div class="reel-strip" id="reelStrip3"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                    </div>
+                    <div class="slot-good-luck">GOOD LUCK !</div>
+                  </div>
+
+                  <div class="bulb-col right-bulbs">
+                    <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  </div>
+                </div>
+
+                <!-- Bottom Bulbs (8 bulbs) -->
+                <div class="bulb-row bottom-bulbs">
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                </div>
+              </div>
+
+              <!-- Animated One Spin Availability Message (Directly Above Spin Button) -->
+              <div class="spin-avail-box" id="spinAvailBox">
+                <div class="spin-avail-title">You Have One Spin!</div>
+                <div class="spin-avail-sub">Try your luck and discover your reward.</div>
+              </div>
+
+              <!-- Spin & Win Primary Action Button -->
+              <button class="c-btn spin-btn" id="spinActionBtn" type="button">
+                <span id="spinActionBtnText">SPIN &amp; WIN</span>
+              </button>
+
+              <!-- Google Wallet Registration Button (Simulated In Place) -->
+              <button class="google-wallet-btn" id="googleWalletBtn" type="button">
+                <span class="gw-badge-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="#4285F4" d="M21.5 12c0-.7-.1-1.4-.2-2H12v4.3h5.4c-.2 1.3-.9 2.5-2 3.2v2.7h3.3c1.9-1.8 3-4.4 3-7.5z"/>
+                    <path fill="#34A853" d="M12 21.6c2.6 0 4.8-.9 6.4-2.4l-3.3-2.7c-.9.6-2 1-3.1 1-2.4 0-4.5-1.6-5.2-3.8H3.3v2.8C5 19.8 8.2 21.6 12 21.6z"/>
+                    <path fill="#FBBC05" d="M6.8 13.7c-.2-.6-.3-1.2-.3-1.9 0-.7.1-1.3.3-1.9V7.1H3.3C2.7 8.3 2.3 9.7 2.3 11.8s.4 3.5 1 4.7l3.5-2.8z"/>
+                    <path fill="#EA4335" d="M12 6.2c1.4 0 2.7.5 3.7 1.5l2.8-2.8C16.8 3.3 14.6 2.4 12 2.4 8.2 2.4 5 4.2 3.3 7.6l3.5 2.8c.7-2.2 2.8-3.8 5.2-3.8z"/>
+                  </svg>
+                </span>
+                <span id="googleWalletBtnText">Add to Google Wallet</span>
+              </button>
+
+              <!-- Active Status Card (Replaces Google Wallet Button In Place) -->
+              <div class="face11-active-pass-card" id="face11ActivePassCard" style="display:none">
+                <div class="active-pass-shine"></div>
+                <div class="active-pass-left">
+                  <div class="active-pass-icon-badge">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                      <path fill="#4285F4" d="M21.5 12c0-.7-.1-1.4-.2-2H12v4.3h5.4c-.2 1.3-.9 2.5-2 3.2v2.7h3.3c1.9-1.8 3-4.4 3-7.5z"/>
+                      <path fill="#34A853" d="M12 21.6c2.6 0 4.8-.9 6.4-2.4l-3.3-2.7c-.9.6-2 1-3.1 1-2.4 0-4.5-1.6-5.2-3.8H3.3v2.8C5 19.8 8.2 21.6 12 21.6z"/>
+                      <path fill="#FBBC05" d="M6.8 13.7c-.2-.6-.3-1.2-.3-1.9 0-.7.1-1.3.3-1.9V7.1H3.3C2.7 8.3 2.3 9.7 2.3 11.8s.4 3.5 1 4.7l3.5-2.8z"/>
+                      <path fill="#EA4335" d="M12 6.2c1.4 0 2.7.5 3.7 1.5l2.8-2.8C16.8 3.3 14.6 2.4 12 2.4 8.2 2.4 5 4.2 3.3 7.6l3.5 2.8c.7-2.2 2.8-3.8 5.2-3.8z"/>
+                    </svg>
+                  </div>
+                  <div class="active-pass-info">
+                    <div class="active-pass-title">Google Wallet Pass Active</div>
+                    <div class="active-pass-sub">Your PROOF Loyalty Pass is ready.</div>
+                    <div class="active-pass-id" id="face11PassChipId">PASS: GW-PROOF-PASS</div>
+                  </div>
+                </div>
+                <div class="active-pass-status-pill">
+                  <span class="active-pulse-dot"></span> Active
+                </div>
+              </div>
+
+              <!-- Wallet Requirement Reminder Notice (Shown BELOW Google Wallet button if user clicks locked spin) -->
+              <div class="wallet-req-reminder" id="walletReqReminder" style="display:none">
+                <span class="wallet-rem-icon">⚠️</span>
+                <span>Please add your PROOF Loyalty Pass to Google Wallet before spinning.</span>
+              </div>
+            </div>
+
+            <!-- FACE 12: REWARD RESULT SCREEN (STRICT SINGLE REWARD) -->
+            <div class="c-face" data-face="12">
+              <div class="c-center" id="rewardResultCenter">
+                <!-- Dynamic Tier Icon / Medallion -->
+                <div class="medallion-3d" id="resultMedallion">
+                  <div class="medallion-orbit"></div>
+                  <span id="resultMedallionIcon">🎁</span>
+                </div>
+
+                <div class="c-title" id="resultTierHeading" style="font-size:26px">Congratulations!</div>
+                <div id="resultTierSubheading" style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-primary);margin-top:-4px">
+                  You won a reward!
+                </div>
+
+                <!-- Reward Showcase Card (Mutually Exclusive: Either Stamp OR Gift) -->
+                <div class="reward-showcase-card" id="rewardShowcaseCard">
+                  <!-- Mini Winning Symbols -->
+                  <div class="winning-symbols-row" id="winningSymbolsRow">
+                    <span class="win-sym">[7]</span>
+                    <span class="win-sym">[7]</span>
+                    <span class="win-sym">[7]</span>
+                  </div>
+
+                  <!-- Single Reward Showcase Container -->
+                  <div class="dual-reward-bundle" id="singleRewardBundle">
+                    <!-- Option A: Stamp Award Row (Only shown if stamp won) -->
+                    <div class="bundle-row-item" id="bundleStampRow" style="display:none">
+                      <div class="bundle-item-icon" id="bundleStampIcon" style="background:transparent;box-shadow:none;border:none"></div>
+                      <div class="bundle-item-content">
+                        <div class="bundle-item-type">LOYALTY STAMP AWARDED</div>
+                        <div class="bundle-item-title" id="bundleStampTitle">Green Stamp Won</div>
+                        <div class="bundle-item-desc" id="bundleStampDesc">1 Green Stamp has been added to your loyalty collection.</div>
+                      </div>
+                      <div class="bundle-item-status">Added</div>
+                    </div>
+
+                    <!-- Option B: Gift Award Row (Only shown if gift won) -->
+                    <div class="bundle-row-item" id="bundleGiftRow" style="display:none">
+                      <div class="bundle-item-icon" id="bundleGiftIcon">☕</div>
+                      <div class="bundle-item-content">
+                        <div class="bundle-item-type">COMPLIMENTARY GIFT AWARDED</div>
+                        <div class="bundle-item-title" id="bundleGiftTitle">Extra Coffee Powder</div>
+                        <div class="bundle-item-desc" id="bundleGiftDesc">Show pass at checkout to claim with your visit order!</div>
+                      </div>
+                      <div class="bundle-item-status">Ready</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wallet-status-summary" id="walletStatusSummary">
+                  <span>Loyalty Balance:</span>
+                  <b id="summaryWalletStamps">0 Green · 0 Blue</b>
+                </div>
+
+                <!-- Exactly Two Post-Spin Actions -->
+                <button class="c-btn" id="resultReturnStartBtn" type="button" style="margin-top:12px">
+                  Return to Start
+                </button>
+                <button class="c-btn-ghost" id="resultCheckWalletBtn" type="button" style="margin-top:8px;font-size:13px;padding:10px 14px">
+                  Check Loyalty Wallet
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1675,6 +2773,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   }
 
   function populateCountrySelect(selectEl){
+    if(!selectEl) return;
     var detected = detectCountry();
     selectEl.innerHTML = '';
     for(var i = 0; i < countryCodes.length; i++){
@@ -1689,23 +2788,69 @@ tr:hover td{background:rgba(230,202,151,0.03)}
 
 
   // ═══════════════════════════════════════════════════════
-  // DATA LAYER — LOCALSTORAGE-BACKED MOCK STORAGE
+  // DATA LAYER — LOCALSTORAGE & NORMALIZATION
   // ═══════════════════════════════════════════════════════
 
   var STORAGE_CUSTOMERS = 'proof_customers';
   var STORAGE_EVENTS    = 'proof_events';
+  var PROMPT_COOLDOWN_VISITS = 3;
+
+  function normalizeCustomerRecord(c){
+    if(!c) return null;
+    if(!c.stampWallet){
+      c.stampWallet = {
+        green: (c.stamps && c.stamps.green) || 0,
+        blue:  (c.stamps && c.stamps.blue)  || 0
+      };
+    }
+    if(!c.stamps){
+      c.stamps = { green: c.stampWallet.green, blue: c.stampWallet.blue };
+    }
+    if(!c.googleWallet){
+      c.googleWallet = { registered: false, passId: null, registeredAt: null };
+    }
+    if(!c.spin){
+      c.spin = { available: true, completed: false };
+    }
+    if(!Array.isArray(c.rewardHistory)) c.rewardHistory = [];
+    if(!Array.isArray(c.redemptionHistory)) c.redemptionHistory = [];
+
+    if(!c.profilePrompt){
+      var profDone = (c.profileStage === 'CONTACT_DETAILS_COMPLETED' || c.profileStage === 'ADDITIONAL_DETAILS_COMPLETED' || !!c.name);
+      c.profilePrompt = {
+        completed: profDone,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+    }
+    if(!c.birthdayPrompt){
+      var bdayDone = (c.profileStage === 'ADDITIONAL_DETAILS_COMPLETED' || !!c.birthday);
+      c.birthdayPrompt = {
+        completed: bdayDone,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+    }
+    return c;
+  }
 
   function loadCustomers(){
-    try { return JSON.parse(localStorage.getItem(STORAGE_CUSTOMERS)) || []; }
+    try {
+      var raw = JSON.parse(localStorage.getItem(STORAGE_CUSTOMERS)) || [];
+      return raw.map(normalizeCustomerRecord);
+    }
     catch(e){ return []; }
   }
+
   function saveCustomers(list){
     localStorage.setItem(STORAGE_CUSTOMERS, JSON.stringify(list));
   }
+
   function loadEvents(){
     try { return JSON.parse(localStorage.getItem(STORAGE_EVENTS)) || []; }
     catch(e){ return []; }
   }
+
   function saveEventsData(list){
     localStorage.setItem(STORAGE_EVENTS, JSON.stringify(list));
   }
@@ -1742,6 +2887,14 @@ tr:hover td{background:rgba(230,202,151,0.03)}
       visitHistory: [{ date: now, type: 'signup', visit: 1 }],
       profileStage: 'PHONE_ONLY',
       promotionDetails: { offered: false, accepted: false },
+      googleWallet: { registered: false, passId: null, registeredAt: null },
+      stampWallet: { green: 0, blue: 0 },
+      stamps: { green: 0, blue: 0 },
+      spin: { available: true, completed: false },
+      rewardHistory: [],
+      redemptionHistory: [],
+      profilePrompt: { completed: false, skippedAtVisit: null, remindAfterVisit: null },
+      birthdayPrompt: { completed: false, skippedAtVisit: null, remindAfterVisit: null },
       createdAt: now,
       updatedAt: now
     };
@@ -1762,6 +2915,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
           }
         }
         customers[i].updatedAt = new Date().toISOString();
+        normalizeCustomerRecord(customers[i]);
         saveCustomers(customers);
         return customers[i];
       }
@@ -1799,6 +2953,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   }
 
   function showFieldError(errEl, show, msg){
+    if(!errEl) return;
     if(msg) errEl.textContent = msg;
     errEl.classList.toggle('show', show);
     var field = errEl.closest('.c-field');
@@ -1847,6 +3002,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   function renderLog(){
     var evts = loadEvents();
     var body = document.getElementById('logBody');
+    if(!body) return;
     if(evts.length === 0){
       body.innerHTML = '<div class="log-empty">No events yet — walk through the flow above to populate this.</div>';
       return;
@@ -1867,6 +3023,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   var deviceScreen = document.getElementById('deviceScreen');
 
   function deviceIdle(){
+    if(!deviceScreen) return;
     deviceScreen.classList.remove('st-event');
     deviceScreen.innerHTML =
       '<div class="d-stars">★★★★★</div>' +
@@ -1880,6 +3037,7 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   }
 
   function deviceShow(kind, name, sub, tag){
+    if(!deviceScreen) return;
     deviceScreen.classList.add('st-event');
     deviceScreen.innerHTML =
       '<div class="d-icon">✓</div>' +
@@ -1890,8 +3048,9 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   }
 
   function displayName(cust){
+    if(!cust) return 'Guest';
     if(cust.name) return cust.name.split(' ')[0];
-    return cust.phoneNumber;
+    return cust.phoneNumber || 'Guest';
   }
 
 
@@ -1912,155 +3071,200 @@ tr:hover td{background:rgba(230,202,151,0.03)}
 
 
   // ═══════════════════════════════════════════════════════
-  // FACE 0: NFC TAP INTERACTION (3D DYNAMIC MOTION)
+  // FACE 0: NFC TAP INTERACTION
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('nfcZone').addEventListener('click', function(){
-    var ripple = document.getElementById('ripple');
-    var stagePhone = document.getElementById('stagePhone3d');
+  var nfcZoneEl = document.getElementById('nfcZone');
+  if(nfcZoneEl){
+    nfcZoneEl.addEventListener('click', function(){
+      var ripple = document.getElementById('ripple');
+      var stagePhone = document.getElementById('stagePhone3d');
 
-    // Trigger phone downward tap motion in 3D
-    stagePhone.classList.add('tapping');
+      if(stagePhone) stagePhone.classList.add('tapping');
 
-    // Trigger electromagnetic ripple
-    var zone = this.getBoundingClientRect();
-    ripple.style.left = (zone.width / 2 - 5) + 'px';
-    ripple.style.top  = (zone.height / 2 - 5) + 'px';
-    ripple.classList.remove('go');
-    void ripple.offsetWidth;
-    ripple.classList.add('go');
+      if(ripple){
+        var zone = this.getBoundingClientRect();
+        ripple.style.left = (zone.width / 2 - 5) + 'px';
+        ripple.style.top  = (zone.height / 2 - 5) + 'px';
+        ripple.classList.remove('go');
+        void ripple.offsetWidth;
+        ripple.classList.add('go');
+      }
 
-    document.getElementById('connectingText').classList.add('show');
+      var connText = document.getElementById('connectingText');
+      if(connText) connText.classList.add('show');
 
-    setTimeout(function(){
-      stagePhone.classList.remove('tapping');
-      document.getElementById('connectingText').classList.remove('show');
-      activeCustomer = null;
-      showFace(1, 1);
-    }, 900);
-  });
+      setTimeout(function(){
+        if(stagePhone) stagePhone.classList.remove('tapping');
+        if(connText) connText.classList.remove('show');
+        activeCustomer = null;
+        showFace(1, 1);
+      }, 900);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
   // FACE 1: GATE SELECTION
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('gateNewBtn').addEventListener('click', function(){
-    document.getElementById('regPhone').value = '';
-    document.getElementById('regConsent').checked = true;
-    clearFieldError(document.getElementById('regPhoneErr'));
-    showFace(2, 2);
-  });
+  var gateNewBtn = document.getElementById('gateNewBtn');
+  if(gateNewBtn){
+    gateNewBtn.addEventListener('click', function(){
+      var regP = document.getElementById('regPhone');
+      if(regP) regP.value = '';
+      var regC = document.getElementById('regConsent');
+      if(regC) regC.checked = true;
+      clearFieldError(document.getElementById('regPhoneErr'));
+      showFace(2, 2);
+    });
+  }
 
-  document.getElementById('gateReturnBtn').addEventListener('click', function(){
-    document.getElementById('pSignin').value = '';
-    document.getElementById('signinErr').style.display = 'none';
-    clearFieldError(document.getElementById('siPhoneErr'));
-    showFace(4, 2);
-  });
+  var gateReturnBtn = document.getElementById('gateReturnBtn');
+  if(gateReturnBtn){
+    gateReturnBtn.addEventListener('click', function(){
+      var pSi = document.getElementById('pSignin');
+      if(pSi) pSi.value = '';
+      var siErr = document.getElementById('signinErr');
+      if(siErr) siErr.style.display = 'none';
+      clearFieldError(document.getElementById('siPhoneErr'));
+      showFace(4, 2);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
   // FACE 2: FIRST-TIME REGISTRATION (PHONE ONLY)
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('submitCapture').addEventListener('click', function(){
-    var countryCode = document.getElementById('regCountryCode').value;
-    var phone       = document.getElementById('regPhone').value.trim();
-    var errEl       = document.getElementById('regPhoneErr');
+  var submitCaptureBtn = document.getElementById('submitCapture');
+  if(submitCaptureBtn){
+    submitCaptureBtn.addEventListener('click', function(){
+      var countryCode = document.getElementById('regCountryCode').value;
+      var phone       = document.getElementById('regPhone').value.trim();
+      var errEl       = document.getElementById('regPhoneErr');
 
-    if(!validatePhone(phone)){
-      showFieldError(errEl, true, 'Please enter a valid phone number (6–15 digits).');
-      return;
-    }
+      if(!validatePhone(phone)){
+        showFieldError(errEl, true, 'Please enter a valid phone number (6–15 digits).');
+        return;
+      }
 
-    var newCust = createCustomer(countryCode, phone);
-    if(!newCust){
-      showFieldError(errEl, true, 'This number is already registered. Please select "I\'ve Signed In Before".');
-      return;
-    }
-    clearFieldError(errEl);
+      var newCust = createCustomer(countryCode, phone);
+      if(!newCust){
+        showFieldError(errEl, true, "This number is already registered. Please select 'I have Signed In Before'.");
+        return;
+      }
+      clearFieldError(errEl);
 
-    activeCustomer = newCust;
-    var label = displayName(activeCustomer);
+      activeCustomer = newCust;
+      var label = displayName(activeCustomer);
 
-    document.getElementById('signupSuccessMsg').textContent = 'Visit #1 logged. Welcome aboard!';
-    addEvent(label, 'Signed up — loyalty pass issued', 'capture');
-    deviceShow('New Member', label, 'Visit #1 · Loyalty Pass Created', 'capture');
-    showFace(3, 3);
-  });
-
-
-  // ═══════════════════════════════════════════════════════
-  // FACE 3: SIGN-UP SUCCESS → BACK TO START
-  // ═══════════════════════════════════════════════════════
-
-  document.getElementById('backToStart3').addEventListener('click', function(){
-    deviceIdle();
-    showFace(0, 0);
-  });
+      var sMsg = document.getElementById('signupSuccessMsg');
+      if(sMsg) sMsg.textContent = 'Visit #1 logged. Welcome aboard!';
+      addEvent(label, 'Signed up — loyalty pass issued', 'capture');
+      deviceShow('New Member', label, 'Visit #1 · Loyalty Pass Created', 'capture');
+      showFace(3, 3);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
-  // FACE 4: RETURNING CUSTOMER SIGN-IN
+  // FACE 3: SIGN-UP SUCCESS (SPIN & WIN PRIMARY ONLY)
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('signinBtn').addEventListener('click', function(){
-    var countryCode = document.getElementById('siCountryCode').value;
-    var phone       = document.getElementById('pSignin').value.trim();
-    var phoneErr    = document.getElementById('siPhoneErr');
-    var notFoundErr = document.getElementById('signinErr');
+  var bts3 = document.getElementById('backToStart3');
+  if(bts3){
+    bts3.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
 
-    if(!validatePhone(phone)){
-      showFieldError(phoneErr, true, 'Please enter a valid phone number (6–15 digits).');
-      notFoundErr.style.display = 'none';
-      return;
-    }
-    clearFieldError(phoneErr);
 
-    var normalized = normalizePhone(countryCode, phone);
-    var customer = findCustomerByPhone(normalized);
+  // ═══════════════════════════════════════════════════════
+  // FACE 4: RETURNING CUSTOMER SIGN-IN WITH COOLDOWN LOGIC
+  // ═══════════════════════════════════════════════════════
 
-    if(!customer){
-      notFoundErr.style.display = 'block';
-      return;
-    }
-    notFoundErr.style.display = 'none';
-    activeCustomer = customer;
+  var signinBtn = document.getElementById('signinBtn');
+  if(signinBtn){
+    signinBtn.addEventListener('click', function(){
+      var countryCode = document.getElementById('siCountryCode').value;
+      var phone       = document.getElementById('pSignin').value.trim();
+      var phoneErr    = document.getElementById('siPhoneErr');
+      var notFoundErr = document.getElementById('signinErr');
 
-    // Record visit strictly once
-    activeCustomer = recordVisit(activeCustomer);
+      if(!validatePhone(phone)){
+        showFieldError(phoneErr, true, 'Please enter a valid phone number (6–15 digits).');
+        if(notFoundErr) notFoundErr.style.display = 'none';
+        return;
+      }
+      clearFieldError(phoneErr);
 
-    var label = displayName(activeCustomer);
-    addEvent(label, 'Signed in — visit #' + activeCustomer.visits, 'signin');
-    deviceShow('Welcome Back VIP', label, 'Visit #' + activeCustomer.visits + ' Logged', 'signin');
+      var normalized = normalizePhone(countryCode, phone);
+      var customer = findCustomerByPhone(normalized);
 
-    // Route based on progressive profile stage
-    if(activeCustomer.profileStage === 'PHONE_ONLY'){
-      var greeting = activeCustomer.name
-        ? ('Welcome back, ' + activeCustomer.name.split(' ')[0] + '!')
-        : 'Welcome Back!';
-      document.getElementById('promoGreeting').textContent = greeting;
-      showFace(6, 3);
+      if(!customer){
+        if(notFoundErr) notFoundErr.style.display = 'block';
+        return;
+      }
+      if(notFoundErr) notFoundErr.style.display = 'none';
+      activeCustomer = customer;
 
-    } else if(activeCustomer.profileStage === 'CONTACT_DETAILS_COMPLETED' && !activeCustomer.birthday){
-      var bdayName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
-      document.getElementById('bdayGreeting').textContent =
-        bdayName ? ('Hey ' + bdayName + ', Help Us Celebrate You!') : 'Help Us Celebrate You';
-      document.getElementById('bdayInput').value = '';
-      showFace(9, 3);
+      // Increment visit strictly once on sign-in
+      activeCustomer = recordVisit(activeCustomer);
 
-    } else {
-      showWelcomeBack(3);
-    }
-  });
+      var label = displayName(activeCustomer);
+      addEvent(label, 'Signed in — visit #' + activeCustomer.visits, 'signin');
+      deviceShow('Welcome Back VIP', label, 'Visit #' + activeCustomer.visits + ' Logged', 'signin');
+
+      // Progressive profile routing with independent 3-visit cooldowns
+      var needsProfile = !activeCustomer.profilePrompt.completed;
+      var profileSuppressed = false;
+      if(needsProfile && activeCustomer.profilePrompt.remindAfterVisit !== null){
+        if(activeCustomer.visits < activeCustomer.profilePrompt.remindAfterVisit){
+          profileSuppressed = true;
+        }
+      }
+
+      var needsBirthday = activeCustomer.profilePrompt.completed && !activeCustomer.birthdayPrompt.completed;
+      var birthdaySuppressed = false;
+      if(needsBirthday && activeCustomer.birthdayPrompt.remindAfterVisit !== null){
+        if(activeCustomer.visits < activeCustomer.birthdayPrompt.remindAfterVisit){
+          birthdaySuppressed = true;
+        }
+      }
+
+      if(needsProfile && !profileSuppressed){
+        var greeting = activeCustomer.name
+          ? ('Welcome back, ' + activeCustomer.name.split(' ')[0] + '!')
+          : 'Welcome Back!';
+        var pGreet = document.getElementById('promoGreeting');
+        if(pGreet) pGreet.textContent = greeting;
+        showFace(6, 3);
+
+      } else if(needsBirthday && !birthdaySuppressed){
+        var bdayName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+        var bGreet = document.getElementById('bdayGreeting');
+        if(bGreet) bGreet.textContent = bdayName ? ('Hey ' + bdayName + ', Help Us Celebrate You!') : 'Help Us Celebrate You';
+        var bIn = document.getElementById('bdayInput');
+        if(bIn) bIn.value = '';
+        showFace(13, 3); // Face 13 is dedicated Birthday screen
+
+      } else {
+        showWelcomeBack(3);
+      }
+    });
+  }
 
   function showWelcomeBack(dot){
+    if(!activeCustomer) return;
     var label = activeCustomer.name
       ? activeCustomer.name.split(' ')[0]
-      : 'Guest';
-    document.getElementById('welcomeName').textContent = label;
-    document.getElementById('visitNum').textContent = activeCustomer.visits;
+      : 'VIP Member';
+    var wName = document.getElementById('welcomeName');
+    var vNum  = document.getElementById('visitNum');
+    if(wName) wName.textContent = label;
+    if(vNum)  vNum.textContent  = activeCustomer.visits;
     showFace(5, dot);
   }
 
@@ -2069,146 +3273,1256 @@ tr:hover td{background:rgba(230,202,151,0.03)}
   // FACE 5: WELCOME BACK TERMINAL → BACK TO START
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('backToStart5').addEventListener('click', function(){
-    deviceIdle();
-    showFace(0, 0);
-  });
+  var bts5 = document.getElementById('backToStart5');
+  if(bts5){
+    bts5.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
   // FACE 6: PROFILE COMPLETION INTRO
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('promoYesBtn').addEventListener('click', function(){
-    activeCustomer = updateCustomer(activeCustomer, {
-      promotionDetails: { offered: true, accepted: true }
-    });
+  var promoYesBtn = document.getElementById('promoYesBtn');
+  if(promoYesBtn){
+    promoYesBtn.addEventListener('click', function(){
+      activeCustomer = updateCustomer(activeCustomer, {
+        promotionDetails: { offered: true, accepted: true }
+      });
 
-    document.getElementById('promoName').value  = activeCustomer.name || '';
-    document.getElementById('promoEmail').value = activeCustomer.email || '';
-    clearFieldError(document.getElementById('promoNameErr'));
-    clearFieldError(document.getElementById('promoEmailErr'));
-    showFace(7, 4);
-  });
-
-  document.getElementById('promoNoBtn').addEventListener('click', function(){
-    activeCustomer = updateCustomer(activeCustomer, {
-      promotionDetails: { offered: true, accepted: false }
+      var pName  = document.getElementById('promoName');
+      var pEmail = document.getElementById('promoEmail');
+      if(pName)  pName.value  = activeCustomer.name || '';
+      if(pEmail) pEmail.value = activeCustomer.email || '';
+      clearFieldError(document.getElementById('promoNameErr'));
+      clearFieldError(document.getElementById('promoEmailErr'));
+      showFace(7, 4);
     });
-    showWelcomeBack(4);
-  });
+  }
+
+  var promoNoBtn = document.getElementById('promoNoBtn');
+  if(promoNoBtn){
+    promoNoBtn.addEventListener('click', function(){
+      var skippedVisit = activeCustomer.visits;
+      var remindVisit  = skippedVisit + PROMPT_COOLDOWN_VISITS;
+      activeCustomer.profilePrompt = {
+        completed: false,
+        skippedAtVisit: skippedVisit,
+        remindAfterVisit: remindVisit
+      };
+      activeCustomer = updateCustomer(activeCustomer, {
+        profilePrompt: activeCustomer.profilePrompt,
+        promotionDetails: { offered: true, accepted: false }
+      });
+      addEvent(displayName(activeCustomer), 'Deferred profile info (remind after visit #' + remindVisit + ')', 'promo');
+      showWelcomeBack(4);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
   // FACE 7: NAME & EMAIL FORM
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('submitPromoBtn').addEventListener('click', function(){
-    var name     = document.getElementById('promoName').value.trim();
-    var email    = document.getElementById('promoEmail').value.trim();
-    var nameErr  = document.getElementById('promoNameErr');
-    var emailErr = document.getElementById('promoEmailErr');
+  var submitPromoBtn = document.getElementById('submitPromoBtn');
+  if(submitPromoBtn){
+    submitPromoBtn.addEventListener('click', function(){
+      var name     = document.getElementById('promoName').value.trim();
+      var email    = document.getElementById('promoEmail').value.trim();
+      var nameErr  = document.getElementById('promoNameErr');
+      var emailErr = document.getElementById('promoEmailErr');
 
-    var valid = true;
+      var valid = true;
 
-    if(!validateName(name)){
-      showFieldError(nameErr, true);
-      valid = false;
-    } else {
-      clearFieldError(nameErr);
-    }
+      if(!validateName(name)){
+        showFieldError(nameErr, true);
+        valid = false;
+      } else {
+        clearFieldError(nameErr);
+      }
 
-    if(!validateEmail(email)){
-      showFieldError(emailErr, true);
-      valid = false;
-    } else {
-      clearFieldError(emailErr);
-    }
+      if(!validateEmail(email)){
+        showFieldError(emailErr, true);
+        valid = false;
+      } else {
+        clearFieldError(emailErr);
+      }
 
-    if(!valid) return;
+      if(!valid) return;
 
-    activeCustomer = updateCustomer(activeCustomer, {
-      name: name,
-      email: email,
-      profileStage: 'CONTACT_DETAILS_COMPLETED',
-      promotionDetails: { offered: true, accepted: true }
+      activeCustomer.profilePrompt = {
+        completed: true,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+
+      activeCustomer = updateCustomer(activeCustomer, {
+        name: name,
+        email: email,
+        profileStage: 'CONTACT_DETAILS_COMPLETED',
+        profilePrompt: activeCustomer.profilePrompt,
+        promotionDetails: { offered: true, accepted: true }
+      });
+
+      var firstName = name.split(' ')[0];
+      addEvent(firstName, 'Completed profile details', 'promo');
+      deviceShow('Profile Updated', firstName, 'Profile Linked · Visit #' + activeCustomer.visits, 'promo');
+
+      showFace(8, 5);
     });
+  }
 
-    var firstName = name.split(' ')[0];
-    addEvent(firstName, 'Completed profile details', 'promo');
-    deviceShow('Profile Updated', firstName, 'Profile Linked · Visit #' + activeCustomer.visits, 'promo');
-
-    showFace(8, 5);
-  });
-
-
-  // ═══════════════════════════════════════════════════════
-  // FACE 8: PROFILE SUCCESS → WELCOME BACK
-  // ═══════════════════════════════════════════════════════
-
-  document.getElementById('offerDoneBtn').addEventListener('click', function(){
-    showWelcomeBack(6);
-  });
+  var offerDoneBtn = document.getElementById('offerDoneBtn');
+  if(offerDoneBtn){
+    offerDoneBtn.addEventListener('click', function(){
+      showWelcomeBack(6);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
-  // FACE 9: BIRTHDAY + ADDITIONAL DETAILS
+  // FACE 13 & 14: BIRTHDAY DETAILS (PRESERVED)
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('bdaySubmitBtn').addEventListener('click', function(){
-    var bday = document.getElementById('bdayInput').value;
+  var bdaySubmitBtn = document.getElementById('bdaySubmitBtn');
+  if(bdaySubmitBtn){
+    bdaySubmitBtn.addEventListener('click', function(){
+      var bday = document.getElementById('bdayInput').value;
 
-    if(!bday){
+      if(!bday){
+        showWelcomeBack(4);
+        return;
+      }
+
+      activeCustomer.birthdayPrompt = {
+        completed: true,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+
+      activeCustomer = updateCustomer(activeCustomer, {
+        birthday: bday,
+        profileStage: 'ADDITIONAL_DETAILS_COMPLETED',
+        birthdayPrompt: activeCustomer.birthdayPrompt
+      });
+
+      var label = displayName(activeCustomer);
+      addEvent(label, 'Birthday saved — profile completed', 'profile');
+      deviceShow('Profile Completed', label, 'Birthday Saved · Visit #' + activeCustomer.visits, 'profile');
+
+      var firstName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+      var bMsg = document.getElementById('bdaySuccessMsg');
+      if(bMsg){
+        bMsg.textContent = firstName
+          ? ('Thank you, ' + firstName + "! We'll make your birthday extra special.")
+          : "Thank you! We'll make your next visit extra special.";
+      }
+
+      showFace(14, 4);
+    });
+  }
+
+  var bdaySkipBtn = document.getElementById('bdaySkipBtn');
+  if(bdaySkipBtn){
+    bdaySkipBtn.addEventListener('click', function(){
+      var skippedVisit = activeCustomer.visits;
+      var remindVisit  = skippedVisit + PROMPT_COOLDOWN_VISITS;
+      activeCustomer.birthdayPrompt = {
+        completed: false,
+        skippedAtVisit: skippedVisit,
+        remindAfterVisit: remindVisit
+      };
+      activeCustomer = updateCustomer(activeCustomer, {
+        birthdayPrompt: activeCustomer.birthdayPrompt
+      });
+      addEvent(displayName(activeCustomer), 'Deferred birthday info (remind after visit #' + remindVisit + ')', 'profile');
       showWelcomeBack(4);
-      return;
-    }
-
-    activeCustomer = updateCustomer(activeCustomer, {
-      birthday: bday,
-      profileStage: 'ADDITIONAL_DETAILS_COMPLETED'
     });
+  }
 
-    var label = displayName(activeCustomer);
-    addEvent(label, 'Birthday saved — profile completed', 'profile');
-    deviceShow('Profile Completed', label, 'Birthday Saved · Visit #' + activeCustomer.visits, 'profile');
-
-    var firstName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
-    document.getElementById('bdaySuccessMsg').textContent =
-      firstName
-        ? ('Thank you, ' + firstName + '! We\'ll make your birthday extra special.')
-        : 'Thank you! We\'ll make your next visit extra special.';
-
-    showFace(10, 4);
-  });
-
-  document.getElementById('bdaySkipBtn').addEventListener('click', function(){
-    showWelcomeBack(4);
-  });
-
-
-  // ═══════════════════════════════════════════════════════
-  // FACE 10: DETAILS SAVED → WELCOME BACK
-  // ═══════════════════════════════════════════════════════
-
-  document.getElementById('bdayDoneBtn').addEventListener('click', function(){
-    showWelcomeBack(5);
-  });
+  var bdayDoneBtn = document.getElementById('bdayDoneBtn');
+  if(bdayDoneBtn){
+    bdayDoneBtn.addEventListener('click', function(){
+      showWelcomeBack(5);
+    });
+  }
 
 
   // ═══════════════════════════════════════════════════════
   // RESET ALL DATA
   // ═══════════════════════════════════════════════════════
 
-  document.getElementById('resetBtn').addEventListener('click', function(){
-    if(confirm('Reset all customer records and event audit log? This cannot be undone.')){
-      localStorage.removeItem(STORAGE_CUSTOMERS);
-      localStorage.removeItem(STORAGE_EVENTS);
-      activeCustomer = null;
-      renderLog();
+  var resetBtn = document.getElementById('resetBtn');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Reset all customer records and event audit log? This cannot be undone.')){
+        localStorage.removeItem(STORAGE_CUSTOMERS);
+        localStorage.removeItem(STORAGE_EVENTS);
+        activeCustomer = null;
+        renderLog();
+        deviceIdle();
+        showFace(0, 0);
+      }
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // SOUND SYNTHESIZER
+  // ═══════════════════════════════════════════════════════
+
+  var SoundFX = (function(){
+    var audioCtx = null;
+    var isMuted = true;
+
+    function initCtx(){
+      if(!audioCtx && (window.AudioContext || window.webkitAudioContext)){
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e){}
+      }
+      if(audioCtx && audioCtx.state === 'suspended'){
+        audioCtx.resume();
+      }
+    }
+
+    function playTick(){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(620, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.035);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.035);
+      } catch(e){}
+    }
+
+    function playReelStop(){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(170, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e){}
+    }
+
+    function playWinFanfare(tier){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var now = audioCtx.currentTime;
+        var notes = (tier === 'MEGA_JACKPOT' || tier === 'JACKPOT')
+          ? [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98]
+          : [523.25, 659.25, 783.99];
+        var noteLen = 0.12;
+        notes.forEach(function(freq, i){
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * noteLen);
+          gain.gain.setValueAtTime(0.12, now + i * noteLen);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i + 1) * noteLen + 0.1);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * noteLen);
+          osc.stop(now + (i + 1) * noteLen + 0.1);
+        });
+      } catch(e){}
+    }
+
+    return {
+      init: initCtx,
+      tick: playTick,
+      stop: playReelStop,
+      win: playWinFanfare,
+      toggleMute: function(){
+        isMuted = !isMuted;
+        initCtx();
+        return isMuted;
+      },
+      isMuted: function(){ return isMuted; }
+    };
+  })();
+
+
+  // ═══════════════════════════════════════════════════════
+  // REWARD ENGINE: STRICTLY MUTUALLY EXCLUSIVE REWARD
+  // A CUSTOMER RECEIVES EITHER A STAMP OR A GIFT — NEVER BOTH!
+  // ═══════════════════════════════════════════════════════
+
+  var SYMBOLS = ['7', '♥', '♣', '♠', '♦'];
+  var NON_SEVEN_SUITS = ['♥', '♣', '♠', '♦'];
+
+  function getRandomElement(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function pickRewardTier(){
+    var r = Math.random();
+    if(r < 0.005) return 'MEGA_JACKPOT'; // 0.5%
+    if(r < 0.005 + 0.015) return 'JACKPOT'; // 1.5%
+    if(r < 0.005 + 0.015 + 0.15) return 'MEDIUM'; // 15%
+    return 'SMALL'; // 83%
+  }
+
+  function generateSymbolsForTier(tier){
+    if(tier === 'MEGA_JACKPOT'){
+      return ['7', '7', '7'];
+    }
+    if(tier === 'JACKPOT'){
+      var suit = getRandomElement(NON_SEVEN_SUITS);
+      return [suit, suit, suit];
+    }
+    if(tier === 'MEDIUM'){
+      var pairSymbol = getRandomElement(['7', '♥']);
+      var otherSymbols = SYMBOLS.filter(function(s){ return s !== pairSymbol; });
+      var odd = getRandomElement(otherSymbols);
+      var layouts = [
+        [pairSymbol, pairSymbol, odd],
+        [odd, pairSymbol, pairSymbol],
+        [pairSymbol, odd, pairSymbol]
+      ];
+      return getRandomElement(layouts);
+    }
+    // SMALL
+    if(Math.random() < 0.65){
+      var lowPair = getRandomElement(['♣', '♠', '♦']);
+      var rest = SYMBOLS.filter(function(s){ return s !== lowPair; });
+      var oddS = getRandomElement(rest);
+      var pos = [
+        [lowPair, lowPair, oddS],
+        [oddS, lowPair, lowPair],
+        [lowPair, oddS, lowPair]
+      ];
+      return getRandomElement(pos);
+    } else {
+      var shuffled = SYMBOLS.slice().sort(function(){ return 0.5 - Math.random(); });
+      return [shuffled[0], shuffled[1], shuffled[2]];
+    }
+  }
+
+  function getSymbolHtml(sym){
+    if(sym === '7') return '<span class="sym-7">7</span>';
+    if(sym === '♥') return '<span class="sym-heart">♥</span>';
+    if(sym === '♣') return '<span class="sym-clover">♣</span>';
+    if(sym === '♠') return '<span class="sym-spade">♠</span>';
+    if(sym === '♦') return '<span class="sym-diamond">♦</span>';
+    return sym;
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // 3D SCALLOPED LOYALTY STAMP SVG GENERATOR (GREEN & BLUE)
+  // ═══════════════════════════════════════════════════════
+
+  function get3DStampSvg(color, size, animClass){
+    size = size || 44;
+    var isGreen = (String(color).toLowerCase() === 'green');
+    var uid = 'stamp_' + (isGreen ? 'g' : 'b') + '_' + Math.random().toString(36).substr(2, 5);
+    var gradId = uid + '_grad';
+    var coreId = uid + '_core';
+    var starId = uid + '_star';
+
+    var cStart = isGreen ? '#145a32' : '#154360';
+    var cMid   = isGreen ? '#2ecc71' : '#3498db';
+    var cLight = isGreen ? '#abebc6' : '#aed6f1';
+    var cGlow  = isGreen ? 'rgba(46,204,113,0.45)' : 'rgba(52,152,219,0.45)';
+
+    var pathD = 'M 57.00 30.00 Q 53.54 34.68 54.94 40.33 Q 49.96 43.33 49.09 49.09 Q 43.33 49.96 40.33 54.94 Q 34.68 53.54 30.00 57.00 Q 25.32 53.54 19.67 54.94 Q 16.67 49.96 10.91 49.09 Q 10.04 43.33 5.06 40.33 Q 6.46 34.68 3.00 30.00 Q 6.46 25.32 5.06 19.67 Q 10.04 16.67 10.91 10.91 Q 16.67 10.04 19.67 5.06 Q 25.32 6.46 30.00 3.00 Q 34.68 6.46 40.33 5.06 Q 43.33 10.04 49.09 10.91 Q 49.96 16.67 54.94 19.67 Q 53.54 25.32 57.00 30.00 Z';
+
+    var emblem = isGreen
+      ? '<polygon points="30,17 33.5,24.5 41.5,24.5 35,29.5 37.5,37 30,32 22.5,37 25,29.5 18.5,24.5 26.5,24.5" fill="url(#' + starId + ')" stroke="#996e14" stroke-width="0.5" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.6))"/>'
+      : '<polygon points="30,15 35.5,24.5 44,30 35.5,35.5 30,45 24.5,35.5 16,30 24.5,24.5" fill="url(#' + starId + ')" stroke="#996e14" stroke-width="0.5" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.6))"/>';
+
+    var cls = 'stamp-3d-graphic ' + (animClass || '');
+
+    return '<svg class="' + cls + '" viewBox="0 0 60 60" width="' + size + '" height="' + size + '" style="filter:drop-shadow(0 4px 10px ' + cGlow + ')">' +
+      '<defs>' +
+        '<linearGradient id="' + gradId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="' + cStart + '"/>' +
+          '<stop offset="45%" stop-color="' + cMid + '"/>' +
+          '<stop offset="70%" stop-color="' + cLight + '"/>' +
+          '<stop offset="100%" stop-color="' + cStart + '"/>' +
+        '</linearGradient>' +
+        '<radialGradient id="' + coreId + '" cx="40%" cy="35%" r="65%">' +
+          '<stop offset="0%" stop-color="' + cLight + '"/>' +
+          '<stop offset="50%" stop-color="' + cMid + '"/>' +
+          '<stop offset="100%" stop-color="' + cStart + '"/>' +
+        '</radialGradient>' +
+        '<linearGradient id="' + starId + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+          '<stop offset="0%" stop-color="#fff5cc"/>' +
+          '<stop offset="50%" stop-color="#f1c40f"/>' +
+          '<stop offset="100%" stop-color="#b7950b"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<path d="' + pathD + '" fill="url(#' + gradId + ')" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>' +
+      '<circle cx="30" cy="30" r="21.5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-dasharray="2.5 2"/>' +
+      '<circle cx="30" cy="30" r="17" fill="url(#' + coreId + ')" stroke="rgba(0,0,0,0.35)" stroke-width="1"/>' +
+      emblem +
+      '<path d="M 18,22 C 22,14 38,14 42,22 C 37,17 23,17 18,22 Z" fill="rgba(255,255,255,0.45)"/>' +
+    '</svg>';
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // MUTUALLY EXCLUSIVE SINGLE REWARD GENERATOR
+  // ═══════════════════════════════════════════════════════
+
+  function pickSingleRewardOutcome(){
+    var tier = pickRewardTier();
+    var symbols = generateSymbolsForTier(tier);
+    var outcome = null;
+
+    if(tier === 'SMALL'){
+      // 83% total probability: 50% chance of Option A (Stamp) vs Option B (Gift)
+      var isStamp = Math.random() < 0.5;
+      if(isStamp){
+        outcome = {
+          rewardCategory: 'SMALL',
+          rewardType: 'STAMP',
+          stampColor: 'GREEN',
+          stampCount: 1,
+          gift: null,
+          label: 'SMALL REWARD (STAMP)',
+          heading: 'Congratulations!',
+          subheading: 'You won a Green Stamp!',
+          symbols: symbols,
+          medallionIcon: 'GREEN_STAMP'
+        };
+      } else {
+        var smallGifts = [
+          { name: 'Extra Coffee Powder & Roast Bag', desc: 'Freshly ground complimentary sample pack of house roast.' },
+          { name: 'Artisan Flavor Syrup Shot', desc: 'Add Madagascar Vanilla or Salted Caramel to your beverage.' },
+          { name: 'Gourmet Dark Chocolate Treat', desc: 'Handcrafted mini dark chocolate square with your visit.' }
+        ];
+        var g = getRandomElement(smallGifts);
+        outcome = {
+          rewardCategory: 'SMALL',
+          rewardType: 'GIFT',
+          stampColor: null,
+          stampCount: 0,
+          gift: g,
+          label: 'SMALL REWARD (GIFT)',
+          heading: 'Congratulations!',
+          subheading: 'You won a complimentary gift!',
+          symbols: symbols,
+          medallionIcon: '☕'
+        };
+      }
+
+    } else if(tier === 'MEDIUM'){
+      // 15% total probability: 50% chance of Option A (Stamp) vs Option B (Gift)
+      var isStampM = Math.random() < 0.5;
+      if(isStampM){
+        outcome = {
+          rewardCategory: 'MEDIUM',
+          rewardType: 'STAMP',
+          stampColor: 'BLUE',
+          stampCount: 1,
+          gift: null,
+          label: 'MEDIUM REWARD (STAMP)',
+          heading: 'Great Win!',
+          subheading: 'You won a Blue Stamp!',
+          symbols: symbols,
+          medallionIcon: 'BLUE_STAMP'
+        };
+      } else {
+        var medGifts = [
+          { name: 'Complimentary Size Upgrade', desc: 'Order any regular beverage and enjoy a large size for free!' },
+          { name: 'Free Oat or Specialty Milk Upgrade', desc: 'Upgrade your latte or cappuccino with dairy-free artisan milk.' }
+        ];
+        var gm = getRandomElement(medGifts);
+        outcome = {
+          rewardCategory: 'MEDIUM',
+          rewardType: 'GIFT',
+          stampColor: null,
+          stampCount: 0,
+          gift: gm,
+          label: 'MEDIUM REWARD (GIFT)',
+          heading: 'Great Win!',
+          subheading: 'You unlocked a special reward!',
+          symbols: symbols,
+          medallionIcon: '🎁'
+        };
+      }
+
+    } else if(tier === 'JACKPOT'){ // 1.5% - Gift only
+      var jackpotGifts = [
+        { name: 'Signature PROOF Ceramic Barista Mug', desc: 'Handcrafted matte ceramic coffee mug with gold PROOF emblem.' },
+        { name: 'Fresh French Bakery Pastry of the Day', desc: 'Pair your favorite coffee with freshly baked artisan pastry.' }
+      ];
+      var gj = getRandomElement(jackpotGifts);
+      outcome = {
+        rewardCategory: 'JACKPOT',
+        rewardType: 'GIFT',
+        stampColor: null,
+        stampCount: 0,
+        gift: gj,
+        label: 'JACKPOT REWARD (GIFT)',
+        heading: 'Jackpot!',
+        subheading: 'Fantastic! You won a premium gift!',
+        symbols: symbols,
+        medallionIcon: '🏆'
+      };
+
+    } else { // MEGA_JACKPOT (0.5%) - Grand Gift
+      var megaGifts = [
+        { name: 'Buy One Get One VIP Pass', desc: 'Enjoy any signature coffee on the house when you bring a guest!' },
+        { name: 'PROOF Deluxe Coffee Gift Hamper', desc: 'Artisan beans, ceramic mug & premium travel tumbler.' }
+      ];
+      var gmj = getRandomElement(megaGifts);
+      outcome = {
+        rewardCategory: 'MEGA_JACKPOT',
+        rewardType: 'GIFT',
+        stampColor: null,
+        stampCount: 0,
+        gift: gmj,
+        label: 'MEGA JACKPOT (GIFT)',
+        heading: 'MEGA JACKPOT!',
+        subheading: "Unbelievable! You've won our grand reward!",
+        symbols: symbols,
+        medallionIcon: '👑'
+      };
+    }
+
+    outcome.spinId = 'spin-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+    outcome.createdAt = new Date().toISOString();
+    return outcome;
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // REEL MANAGEMENT & ATTRACT STATE (REFERENCE IMAGE 1)
+  // ═══════════════════════════════════════════════════════
+
+  var REEL_ITEM_H = 44;
+  var REEL_WIN_H  = 102;
+  var isSpinning  = false;
+
+  function calcTranslateY(index){
+    return -(index * REEL_ITEM_H - (REEL_WIN_H - REEL_ITEM_H) / 2);
+  }
+
+  function renderReelStrip(stripEl, symbolList){
+    if(!stripEl) return;
+    var htmlStr = '';
+    for(var i = 0; i < symbolList.length; i++){
+      htmlStr += '<div class="reel-sym-card">' + getSymbolHtml(symbolList[i]) + '</div>';
+    }
+    stripEl.innerHTML = htmlStr;
+  }
+
+  function resetReelsToAttract(){
+    // Matches Reference Image 1 exactly:
+    // Reel 1: 7 on top, Spade in center, Heart on bottom
+    // Reel 2: Club on top, Heart in center, Club on bottom
+    // Reel 3: Diamond on top, 7 in center, Spade on bottom
+    var initList1 = ['7', '♠', '♥'];
+    var initList2 = ['♣', '♥', '♣'];
+    var initList3 = ['♦', '7', '♠'];
+
+    var s1 = document.getElementById('reelStrip1');
+    var s2 = document.getElementById('reelStrip2');
+    var s3 = document.getElementById('reelStrip3');
+
+    if(!s1 || !s2 || !s3) return;
+
+    [s1, s2, s3].forEach(function(strip){
+      strip.style.transition = 'none';
+      strip.style.transform = 'translateY(' + calcTranslateY(1) + 'px)';
+    });
+
+    renderReelStrip(s1, initList1);
+    renderReelStrip(s2, initList2);
+    renderReelStrip(s3, initList3);
+
+    var cabinet = document.getElementById('slotMachineCabinet');
+    if(cabinet) {
+      cabinet.classList.remove('spinning');
+      cabinet.classList.remove('celebrating');
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 9: PROOF LOYALTY WALLET RENDERING & REDEMPTION
+  // ═══════════════════════════════════════════════════════
+
+  function renderFace9LoyaltyWallet(){
+    if(!activeCustomer) return;
+    var isRegistered = activeCustomer.googleWallet && activeCustomer.googleWallet.registered;
+
+    // Google Wallet Mock Action Box
+    var headline = document.getElementById('walletRegHeadline');
+    var desc     = document.getElementById('walletRegDesc');
+    var chipId   = document.getElementById('walletPassChipId');
+
+    if(headline) headline.textContent = isRegistered ? 'Google Wallet Pass Active' : 'Google Wallet Pass';
+    if(desc) desc.textContent = isRegistered ? 'Your PROOF Loyalty Pass is ready.' : 'Add your PROOF pass to Google Wallet before spinning.';
+    if(chipId) chipId.textContent = 'PASS: ' + ((activeCustomer.googleWallet && activeCustomer.googleWallet.passId) || 'GW-PROOF-PASS');
+
+    // 3D Green Stamp Collection Card
+    var greenEmblem = document.getElementById('face9GreenStampEmblem');
+    if(greenEmblem) greenEmblem.innerHTML = get3DStampSvg('green', 42);
+
+    var greenCount = (activeCustomer.stampWallet && activeCustomer.stampWallet.green) || 0;
+    var gBal = document.getElementById('face9GreenBalance');
+    var gProg = document.getElementById('face9GreenProgress');
+    var gBanner = document.getElementById('face9GreenRewardBanner');
+    var gRedeem = document.getElementById('face9RedeemGreenBtn');
+    var gInst = document.getElementById('face9GreenInstruction');
+
+    if(gBal) gBal.textContent = greenCount + ' / 10 Green Stamps';
+    var gPct = Math.min(100, Math.round((greenCount / 10) * 100));
+    if(gProg) gProg.style.width = gPct + '%';
+    if(gInst) gInst.textContent = 'Collect 10 Green Stamps to redeem your reward.';
+
+    if(greenCount >= 10){
+      if(gBanner) gBanner.style.display = 'block';
+      if(gRedeem){
+        gRedeem.style.display = 'block';
+        gRedeem.disabled = false;
+      }
+    } else {
+      if(gBanner) gBanner.style.display = 'none';
+      if(gRedeem){
+        gRedeem.style.display = 'none';
+        gRedeem.disabled = true;
+      }
+    }
+
+    // 3D Blue Stamp Collection Card
+    var blueEmblem = document.getElementById('face9BlueStampEmblem');
+    if(blueEmblem) blueEmblem.innerHTML = get3DStampSvg('blue', 42);
+
+    var blueCount = (activeCustomer.stampWallet && activeCustomer.stampWallet.blue) || 0;
+    var bBal = document.getElementById('face9BlueBalance');
+    var bProg = document.getElementById('face9BlueProgress');
+    var bBanner = document.getElementById('face9BlueRewardBanner');
+    var bRedeem = document.getElementById('face9RedeemBlueBtn');
+    var bInst = document.getElementById('face9BlueInstruction');
+
+    if(bBal) bBal.textContent = blueCount + ' / 5 Blue Stamps';
+    var bPct = Math.min(100, Math.round((blueCount / 5) * 100));
+    if(bProg) bProg.style.width = bPct + '%';
+    if(bInst) bInst.textContent = 'Collect 5 Blue Stamps to redeem your reward.';
+
+    if(blueCount >= 5){
+      if(bBanner) bBanner.style.display = 'block';
+      if(bRedeem){
+        bRedeem.style.display = 'block';
+        bRedeem.disabled = false;
+      }
+    } else {
+      if(bBanner) bBanner.style.display = 'none';
+      if(bRedeem){
+        bRedeem.style.display = 'none';
+        bRedeem.disabled = true;
+      }
+    }
+  }
+
+  function redeemFace9StampReward(type){
+    if(!activeCustomer) return;
+    if(!activeCustomer.stampWallet) activeCustomer.stampWallet = { green: 0, blue: 0 };
+
+    var cost = (type === 'green') ? 10 : 5;
+    var current = (type === 'green') ? activeCustomer.stampWallet.green : activeCustomer.stampWallet.blue;
+
+    if(current < cost){
+      alert('You need ' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' stamps to redeem. Current balance: ' + current);
+      return;
+    }
+
+    if(type === 'green'){
+      activeCustomer.stampWallet.green -= cost;
+    } else {
+      activeCustomer.stampWallet.blue -= cost;
+    }
+
+    activeCustomer.stamps = {
+      green: activeCustomer.stampWallet.green,
+      blue:  activeCustomer.stampWallet.blue
+    };
+
+    activeCustomer = updateCustomer(activeCustomer, {
+      stampWallet: activeCustomer.stampWallet,
+      stamps: activeCustomer.stamps
+    });
+
+    var custName = displayName(activeCustomer);
+    addEvent(custName, 'Redeemed ' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' stamps for loyalty reward', 'promo');
+
+    if(deviceScreen){
+      deviceScreen.classList.add('st-event');
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #2ecc71 60%, #1e8449 100%)">🎉</div>' +
+        '<div class="d-label">STAMP REWARD REDEEMED</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-weight:600;margin:6px 0">Loyalty Reward Unlocked</div>' +
+        '<div class="d-sub" style="font-size:11px;color:#fff">' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' Stamps Deducted</div>' +
+        '<div class="d-tag promo">CLAIM AT COUNTER</div>';
+    }
+
+    SoundFX.win('JACKPOT');
+    renderFace9LoyaltyWallet();
+    alert('🎉 Congratulations! You redeemed ' + cost + ' stamps for your loyalty reward.\nPlease claim it from the barista at the counter!');
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 11: SPIN & WIN STATE (IN-PLACE GOOGLE WALLET REGISTRATION)
+  // ═══════════════════════════════════════════════════════
+
+  function updateSpinButtonState(){
+    var spinBtn = document.getElementById('spinActionBtn');
+    var spinBtnText = document.getElementById('spinActionBtnText');
+    var reminder = document.getElementById('walletReqReminder');
+    var gwBtn = document.getElementById('googleWalletBtn');
+    var gwBtnText = document.getElementById('googleWalletBtnText');
+    var activePassCard = document.getElementById('face11ActivePassCard');
+    var passChip = document.getElementById('face11PassChipId');
+
+    var isRegistered = activeCustomer && activeCustomer.googleWallet && activeCustomer.googleWallet.registered;
+
+    if(!isRegistered){
+      if(spinBtn){
+        spinBtn.classList.add('locked');
+        spinBtn.disabled = false;
+      }
+      if(spinBtnText) spinBtnText.innerHTML = '🔒 SPIN &amp; WIN (WALLET REQUIRED)';
+      if(gwBtn){
+        gwBtn.style.display = 'flex';
+        gwBtn.disabled = false;
+        gwBtn.classList.add('needs-reg');
+      }
+      if(gwBtnText) gwBtnText.textContent = 'Add to Google Wallet';
+      if(activePassCard) activePassCard.style.display = 'none';
+      if(reminder) reminder.style.display = 'none';
+    } else {
+      if(spinBtn){
+        spinBtn.classList.remove('locked');
+        spinBtn.disabled = false;
+      }
+      if(spinBtnText) spinBtnText.innerHTML = 'SPIN &amp; WIN →';
+      if(gwBtn) gwBtn.style.display = 'none';
+      if(reminder) reminder.style.display = 'none';
+      if(activePassCard){
+        activePassCard.style.display = 'flex';
+        if(passChip){
+          passChip.textContent = 'PASS: ' + (activeCustomer.googleWallet.passId || 'GW-PROOF-PASS');
+        }
+      }
+    }
+  }
+
+  function handleInPlaceGoogleWalletRegistration(){
+    if(!activeCustomer) return;
+    var gwBtn = document.getElementById('googleWalletBtn');
+    var gwBtnText = document.getElementById('googleWalletBtnText');
+    var reminder = document.getElementById('walletReqReminder');
+
+    if(gwBtnText) gwBtnText.textContent = 'Adding to Google Wallet...';
+    if(gwBtn) gwBtn.disabled = true;
+
+    SoundFX.tick();
+
+    setTimeout(function(){
+      var passSuffix = activeCustomer.phone ? activeCustomer.phone.slice(-4) : Math.floor(1000 + Math.random()*9000);
+      var passId = 'GW-PROOF-' + passSuffix;
+
+      activeCustomer.googleWallet = {
+        registered: true,
+        passId: passId,
+        addedAt: new Date().toISOString()
+      };
+
+      activeCustomer = updateCustomer(activeCustomer, {
+        googleWallet: activeCustomer.googleWallet
+      });
+
+      SoundFX.win('SMALL');
+
+      var custName = displayName(activeCustomer);
+      addEvent(custName, 'Registered loyalty pass in Google Wallet (' + passId + ')', 'profile');
+
+      // Update Face 11 UI in place immediately - NO SCREEN NAVIGATION
+      updateSpinButtonState();
+    }, 450);
+  }
+
+  function openSpinAndWin(){
+    updateSpinButtonState();
+    resetReelsToAttract();
+    var spinBtn = document.getElementById('spinActionBtn');
+    if(spinBtn){
+      spinBtn.classList.remove('spinning');
+    }
+    isSpinning = false;
+    showFace(11, 4);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // COUNTER DISPLAY SPIN SYNCHRONIZATION
+  // ═══════════════════════════════════════════════════════
+
+  function deviceShowSpinning(custName){
+    if(!deviceScreen) return;
+    deviceScreen.classList.add('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #f1c40f 60%, #b7950b 100%)">🎰</div>' +
+      '<div class="d-label">LOYALTY SPIN IN PROGRESS</div>' +
+      '<div class="d-name">' + escHtml(custName) + '</div>' +
+      '<div class="d-sub" style="font-size:16px;letter-spacing:6px;margin:8px 0;animation:pulse-text 0.5s infinite">⟳ ⟳ ⟳</div>' +
+      '<div class="d-tag promo">SYNCHRONIZING REELS</div>';
+  }
+
+  function deviceShowReward(custName, symbols, outcome){
+    if(!deviceScreen) return;
+    deviceScreen.classList.add('st-event');
+    var symStr = symbols.join(' · ');
+
+    if(outcome.rewardType === 'STAMP'){
+      var isGreen = (outcome.stampColor === 'GREEN');
+      var stampTitle = isGreen ? 'You won 1 Green Stamp!' : 'You won 1 Blue Stamp!';
+      var stampSub = isGreen ? 'Added to Green Stamp Collection.' : 'Added to Blue Stamp Collection.';
+      var stampSvg = get3DStampSvg(isGreen ? 'green' : 'blue', 52);
+
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:transparent;box-shadow:none;border:none">' + stampSvg + '</div>' +
+        '<div class="d-label">LOYALTY STAMP WON</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="font-size:16px;letter-spacing:4px;color:#fff;margin:4px 0">[' + symStr + ']</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-size:15px;font-weight:700">' + escHtml(stampTitle) + '</div>' +
+        '<div class="d-sub" style="font-size:12px;color:' + (isGreen ? '#2ecc71' : '#3498db') + ';margin-top:2px">' + escHtml(stampSub) + '</div>' +
+        '<div class="d-tag signin">STAMP CREDITED</div>';
+    } else {
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #d4af37 60%, #7d5e23 100%)">🎁</div>' +
+        '<div class="d-label">COMPLIMENTARY GIFT WON</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="font-size:16px;letter-spacing:4px;color:#fff;margin:4px 0">[' + symStr + ']</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-size:15px;font-weight:700">' + escHtml(outcome.gift.name) + '</div>' +
+        '<div class="d-sub" style="font-size:12px;color:#fff;margin-top:2px">Show Pass at Checkout</div>' +
+        '<div class="d-tag promo">CLAIM AT COUNTER</div>';
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // SPIN EXECUTION (STRICTLY MUTUALLY EXCLUSIVE REWARD)
+  // ═══════════════════════════════════════════════════════
+
+  function executeSpin(){
+    if(isSpinning) return;
+
+    // Check mandatory wallet registration
+    if(!activeCustomer || !activeCustomer.googleWallet || !activeCustomer.googleWallet.registered){
+      var reminder = document.getElementById('walletReqReminder');
+      if(reminder){
+        reminder.style.display = 'flex';
+        reminder.classList.remove('shake');
+        void reminder.offsetWidth;
+        reminder.classList.add('shake');
+      }
+      var gwBtn = document.getElementById('googleWalletBtn');
+      if(gwBtn) gwBtn.classList.add('needs-reg');
+      return;
+    }
+
+    isSpinning = true;
+
+    var spinBtn = document.getElementById('spinActionBtn');
+    var spinBtnText = document.getElementById('spinActionBtnText');
+    if(spinBtn){
+      spinBtn.disabled = true;
+      spinBtn.classList.add('spinning');
+    }
+    if(spinBtnText) spinBtnText.textContent = 'SPINNING...';
+
+    var cabinet = document.getElementById('slotMachineCabinet');
+    if(cabinet) cabinet.classList.add('spinning');
+
+    // 1. Determine Mutually Exclusive Reward
+    var outcome = pickSingleRewardOutcome();
+    var symbols = outcome.symbols;
+    var custName = activeCustomer ? displayName(activeCustomer) : 'Lucky Guest';
+
+    // 2. Synchronize Counter Screen
+    deviceShowSpinning(custName);
+
+    // 3. Audio tick interval
+    var tickTimer = setInterval(function(){
+      SoundFX.tick();
+    }, 85);
+
+    // 4. Construct strips ending on target symbols
+    var s1 = document.getElementById('reelStrip1');
+    var s2 = document.getElementById('reelStrip2');
+    var s3 = document.getElementById('reelStrip3');
+
+    var targetIdx1 = 20;
+    var targetIdx2 = 24;
+    var targetIdx3 = 28;
+
+    function buildSpinStrip(targetSym, count){
+      var list = [];
+      for(var i = 0; i < count; i++){
+        list.push(getRandomElement(SYMBOLS));
+      }
+      list[count - 2] = targetSym;
+      list[count - 1] = getRandomElement(SYMBOLS);
+      return list;
+    }
+
+    renderReelStrip(s1, buildSpinStrip(symbols[0], targetIdx1 + 2));
+    renderReelStrip(s2, buildSpinStrip(symbols[1], targetIdx2 + 2));
+    renderReelStrip(s3, buildSpinStrip(symbols[2], targetIdx3 + 2));
+
+    [s1, s2, s3].forEach(function(strip){
+      if(!strip) return;
+      strip.style.transition = 'none';
+      strip.style.transform = 'translateY(' + calcTranslateY(0) + 'px)';
+    });
+
+    if(s1) void s1.offsetWidth; // Force reflow
+
+    // 5. Staggered Deceleration
+    if(s1){
+      s1.style.transition = 'transform 1.5s cubic-bezier(0.12, 0.9, 0.2, 1)';
+      s1.style.transform = 'translateY(' + calcTranslateY(targetIdx1) + 'px)';
+    }
+
+    setTimeout(function(){
+      if(s2){
+        s2.style.transition = 'transform 1.9s cubic-bezier(0.12, 0.9, 0.2, 1)';
+        s2.style.transform = 'translateY(' + calcTranslateY(targetIdx2) + 'px)';
+      }
+    }, 200);
+
+    setTimeout(function(){
+      if(s3){
+        s3.style.transition = 'transform 2.3s cubic-bezier(0.12, 0.9, 0.2, 1)';
+        s3.style.transform = 'translateY(' + calcTranslateY(targetIdx3) + 'px)';
+      }
+    }, 400);
+
+    // Stop Reels & Celebrate
+    setTimeout(function(){
+      clearInterval(tickTimer);
+      SoundFX.stop();
+
+      setTimeout(function(){ SoundFX.stop(); }, 200);
+      setTimeout(function(){
+        SoundFX.stop();
+        if(cabinet){
+          cabinet.classList.remove('spinning');
+          cabinet.classList.add('celebrating');
+        }
+        SoundFX.win(outcome.rewardCategory);
+      }, 500);
+
+      // 6. ATOMIC MUTUALLY EXCLUSIVE UPDATE
+      if(activeCustomer){
+        if(!activeCustomer.stampWallet) activeCustomer.stampWallet = { green: 0, blue: 0 };
+        if(!Array.isArray(activeCustomer.rewardHistory)) activeCustomer.rewardHistory = [];
+
+        // STRICT LOGIC: IF STAMP -> INCREMENT STAMP. IF GIFT -> NO STAMP INCREASE.
+        if(outcome.rewardType === 'STAMP'){
+          if(outcome.stampColor === 'GREEN'){
+            activeCustomer.stampWallet.green = (activeCustomer.stampWallet.green || 0) + outcome.stampCount;
+          } else if(outcome.stampColor === 'BLUE'){
+            activeCustomer.stampWallet.blue = (activeCustomer.stampWallet.blue || 0) + outcome.stampCount;
+          }
+        }
+
+        activeCustomer.stamps = {
+          green: activeCustomer.stampWallet.green,
+          blue:  activeCustomer.stampWallet.blue
+        };
+
+        var rewardRecord = {
+          spinId: outcome.spinId,
+          rewardCategory: outcome.rewardCategory,
+          rewardType: outcome.rewardType,
+          stampColor: outcome.stampColor,
+          stampCount: outcome.stampCount,
+          gift: outcome.gift ? { name: outcome.gift.name, desc: outcome.gift.desc } : null,
+          symbols: outcome.symbols,
+          createdAt: outcome.createdAt
+        };
+        activeCustomer.rewardHistory.unshift(rewardRecord);
+
+        if(!activeCustomer.spin) activeCustomer.spin = {};
+        activeCustomer.spin.available = false;
+        activeCustomer.spin.completed = true;
+
+        activeCustomer = updateCustomer(activeCustomer, {
+          stampWallet: activeCustomer.stampWallet,
+          stamps: activeCustomer.stamps,
+          spin: activeCustomer.spin,
+          rewardHistory: activeCustomer.rewardHistory
+        });
+      }
+
+      // 7. Update Audit Log with Single Reward
+      var eventText = (outcome.rewardType === 'STAMP')
+        ? (outcome.rewardCategory + ' REWARD (STAMP): ' + (outcome.stampColor === 'GREEN' ? '+1 Green Stamp' : '+1 Blue Stamp'))
+        : (outcome.rewardCategory + ' REWARD (GIFT): ' + outcome.gift.name);
+
+      addEvent(
+        custName,
+        'Spin & Win [' + symbols.join(' ') + '] · ' + eventText,
+        outcome.rewardType === 'STAMP' ? 'signin' : 'promo'
+      );
+
+      // 8. Update Counter Screen with Single Reward
+      deviceShowReward(custName, symbols, outcome);
+
+      // 9. Populate Reward Result Screen (Face 12)
+      renderRewardResultScreen(symbols, outcome);
+
+      // 10. Transition smoothly to Face 12
+      setTimeout(function(){
+        showFace(12, 5);
+        isSpinning = false;
+        if(spinBtn){
+          spinBtn.disabled = false;
+          spinBtn.classList.remove('spinning');
+        }
+        if(spinBtnText) spinBtnText.textContent = 'SPIN & WIN';
+      }, 500);
+
+    }, 2750);
+  }
+
+  function renderRewardResultScreen(symbols, outcome){
+    var med = document.getElementById('resultMedallion');
+    var heading = document.getElementById('resultTierHeading');
+    var subhead = document.getElementById('resultTierSubheading');
+    var symRow = document.getElementById('winningSymbolsRow');
+    var sumWallet = document.getElementById('summaryWalletStamps');
+
+    if(outcome.rewardType === 'STAMP'){
+      var isGreen = (outcome.stampColor === 'GREEN');
+      if(heading) heading.textContent = isGreen ? 'Congratulations!' : 'Great Win!';
+      if(subhead) subhead.textContent = isGreen ? 'You won a Green Stamp!' : 'You won a Blue Stamp!';
+      if(med) {
+        med.innerHTML = '<div class="medallion-orbit"></div>' + get3DStampSvg(isGreen ? 'green' : 'blue', 74, 'awarded');
+      }
+
+      var stampRow = document.getElementById('bundleStampRow');
+      var giftRow  = document.getElementById('bundleGiftRow');
+      if(stampRow) stampRow.style.display = 'flex';
+      if(giftRow)  giftRow.style.display  = 'none';
+
+      var stampIcon  = document.getElementById('bundleStampIcon');
+      var stampTitle = document.getElementById('bundleStampTitle');
+      var stampDesc  = document.getElementById('bundleStampDesc');
+
+      if(stampIcon)  stampIcon.innerHTML = get3DStampSvg(isGreen ? 'green' : 'blue', 38);
+      if(stampTitle) stampTitle.textContent = isGreen ? 'Green Stamp Won' : 'Blue Stamp Won';
+      if(stampDesc)  stampDesc.textContent  = isGreen
+        ? '1 Green Stamp has been added to your loyalty collection.'
+        : '1 Blue Stamp has been added to your loyalty collection.';
+
+    } else {
+      if(heading) heading.textContent = outcome.heading;
+      if(subhead) subhead.textContent = outcome.subheading;
+      if(med) {
+        med.innerHTML = '<div class="medallion-orbit"></div><span id="resultMedallionIcon" style="font-size:36px">' + outcome.medallionIcon + '</span>';
+      }
+
+      var stampRow = document.getElementById('bundleStampRow');
+      var giftRow  = document.getElementById('bundleGiftRow');
+      if(stampRow) stampRow.style.display = 'none';
+      if(giftRow)  giftRow.style.display  = 'flex';
+
+      var giftIcon  = document.getElementById('bundleGiftIcon');
+      var giftTitle = document.getElementById('bundleGiftTitle');
+      var giftDesc  = document.getElementById('bundleGiftDesc');
+
+      if(giftIcon)  giftIcon.textContent  = outcome.medallionIcon;
+      if(giftTitle) giftTitle.textContent = outcome.gift.name;
+      if(giftDesc)  giftDesc.textContent  = outcome.gift.desc + ' · Claim at checkout!';
+    }
+
+    if(symRow){
+      symRow.innerHTML =
+        '<span class="win-sym">' + getSymbolHtml(symbols[0]) + '</span>' +
+        '<span class="win-sym">' + getSymbolHtml(symbols[1]) + '</span>' +
+        '<span class="win-sym">' + getSymbolHtml(symbols[2]) + '</span>';
+    }
+
+    var greenTotal = (activeCustomer && activeCustomer.stampWallet) ? activeCustomer.stampWallet.green : 0;
+    var blueTotal  = (activeCustomer && activeCustomer.stampWallet) ? activeCustomer.stampWallet.blue : 0;
+    if(sumWallet){
+      sumWallet.innerHTML = greenTotal + ' Green Stamps &nbsp;·&nbsp; ' + blueTotal + ' Blue Stamps';
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // EVENT LISTENERS & NAVIGATION
+  // ═══════════════════════════════════════════════════════
+
+  // Launch Spin from Registration Success (Face 3)
+  var startSpinBtn = document.getElementById('startSpinBtn');
+  if(startSpinBtn){
+    startSpinBtn.addEventListener('click', function(){
+      openSpinAndWin();
+    });
+  }
+
+  // Launch Spin from Returning Member (Face 5)
+  var retSpinBtn = document.getElementById('returningSpinBtn');
+  if(retSpinBtn){
+    retSpinBtn.addEventListener('click', function(){
+      openSpinAndWin();
+    });
+  }
+
+  // Spin Action Button
+  var spinActBtn = document.getElementById('spinActionBtn');
+  if(spinActBtn){
+    spinActBtn.addEventListener('click', function(){
+      executeSpin();
+    });
+  }
+
+  // Google Wallet Button (In-Place Registration - NO NAVIGATION)
+  var gwBtn = document.getElementById('googleWalletBtn');
+  if(gwBtn){
+    gwBtn.addEventListener('click', function(){
+      handleInPlaceGoogleWalletRegistration();
+    });
+  }
+
+  // Face 9: Stamp Redemption Buttons
+  var f9RedeemG = document.getElementById('face9RedeemGreenBtn');
+  if(f9RedeemG){
+    f9RedeemG.addEventListener('click', function(){
+      redeemFace9StampReward('green');
+    });
+  }
+
+  var f9RedeemB = document.getElementById('face9RedeemBlueBtn');
+  if(f9RedeemB){
+    f9RedeemB.addEventListener('click', function(){
+      redeemFace9StampReward('blue');
+    });
+  }
+
+  // Sound Toggle Button
+  var soundBtn = document.getElementById('soundToggleBtn');
+  if(soundBtn){
+    soundBtn.addEventListener('click', function(){
+      var muted = SoundFX.toggleMute();
+      soundBtn.textContent = muted ? '🔇' : '🔊';
+    });
+  }
+
+  // Face 12 Action 1: Return to Start
+  var resultRetStart = document.getElementById('resultReturnStartBtn');
+  if(resultRetStart){
+    resultRetStart.addEventListener('click', function(){
       deviceIdle();
       showFace(0, 0);
+    });
+  }
+
+  // Face 12 Action 2: Check Loyalty Wallet
+  var resultChkWallet = document.getElementById('resultCheckWalletBtn');
+  if(resultChkWallet){
+    resultChkWallet.addEventListener('click', function(){
+      renderFace9LoyaltyWallet();
+      showFace(9, 4);
+    });
+  }
+
+  // Face 9 Bottom Action: ONLY Return to Start
+  var walletRetStart = document.getElementById('walletReturnStartBtn');
+  if(walletRetStart){
+    walletRetStart.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // FUTURE MQTT & ARCHITECTURE PREPARATION INTERFACE
+  // ═══════════════════════════════════════════════════════
+
+  window.ProofSpinEngine = {
+    requestSpin: function(customerId){
+      console.log('[MQTT PREP] spin.requested for:', customerId);
+    },
+    onSpinStarted: function(payload){
+      console.log('[MQTT PREP] spin.started:', payload);
+    },
+    onSpinResult: function(payload){
+      console.log('[MQTT PREP] spin.result:', payload);
+    },
+    onSpinCompleted: function(payload){
+      console.log('[MQTT PREP] spin.completed:', payload);
+    },
+    simulateSpins: function(trials){
+      trials = trials || 10000;
+      var counts = {
+        SMALL_STAMP: 0,
+        SMALL_GIFT: 0,
+        MEDIUM_STAMP: 0,
+        MEDIUM_GIFT: 0,
+        JACKPOT_GIFT: 0,
+        MEGA_JACKPOT_GIFT: 0
+      };
+      for(var i = 0; i < trials; i++){
+        var outcome = pickSingleRewardOutcome();
+        if(outcome.rewardCategory === 'SMALL'){
+          if(outcome.rewardType === 'STAMP') counts.SMALL_STAMP++;
+          else counts.SMALL_GIFT++;
+        } else if(outcome.rewardCategory === 'MEDIUM'){
+          if(outcome.rewardType === 'STAMP') counts.MEDIUM_STAMP++;
+          else counts.MEDIUM_GIFT++;
+        } else if(outcome.rewardCategory === 'JACKPOT'){
+          counts.JACKPOT_GIFT++;
+        } else {
+          counts.MEGA_JACKPOT_GIFT++;
+        }
+      }
+      console.log('--- PROOF EXCLUSIVE SINGLE REWARD MONTE CARLO TEST (' + trials + ' spins) ---');
+      console.table({
+        'SMALL - Stamp (Green)': { count: counts.SMALL_STAMP, pct: (counts.SMALL_STAMP / trials * 100).toFixed(2) + '%' },
+        'SMALL - Gift': { count: counts.SMALL_GIFT, pct: (counts.SMALL_GIFT / trials * 100).toFixed(2) + '%' },
+        'MEDIUM - Stamp (Blue)': { count: counts.MEDIUM_STAMP, pct: (counts.MEDIUM_STAMP / trials * 100).toFixed(2) + '%' },
+        'MEDIUM - Gift': { count: counts.MEDIUM_GIFT, pct: (counts.MEDIUM_GIFT / trials * 100).toFixed(2) + '%' },
+        'JACKPOT - Gift': { count: counts.JACKPOT_GIFT, pct: (counts.JACKPOT_GIFT / trials * 100).toFixed(2) + '%' },
+        'MEGA JACKPOT - Gift': { count: counts.MEGA_JACKPOT_GIFT, pct: (counts.MEGA_JACKPOT_GIFT / trials * 100).toFixed(2) + '%' }
+      });
+      return counts;
     }
-  });
+  };
 
 })();
 </script>

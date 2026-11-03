@@ -1,0 +1,4171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROOF — 3D NFC Customer Experience &amp; Progressive Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#050811; --navy-dark:#0a0f1d; --navy-card:#0e1526; --navy-glass:rgba(14,21,38,0.76);
+  --gold-primary:#e6ca97; --gold-light:#f7e7c4; --gold-deep:#ab8b52; --gold-glow:rgba(230,202,151,0.22);
+  --brass:#d4af37; --brass-dark:#8c6f42;
+  --paper:#080c16; --ink:#f4f6fb; --muted:#8f9bb3; --muted-dim:rgba(143,155,179,0.5);
+  --border-glass:rgba(230,202,151,0.18); --border-subtle:rgba(255,255,255,0.08);
+  --green:#2ecc71; --green-glow:rgba(46,204,113,0.25);
+  --warn:#e74c3c; --warn-glow:rgba(231,76,60,0.25);
+  --c-bg:#080b12; --c-gold:var(--gold-primary); --c-white:#f5f2ea;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:radial-gradient(ellipse at 50% -10%, #15223e 0%, #070a13 55%, #03050a 100%);
+  color:var(--ink);
+  font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Subtle background ambient mesh */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 18% 25%, rgba(230,202,151,0.04) 0%, transparent 45%),
+    radial-gradient(circle at 82% 70%, rgba(21,43,90,0.18) 0%, transparent 50%),
+    linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size:100% 100%, 100% 100%, 48px 48px, 48px 48px;
+  pointer-events:none;
+  z-index:0;
+}
+
+.mono{font-family:'IBM Plex Mono',monospace}
+.serif{font-family:'Cormorant Garamond',serif}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ═══ HEADER ═══ */
+header{
+  position:relative;
+  z-index:2;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  background:linear-gradient(180deg, rgba(10,15,29,0.85) 0%, rgba(5,8,17,0.7) 100%);
+  backdrop-filter:blur(20px);
+  padding:26px 24px 20px;
+}
+header .w{max-width:1220px;margin:0 auto}
+.header-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand-lockup{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:linear-gradient(135deg, #f7e7c4 0%, #ab8b52 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;
+  font-size:22px;
+  color:#070a13;
+  box-shadow:0 0 20px var(--gold-glow);
+}
+.brand-text h1{
+  font-size:clamp(1.2rem,2.4vw,1.6rem);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  background:linear-gradient(135deg, #fff 40%, var(--gold-primary) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{content:"";width:14px;height:1px;background:var(--gold-primary)}
+header p{
+  color:var(--muted);
+  margin-top:8px;
+  font-size:13.5px;
+  max-width:760px;
+  line-height:1.6;
+}
+.proto-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(230,202,151,0.06);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:99px;
+  padding:6px 14px;
+}
+.proto-badge .live-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#2ecc71;
+  box-shadow:0 0 8px #2ecc71;
+  animation:pulse-dot 2s infinite ease-in-out;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.proto-badge span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+}
+
+/* ═══ MAIN STAGE ═══ */
+main{max-width:1220px;margin:0 auto;padding:36px 24px 70px;position:relative;z-index:2}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+@media(max-width:960px){.stage{grid-template-columns:1fr}}
+
+/* ═══ PANELS & GLASS CONTAINERS ═══ */
+.panel{
+  background:var(--navy-glass);
+  border:1px solid var(--border-glass);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -15px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter:blur(24px) saturate(180%);
+  position:relative;
+}
+.panel::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:24px;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(230,202,151,0.3) 0%, transparent 40%, rgba(230,202,151,0.05) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.panel-head{
+  padding:18px 24px;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(90deg, rgba(230,202,151,0.05) 0%, transparent 100%);
+}
+.panel-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.panel-label b{
+  color:var(--gold-primary);
+  width:20px;
+  height:20px;
+  border-radius:6px;
+  background:rgba(230,202,151,0.14);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(230,202,151,0.25);
+  font-size:10px;
+}
+.step-dots{display:flex;gap:6px}
+.step-dots i{
+  width:6px;
+  height:6px;
+  border-radius:99px;
+  background:rgba(255,255,255,0.15);
+  transition:all .3s ease;
+}
+.step-dots i.on{
+  width:18px;
+  background:linear-gradient(90deg, var(--gold-light), var(--gold-deep));
+  box-shadow:0 0 10px var(--gold-glow);
+}
+
+/* ═══ 3D PHONE WRAPPER & CHASSIS ═══ */
+.phone-wrap{
+  background:radial-gradient(circle at 50% 30%, #0d1424 0%, #050811 80%);
+  padding:32px 20px 38px;
+  display:flex;
+  justify-content:center;
+  perspective:1000px;
+}
+.phone{
+  width:100%;
+  max-width:338px;
+  background:linear-gradient(160deg, #1c2230 0%, #0e121c 50%, #05070c 100%);
+  border:1.5px solid rgba(230,202,151,0.3);
+  border-radius:36px;
+  padding:10px;
+  box-shadow:
+    0 40px 90px -20px rgba(0,0,0,0.85),
+    0 0 35px rgba(230,202,151,0.12),
+    inset 0 0 0 1.5px rgba(255,255,255,0.08);
+  position:relative;
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.phone-notch{
+  width:84px;
+  height:18px;
+  background:#05070c;
+  border-radius:99px;
+  margin:0 auto 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.phone-camera{width:8px;height:8px;border-radius:50%;background:#101726;border:1px solid #1a2538}
+.phone-speaker{width:36px;height:3px;border-radius:99px;background:#182030}
+
+.phone-screen{
+  background:linear-gradient(180deg, #090e18 0%, #05080e 100%);
+  border-radius:28px;
+  min-height:540px;
+  position:relative;
+  overflow:hidden;
+  padding:24px 20px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:inset 0 0 30px rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+/* Screen Status Bar */
+.screen-status-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  color:rgba(255,255,255,0.5);
+  padding:0 4px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  margin-bottom:12px;
+}
+.screen-status-icons{display:flex;gap:5px;align-items:center;font-size:9px}
+
+/* Faces transitions */
+.c-face{
+  display:none;
+  position:relative;
+  z-index:2;
+  height:100%;
+  flex:1;
+  flex-direction:column;
+  animation:faceFadeUp .45s cubic-bezier(.16,1,.3,1) both;
+}
+.c-face.on{display:flex}
+@keyframes faceFadeUp{
+  from{opacity:0;transform:translateY(14px) scale(0.98)}
+  to{opacity:1;transform:none}
+}
+
+/* ═══ FACE 0: PREMIUM 3D NFC TAP STAGE ═══ */
+.nfc-hero{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  perspective:900px;
+}
+.nfc-stage-3d{
+  position:relative;
+  width:100%;
+  height:240px;
+  margin:10px 0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform-style:preserve-3d;
+}
+
+/* 3D Floating Phone Mockup inside tap zone */
+.floating-phone-3d{
+  position:absolute;
+  width:120px;
+  height:180px;
+  background:linear-gradient(145deg, #182236 0%, #0d1422 100%);
+  border:1.5px solid rgba(230,202,151,0.5);
+  border-radius:20px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.7),
+    0 0 25px rgba(230,202,151,0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  z-index:4;
+  transform:translateY(-18px) rotateX(20deg) rotateY(-8deg);
+  transition:all .5s cubic-bezier(.22,1,.36,1);
+  animation:phoneHover 4.5s ease-in-out infinite alternate;
+}
+@keyframes phoneHover{
+  0%{transform:translateY(-22px) rotateX(18deg) rotateY(-10deg)}
+  100%{transform:translateY(-12px) rotateX(24deg) rotateY(-4deg)}
+}
+.floating-phone-3d.tapping{
+  transform:translateY(24px) rotateX(10deg) rotateY(0deg) scale(0.94)!important;
+  border-color:var(--gold-light);
+  box-shadow:0 0 40px rgba(230,202,151,0.6);
+}
+.fp-screen{
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle at 50% 30%, #15223e 0%, #070b14 100%);
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px solid rgba(230,202,151,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.fp-screen::after{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%);
+  animation:screenGlare 5s infinite linear;
+}
+@keyframes screenGlare{
+  0%{transform:translateX(-100%) translateY(-100%)}
+  100%{transform:translateX(100%) translateY(100%)}
+}
+.fp-nfc-glyph{
+  font-size:26px;
+  color:var(--gold-primary);
+  filter:drop-shadow(0 0 8px var(--gold-glow));
+}
+.fp-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  background:rgba(230,202,151,0.12);
+  padding:2px 6px;
+  border-radius:99px;
+  border:0.5px solid rgba(230,202,151,0.3);
+}
+
+/* 3D NFC Reader Plate on Table */
+.nfc-reader-plate{
+  position:absolute;
+  bottom:6px;
+  width:190px;
+  height:76px;
+  background:linear-gradient(180deg, #141c2e 0%, #080d18 100%);
+  border-radius:50%;
+  border:2px solid rgba(230,202,151,0.35);
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.8),
+    inset 0 2px 10px rgba(230,202,151,0.2),
+    0 0 30px rgba(230,202,151,0.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotateX(62deg);
+}
+.reader-inner-ring{
+  width:140px;
+  height:54px;
+  border-radius:50%;
+  border:1.5px dashed rgba(230,202,151,0.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.reader-core{
+  width:50px;
+  height:20px;
+  border-radius:50%;
+  background:radial-gradient(ellipse, rgba(230,202,151,0.6) 0%, transparent 70%);
+  box-shadow:0 0 20px var(--gold-glow);
+}
+
+/* Concentric Scanning Waves */
+.scan-waves{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.scan-wave{
+  position:absolute;
+  border-radius:50%;
+  border:1.5px solid rgba(230,202,151,0.3);
+  opacity:0;
+}
+.scan-wave:nth-child(1){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) infinite}
+.scan-wave:nth-child(2){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) .9s infinite}
+.scan-wave:nth-child(3){animation:wavePulse 3s cubic-bezier(0,0.5,0.5,1) 1.8s infinite}
+@keyframes wavePulse{
+  0%{width:40px;height:20px;opacity:.9;transform:rotateX(60deg) scale(0.6)}
+  100%{width:240px;height:120px;opacity:0;transform:rotateX(60deg) scale(1.6)}
+}
+
+/* Tap Target Trigger Zone */
+.nfc-tap-action{
+  width:100%;
+  margin-top:4px;
+  background:rgba(230,202,151,0.04);
+  border:1.5px dashed rgba(230,202,151,0.35);
+  border-radius:18px;
+  padding:14px 16px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:all .25s ease;
+}
+.nfc-tap-action:hover{
+  background:rgba(230,202,151,0.08);
+  border-color:var(--gold-primary);
+  box-shadow:0 0 25px rgba(230,202,151,0.18);
+  transform:translateY(-2px);
+}
+.nfc-tap-action:active{transform:scale(0.98)}
+.nfc-tap-action .nl{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.nfc-tap-action .ns{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+/* Contact burst ripple */
+.ripple{
+  position:absolute;
+  border-radius:999px;
+  background:radial-gradient(circle, rgba(247,231,196,0.8) 0%, rgba(230,202,151,0.2) 50%, transparent 80%);
+  opacity:0;
+  pointer-events:none;
+}
+.ripple.go{animation:rippleBurst .85s ease-out forwards}
+@keyframes rippleBurst{
+  from{width:10px;height:10px;opacity:.95;transform:scale(1)}
+  to{width:360px;height:360px;opacity:0;transform:scale(1.2)}
+}
+
+/* High-tech connecting state */
+.connecting{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:var(--gold-primary);
+  letter-spacing:.14em;
+  text-align:center;
+  margin-top:10px;
+  opacity:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-transform:uppercase;
+  transition:opacity .3s;
+}
+.connecting.show{opacity:1}
+.connecting .conn-spinner{
+  width:12px;
+  height:12px;
+  border:1.5px solid rgba(230,202,151,0.2);
+  border-top-color:var(--gold-primary);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ COMMONS & FORM STYLING ═══ */
+.c-biz{text-align:center;margin-bottom:18px}
+.c-biz h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;
+  color:var(--c-white);
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+.c-biz p{
+  font-size:10.5px;
+  color:var(--gold-primary);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-top:3px;
+  font-family:'IBM Plex Mono',monospace;
+}
+
+/* Progress Step Pill */
+.step-progress-indicator{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:99px;
+  padding:5px 12px;
+  margin-bottom:16px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  color:var(--muted);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.step-track{
+  width:60px;
+  height:3px;
+  background:rgba(255,255,255,0.1);
+  border-radius:99px;
+  overflow:hidden;
+  position:relative;
+}
+.step-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold-deep), var(--gold-light));
+  border-radius:99px;
+  transition:width .4s ease;
+}
+
+.c-field{margin-bottom:14px;position:relative}
+.c-field label{
+  display:block;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:500;
+}
+.c-field label i{opacity:.55;text-transform:none;letter-spacing:0;font-style:normal}
+.c-field input, .c-field select{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:12px;
+  padding:12px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  color:var(--c-white);
+  outline:none;
+  transition:all .25s ease;
+  backdrop-filter:blur(8px);
+}
+.c-field input:focus, .c-field select:focus{
+  border-color:var(--gold-primary);
+  background:rgba(230,202,151,0.07);
+  box-shadow:0 0 0 3px rgba(230,202,151,0.18), 0 8px 20px rgba(0,0,0,0.4);
+}
+.c-field select option{background:#0e1526;color:#f5f2ea}
+
+/* Phone row with flags */
+.c-phone-row{display:flex;gap:0;width:100%;border-radius:12px;overflow:hidden}
+.c-phone-row select{
+  width:116px;
+  flex-shrink:0;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(230,202,151,0.25);
+  border-right:none;
+  border-radius:12px 0 0 12px;
+  padding:12px 6px 12px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  color:var(--c-white);
+  outline:none;
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23e6ca97' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  transition:all .25s ease;
+}
+.c-phone-row select:focus{border-color:var(--gold-primary);background-color:rgba(230,202,151,0.08)}
+.c-phone-row input{
+  flex:1;
+  min-width:0;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:0 12px 12px 0;
+  padding:12px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  color:var(--c-white);
+  outline:none;
+}
+.c-phone-row input::placeholder{color:rgba(245,242,234,0.3)}
+
+/* Error pill */
+.c-field-err{
+  font-size:11px;
+  color:#ff9688;
+  margin-top:6px;
+  display:none;
+  line-height:1.4;
+  padding:4px 10px;
+  background:rgba(231,76,60,0.14);
+  border:1px solid rgba(231,76,60,0.3);
+  border-radius:8px;
+  animation:shake .3s ease-in-out;
+}
+.c-field-err.show{display:flex;align-items:center;gap:6px}
+.c-field-err::before{content:"⚠";font-size:10px}
+.c-field.invalid .c-phone-row input, .c-field.invalid .c-phone-row select, .c-field.invalid>input{
+  border-color:#ff9688;
+  background:rgba(231,76,60,0.06);
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+
+/* Consent checkbox */
+.c-consent{
+  display:flex;
+  gap:10px;
+  margin:14px 0 18px;
+  align-items:flex-start;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.c-consent input{
+  margin-top:3px;
+  width:16px;
+  height:16px;
+  accent-color:var(--gold-primary);
+  cursor:pointer;
+}
+.c-consent label{font-size:10px;line-height:1.55;color:var(--muted);cursor:pointer}
+
+/* Buttons */
+.c-btn{
+  width:100%;
+  background:linear-gradient(135deg, #f7e7c4 0%, #d4af37 50%, #ab8b52 100%);
+  color:#090d16;
+  border:none;
+  border-radius:14px;
+  padding:13px 18px;
+  font-weight:700;
+  font-size:13.5px;
+  letter-spacing:.02em;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 25px rgba(212,175,55,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  position:relative;
+  overflow:hidden;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.c-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.5);
+  filter:brightness(1.04);
+}
+.c-btn:active{transform:translateY(1px) scale(0.99)}
+.c-btn-ghost{
+  width:100%;
+  background:rgba(255,255,255,0.03);
+  color:var(--c-white);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:14px;
+  padding:12px 18px;
+  font-weight:600;
+  font-size:13px;
+  cursor:pointer;
+  margin-top:10px;
+  font-family:'DM Sans',sans-serif;
+  transition:all .25s ease;
+  backdrop-filter:blur(8px);
+}
+.c-btn-ghost:hover{
+  background:rgba(230,202,151,0.08);
+  border-color:var(--gold-primary);
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+/* ═══ 3D SELECTION CARDS (FACE 1) ═══ */
+.gate-options-stack{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:16px;
+}
+.choice-card-3d{
+  width:100%;
+  background:linear-gradient(145deg, rgba(20,29,50,0.85) 0%, rgba(10,16,29,0.9) 100%);
+  border:1.5px solid rgba(230,202,151,0.22);
+  border-radius:18px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all .3s cubic-bezier(.22,1,.36,1);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+.choice-card-3d::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 10% 50%, rgba(230,202,151,0.15) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .3s;
+}
+.choice-card-3d:hover{
+  border-color:var(--gold-primary);
+  transform:translateY(-3px) scale(1.01);
+  box-shadow:0 16px 35px rgba(0,0,0,0.6), 0 0 25px var(--gold-glow);
+}
+.choice-card-3d:hover::before{opacity:1}
+.choice-card-3d:active{transform:translateY(1px) scale(0.99)}
+.card-icon-emblem{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(230,202,151,0.18) 0%, rgba(230,202,151,0.05) 100%);
+  border:1px solid rgba(230,202,151,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  color:var(--gold-primary);
+  flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.card-text-block{flex:1}
+.card-tag-pill{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  margin-bottom:3px;
+  display:inline-block;
+}
+.card-title{
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-0.01em;
+}
+.card-subtext{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+.card-arrow{
+  font-size:16px;
+  color:var(--gold-primary);
+  opacity:.6;
+  transition:transform .25s ease, opacity .25s ease;
+}
+.choice-card-3d:hover .card-arrow{transform:translateX(3px);opacity:1}
+
+/* ═══ 3D AVATAR & MEDALLIONS ═══ */
+.c-center{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:10px;
+}
+.c-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:25px;
+  color:var(--c-white);
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+.c-sub{
+  font-size:12px;
+  color:var(--muted);
+  max-width:260px;
+  line-height:1.6;
+}
+.c-err{
+  font-size:11px;
+  color:#ff9688;
+  max-width:260px;
+  line-height:1.5;
+  display:none;
+  margin-top:10px;
+  padding:8px 12px;
+  background:rgba(231,76,60,0.12);
+  border:1px solid rgba(231,76,60,0.3);
+  border-radius:10px;
+}
+
+/* 3D Success / Profile Medallion */
+.medallion-3d{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff1d4 0%, #d4af37 50%, #7d5e23 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  color:#080c14;
+  box-shadow:
+    0 15px 35px rgba(212,175,55,0.45),
+    0 0 25px rgba(212,175,55,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.7);
+  position:relative;
+  margin-bottom:6px;
+  animation:medallionFloat 4s ease-in-out infinite alternate;
+}
+@keyframes medallionFloat{
+  0%{transform:translateY(0) rotate(0deg)}
+  100%{transform:translateY(-6px) rotate(4deg)}
+}
+.medallion-orbit{
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:1.5px dashed rgba(230,202,151,0.45);
+  animation:spin 12s linear infinite;
+}
+
+/* 3D Profile Card in Face 8 */
+.profile-success-card{
+  background:linear-gradient(145deg, rgba(230,202,151,0.08) 0%, rgba(20,29,50,0.6) 100%);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:16px;
+  padding:16px 18px;
+  text-align:center;
+  margin:12px 0 10px;
+  width:100%;
+  box-shadow:0 12px 30px rgba(0,0,0,0.4);
+}
+.profile-pill-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(46,204,113,0.15);
+  border:1px solid rgba(46,204,113,0.35);
+  padding:3px 10px;
+  border-radius:99px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.1em;
+  color:#2ecc71;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.profile-success-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  color:var(--gold-primary);
+  font-weight:600;
+}
+.profile-success-desc{
+  font-size:11.5px;
+  color:var(--muted);
+  margin-top:4px;
+  line-height:1.5;
+}
+
+/* ═══ PANEL 2: PROOF DISPLAY (COUNTER KIOSK HARDWARE) ═══ */
+.device-wrap{
+  padding:32px 20px 38px;
+  display:flex;
+  justify-content:center;
+  background:radial-gradient(circle at 50% 25%, #0f1629 0%, #060913 85%);
+  perspective:1000px;
+}
+.device-shell{
+  width:100%;
+  max-width:370px;
+  background:linear-gradient(160deg, #1f2738 0%, #121724 45%, #070a12 100%);
+  border-radius:28px;
+  padding:18px;
+  border:1.5px solid rgba(230,202,151,0.3);
+  box-shadow:
+    0 40px 90px -15px rgba(0,0,0,0.9),
+    0 0 35px rgba(230,202,151,0.14),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  position:relative;
+}
+.device-shell::after{
+  content:"";
+  position:absolute;
+  bottom:-14px;
+  left:15%;
+  right:15%;
+  height:14px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(230,202,151,0.35) 0%, transparent 70%);
+  filter:blur(6px);
+  pointer-events:none;
+}
+.device-kiosk-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  margin-bottom:14px;
+}
+.kiosk-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.12em;
+  color:var(--gold-primary);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.kiosk-status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#2ecc71;
+  box-shadow:0 0 6px #2ecc71;
+}
+.kiosk-time{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  color:var(--muted);
+}
+
+.device-screen{
+  background:linear-gradient(160deg, #0b1428 0%, #050b18 100%);
+  border-radius:18px;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:28px 22px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(230,202,151,0.18);
+  box-shadow:inset 0 0 40px rgba(0,0,0,0.7);
+  transition:all .4s ease;
+}
+.device-screen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 30%, rgba(230,202,151,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.device-screen.st-event{
+  background:radial-gradient(circle at 50% 20%, #103626 0%, #061912 70%, #030a07 100%);
+  border-color:rgba(46,204,113,0.35);
+  box-shadow:inset 0 0 40px rgba(46,204,113,0.15), 0 0 30px rgba(46,204,113,0.1);
+}
+
+/* Idle Screen Elements */
+.d-stars{
+  display:flex;
+  gap:4px;
+  color:#f1c40f;
+  font-size:18px;
+  text-shadow:0 0 10px rgba(241,196,15,0.5);
+  animation:starShimmer 3s ease-in-out infinite alternate;
+}
+@keyframes starShimmer{0%{opacity:.85;transform:scale(0.98)}100%{opacity:1;transform:scale(1.02)}}
+.d-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:var(--gold-primary);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+.device-screen.st-event .d-label{color:#2ecc71}
+.d-value{
+  font-family:'Archivo',sans-serif;
+  font-weight:800;
+  font-size:42px;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg, #fff 40%, var(--gold-light) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.d-reviews-badge{
+  font-size:10.5px;
+  color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(255,255,255,0.04);
+  padding:3px 10px;
+  border-radius:99px;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.d-nfc-active-bar{
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  background:rgba(230,202,151,0.08);
+  padding:5px 12px;
+  border-radius:99px;
+  border:1px solid rgba(230,202,151,0.2);
+}
+.d-nfc-active-bar .pulse-ring{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold-primary);
+  box-shadow:0 0 8px var(--gold-primary);
+  animation:pulse-dot 1.5s infinite;
+}
+
+/* Event Screen Elements */
+.d-icon{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff 0%, #2ecc71 60%, #196f3d 100%);
+  color:#061912;
+  font-size:24px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 25px rgba(46,204,113,0.4);
+  margin-bottom:4px;
+  animation:medallionFloat 3s ease-in-out infinite alternate;
+}
+.d-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-0.01em;
+  text-align:center;
+}
+.d-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:#d4eedc;
+  text-align:center;
+  max-width:240px;
+}
+.d-tag{
+  margin-top:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.08em;
+  padding:4px 12px;
+  border-radius:99px;
+  font-weight:600;
+  text-transform:uppercase;
+}
+.d-tag.capture{background:rgba(230,202,151,0.2);color:var(--gold-light);border:1px solid rgba(230,202,151,0.4)}
+.d-tag.signin{background:rgba(46,204,113,0.2);color:#2ecc71;border:1px solid rgba(46,204,113,0.4)}
+.d-tag.promo, .d-tag.profile{background:rgba(230,202,151,0.2);color:var(--gold-light);border:1px solid rgba(230,202,151,0.4)}
+
+.device-note{
+  margin-top:16px;
+  font-size:11.5px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.6;
+}
+.nfc-dot{
+  width:9px;
+  height:9px;
+  border-radius:99px;
+  background:var(--gold-deep);
+  margin:14px auto 0;
+  position:relative;
+}
+.nfc-dot::after{
+  content:'';
+  position:absolute;
+  inset:-6px;
+  border:1px solid rgba(230,202,151,0.4);
+  border-radius:99px;
+}
+
+/* ═══ VISIT LOG PANEL ═══ */
+.log-panel{
+  margin-top:30px;
+  background:var(--navy-glass);
+  border:1px solid var(--border-glass);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -15px rgba(0,0,0,0.7);
+  backdrop-filter:blur(24px);
+}
+.log-head{
+  padding:18px 24px;
+  border-bottom:1px solid rgba(230,202,151,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(90deg, rgba(230,202,151,0.05) 0%, transparent 100%);
+  flex-wrap:wrap;
+  gap:12px;
+}
+.log-title{
+  font-weight:700;
+  font-size:15px;
+  color:#fff;
+}
+.log-title span{
+  color:var(--muted);
+  font-weight:400;
+  font-size:12.5px;
+  margin-left:10px;
+}
+.btn-reset{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:.08em;
+  padding:6px 14px;
+  border-radius:99px;
+  border:1px solid rgba(231,76,60,0.3);
+  background:rgba(231,76,60,0.08);
+  color:#ff9688;
+  cursor:pointer;
+  text-transform:uppercase;
+  transition:all .2s ease;
+}
+.btn-reset:hover{
+  background:rgba(231,76,60,0.2);
+  border-color:#ff9688;
+  color:#fff;
+  transform:translateY(-1px);
+}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:left;
+  padding:12px 24px;
+  background:rgba(0,0,0,0.3);
+  color:var(--gold-primary);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+td{
+  padding:12px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--ink);
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(230,202,151,0.03)}
+.log-empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}
+.tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:.06em;
+  padding:3px 10px;
+  border-radius:99px;
+  font-weight:500;
+}
+.tag.capture{background:rgba(230,202,151,0.15);color:var(--gold-light);border:1px solid rgba(230,202,151,0.3)}
+.tag.signin{background:rgba(46,204,113,0.15);color:#2ecc71;border:1px solid rgba(46,204,113,0.3)}
+.tag.promo, .tag.profile{background:rgba(230,202,151,0.15);color:var(--gold-light);border:1px solid rgba(230,202,151,0.3)}
+
+/* Footer Note */
+.note{
+  margin-top:24px;
+  background:rgba(14,21,38,0.6);
+  border:1px solid rgba(230,202,151,0.15);
+  border-radius:16px;
+  padding:16px 20px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.note b{color:var(--gold-primary)}
+
+/* ═══ 3D SPIN & WIN SLOT MACHINE (REFERENCE IMAGE 2) ═══ */
+.spin-header{text-align:center;margin-bottom:8px;position:relative}
+.spin-brand-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  background:rgba(230,202,151,0.08);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:99px;
+  padding:2px 8px;
+  display:inline-block;
+  margin-bottom:4px;
+}
+.spin-header-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.sound-toggle-btn{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(230,202,151,0.25);
+  border-radius:8px;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold-primary);
+  cursor:pointer;
+  font-size:12px;
+  transition:all .2s ease;
+}
+.sound-toggle-btn:hover{background:rgba(230,202,151,0.15)}
+
+/* Cabinet Housing */
+.slot-machine-cabinet{
+  background:linear-gradient(180deg, #181410 0%, #0d0b09 60%, #070605 100%);
+  border:2.5px solid #d4af37;
+  border-radius:20px;
+  padding:8px 6px;
+  box-shadow:
+    0 16px 36px rgba(0,0,0,0.85),
+    0 0 25px rgba(212,175,55,0.25),
+    inset 0 0 25px rgba(0,0,0,0.9);
+  position:relative;
+  margin:4px auto 10px;
+  width:100%;
+  max-width:284px;
+  user-select:none;
+}
+.slot-machine-cabinet::before{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border:1px solid rgba(230,202,151,0.3);
+  border-radius:16px;
+  pointer-events:none;
+}
+
+/* Marquee Bulbs */
+.bulb-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:2px 8px;
+}
+.slot-cabinet-middle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:4px;
+  margin:4px 0;
+}
+.bulb-col{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-around;
+  height:120px;
+  padding:0 2px;
+}
+/* ═══ SLOT BULB ANIMATION (STAGGERED MARQUEE & CELEBRATION) ═══ */
+.slot-bulb {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #f7c844 50%, #996e14 100%);
+  display: inline-block;
+  animation: bulbIdleGlow 1.8s ease-in-out infinite;
+  transition: all .25s ease;
+}
+
+/* Alternating staggered chase timing so bulbs blink across cabinet */
+.slot-bulb:nth-child(4n+1) { animation-delay: 0s; }
+.slot-bulb:nth-child(4n+2) { animation-delay: 0.45s; }
+.slot-bulb:nth-child(4n+3) { animation-delay: 0.9s; }
+.slot-bulb:nth-child(4n+4) { animation-delay: 1.35s; }
+
+@keyframes bulbIdleGlow {
+  0%, 100% {
+    opacity: 0.45;
+    box-shadow: 0 0 3px rgba(247, 200, 68, 0.35);
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 16px rgba(212, 175, 55, 0.6);
+    transform: scale(1.15);
+  }
+}
+
+/* Active Spinning State: Fast High-Energy Chase */
+.slot-machine-cabinet.spinning .slot-bulb {
+  animation: bulbSpinChaser 0.28s infinite alternate !important;
+}
+.slot-machine-cabinet.spinning .slot-bulb:nth-child(even) {
+  animation-delay: 0.14s !important;
+}
+
+@keyframes bulbSpinChaser {
+  0% { opacity: 0.35; box-shadow: 0 0 2px rgba(247,200,68,0.2); transform: scale(0.85); }
+  100% { opacity: 1; box-shadow: 0 0 14px rgba(255,225,120,1), 0 0 22px rgba(212,175,55,0.85); transform: scale(1.25); }
+}
+
+/* Celebratory Lighting Sequence on Win */
+.slot-machine-cabinet.celebrating .slot-bulb {
+  animation: bulbCelebration 0.35s ease-in-out infinite alternate !important;
+}
+.slot-machine-cabinet.celebrating .slot-bulb:nth-child(even) {
+  animation-delay: 0.18s !important;
+}
+
+@keyframes bulbCelebration {
+  0% { opacity: 0.5; box-shadow: 0 0 4px rgba(255,215,0,0.4); transform: scale(0.9); }
+  100% { opacity: 1; box-shadow: 0 0 18px rgba(255,235,120,1), 0 0 28px rgba(255,215,0,0.95); transform: scale(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot-bulb,
+  .slot-machine-cabinet.spinning .slot-bulb,
+  .slot-machine-cabinet.celebrating .slot-bulb {
+    animation: none !important;
+    opacity: 0.85;
+    box-shadow: 0 0 6px rgba(247,200,68,0.7);
+  }
+}
+
+/* ═══ ANIMATED ONE SPIN AVAILABILITY MESSAGE ═══ */
+.spin-avail-box {
+  margin: 10px auto 10px;
+  text-align: center;
+  padding: 8px 14px;
+  background: rgba(212, 175, 55, 0.07);
+  border: 1.5px solid rgba(212, 175, 55, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  animation: spinAvailPulse 2.4s ease-in-out infinite;
+  transform-origin: center center;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes spinAvailPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 rgba(212, 175, 55, 0);
+    border-color: rgba(212, 175, 55, 0.25);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(212, 175, 55, 0.45);
+    border-color: rgba(212, 175, 55, 0.65);
+  }
+}
+
+.spin-avail-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.spin-avail-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  color: #e5e5e5;
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+
+/* Pause/reduce animation while spinning */
+.slot-machine-cabinet.spinning ~ .spin-avail-box,
+.spin-avail-box.paused {
+  animation-play-state: paused;
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-avail-box {
+    animation: none !important;
+  }
+}
+
+/* ═══ LOCKED SPIN & WIN BUTTON STATE ═══ */
+.spin-btn.locked {
+  background: linear-gradient(135deg, #2b2e38 0%, #1a1c24 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  filter: grayscale(0.4);
+}
+.spin-btn.locked:hover {
+  border-color: rgba(212, 175, 55, 0.45) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ═══ WALLET REQUIREMENT REMINDER BANNER ═══ */
+.wallet-req-reminder {
+  background: rgba(243, 156, 18, 0.14);
+  border: 1.5px solid rgba(243, 156, 18, 0.45);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: #f39c12;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  line-height: 1.35;
+  animation: reminderShake 0.45s ease;
+}
+@keyframes reminderShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+.wallet-rem-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Attention pulse on Google Wallet button when locked */
+.google-wallet-btn.needs-reg {
+  animation: gwPulseOutline 2s infinite;
+  border-color: rgba(66, 133, 244, 0.75);
+}
+@keyframes gwPulseOutline {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(66, 133, 244, 0);
+    border-color: rgba(212, 175, 55, 0.85);
+  }
+}
+
+/* ═══ GOOGLE WALLET BUTTON ═══ */
+.google-wallet-btn {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: all .25s ease;
+}
+.google-wallet-btn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+}
+.google-wallet-btn.added {
+  background: rgba(46, 204, 113, 0.12);
+  border-color: rgba(46, 204, 113, 0.45);
+  color: #2ecc71;
+}
+.gw-badge-icon { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ═══ FACE 9: 3D STAMP COLLECTION CARDS & WALLET ═══ */
+.wallet-reg-action-box {
+  background: rgba(66, 133, 244, 0.08);
+  border: 1.5px solid rgba(66, 133, 244, 0.35);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.wallet-reg-action-box.registered {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: rgba(46, 204, 113, 0.35);
+}
+.wallet-reg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.wallet-reg-headline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+}
+.wallet-reg-action-box.registered .wallet-reg-headline {
+  color: #2ecc71;
+}
+.wallet-reg-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.wallet-activate-btn {
+  background: linear-gradient(135deg, #4285F4 0%, #1a73e8 100%);
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+}
+.wallet-pass-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+}
+.pass-chip-id {
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+.pass-sync-status {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.stamp-3d-card {
+  border-radius: 18px;
+  padding: 15px 18px;
+  text-align: left;
+  margin: 10px 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.stamp-3d-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.stamp-3d-card.green-stamp-card {
+  background: linear-gradient(145deg, rgba(46, 204, 113, 0.12) 0%, rgba(12, 24, 20, 0.9) 100%);
+  border: 1.5px solid rgba(46, 204, 113, 0.38);
+}
+.stamp-3d-card.blue-stamp-card {
+  background: linear-gradient(145deg, rgba(52, 152, 219, 0.12) 0%, rgba(10, 20, 38, 0.9) 100%);
+  border: 1.5px solid rgba(52, 152, 219, 0.38);
+}
+.stamp-3d-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.stamp-3d-emblem {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.stamp-3d-emblem.green {
+  background: radial-gradient(circle at 35% 35%, #2ecc71 0%, #1e8449 70%, #145a32 100%);
+}
+.stamp-3d-emblem.blue {
+  background: radial-gradient(circle at 35% 35%, #3498db 0%, #2471a3 70%, #1b4f72 100%);
+}
+.stamp-3d-meta { flex: 1; }
+.stamp-3d-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.green-stamp-card .stamp-3d-label { color: #2ecc71; }
+.blue-stamp-card .stamp-3d-label { color: #3498db; }
+
+.stamp-3d-balance {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.stamp-3d-progress-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 8px 0 6px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.stamp-3d-progress-bar {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stamp-3d-progress-bar.green {
+  background: linear-gradient(90deg, #1abc9c, #2ecc71, #a3e4d7);
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
+}
+.stamp-3d-progress-bar.blue {
+  background: linear-gradient(90deg, #2980b9, #3498db, #aed6f1);
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+}
+
+.stamp-3d-instruction {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+.stamp-3d-reward-banner {
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--gold-primary);
+  font-weight: 700;
+  margin-top: 8px;
+  animation: pulse-dot 2s infinite;
+}
+.stamp-3d-redeem-btn {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 8px;
+}
+.stamp-3d-redeem-btn.green {
+  background: linear-gradient(135deg, #2ecc71 0%, #1e8449 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+}
+.stamp-3d-redeem-btn.blue {
+  background: linear-gradient(135deg, #3498db 0%, #1f618d 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(52,152,219,0.3);
+}
+
+/* ═══ REWARD SHOWCASE BUNDLE (FACE 12 SINGLE REWARD) ═══ */
+.dual-reward-bundle{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin:10px 0;
+  width:100%;
+}
+.bundle-row-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(230,202,151,0.22);
+  border-radius:12px;
+  padding:12px 14px;
+  text-align:left;
+  animation:fadeInUp 0.4s ease;
+}
+.bundle-item-icon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:rgba(230,202,151,0.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+  border:1px solid rgba(230,202,151,0.25);
+}
+.bundle-item-content{flex:1}
+.bundle-item-type{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold-primary);
+  margin-bottom:2px;
+}
+.bundle-item-title{
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  font-weight:700;
+  color:#fff;
+  line-height:1.3;
+}
+.bundle-item-desc{
+  font-size:10.5px;
+  color:var(--muted);
+  margin-top:2px;
+}
+.bundle-item-status{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;
+  letter-spacing:.08em;
+  padding:3px 8px;
+  border-radius:99px;
+  text-transform:uppercase;
+  font-weight:600;
+  background:rgba(46,204,113,0.15);
+  color:#2ecc71;
+  border:1px solid rgba(46,204,113,0.3);
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="w">
+    <div class="header-top">
+      <div class="brand-lockup">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <div class="eyebrow">Smart Countertop Interaction</div>
+          <h1>PROOF · 3D NFC Customer Experience</h1>
+        </div>
+      </div>
+      <div class="proto-badge">
+        <div class="live-dot"></div>
+        <span>NFC Kiosk Engine · Active Simulation</span>
+      </div>
+    </div>
+    <p>Every customer journey begins with an NFC tap. First-time guests register friction-free with mobile only. Returning guests enjoy personalized progressive profile completion and instant VIP recognition.</p>
+  </div>
+</header>
+
+<main>
+  <div class="stage">
+
+    <!-- ═══ CUSTOMER PHONE (PANEL 1) ═══ -->
+    <div class="panel">
+      <div class="panel-head customer">
+        <div class="panel-label"><b>①</b> Customer Smartphone Interface</div>
+        <div class="step-dots" id="custDots">
+          <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch">
+            <div class="phone-camera"></div>
+            <div class="phone-speaker"></div>
+          </div>
+          <div class="phone-screen">
+
+            <!-- Screen Top Status -->
+            <div class="screen-status-bar">
+              <span>PROOF PASS</span>
+              <div class="screen-status-icons">
+                <span>5G</span>
+                <span>● 100%</span>
+              </div>
+            </div>
+
+            <!-- FACE 0: NFC 3D TAP HERO -->
+            <div class="c-face on" data-face="0">
+              <div class="nfc-hero">
+                <div class="c-title" style="font-size:27px">Welcome to PROOF</div>
+                <div class="c-sub">Tap your phone to get started.</div>
+
+                <!-- 3D Interactive NFC Visual Stage -->
+                <div class="nfc-stage-3d">
+                  <!-- Scanning Wave Ripples -->
+                  <div class="scan-waves">
+                    <div class="scan-wave"></div>
+                    <div class="scan-wave"></div>
+                    <div class="scan-wave"></div>
+                  </div>
+
+                  <!-- 3D Floating Phone -->
+                  <div class="floating-phone-3d" id="stagePhone3d">
+                    <div class="fp-screen">
+                      <div class="fp-nfc-glyph">⟡</div>
+                      <div class="fp-badge">NFC Ready</div>
+                    </div>
+                  </div>
+
+                  <!-- 3D Metallic Reader Base Plate -->
+                  <div class="nfc-reader-plate">
+                    <div class="reader-inner-ring">
+                      <div class="reader-core"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Button / Tap Trigger -->
+                <div class="nfc-tap-action" id="nfcZone">
+                  <div class="ripple" id="ripple"></div>
+                  <div class="nl"><span>📱</span> Tap Phone Here</div>
+                  <div class="ns">Hold your phone near the counter reader</div>
+                </div>
+
+                <!-- Animated Connecting State -->
+                <div class="connecting" id="connectingText">
+                  <div class="conn-spinner"></div>
+                  <span>Authenticating NFC Signal…</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FACE 1: GATE SELECTION SCREEN -->
+            <div class="c-face" data-face="1">
+              <div class="c-center">
+                <div class="c-biz" style="margin-bottom:8px">
+                  <h2>Welcome</h2>
+                  <p>Customer Identification</p>
+                </div>
+                <div class="c-title" style="font-size:24px">Been here before?</div>
+                <div class="c-sub">This decides whether we create a new profile or sign you into an existing one.</div>
+
+                <div class="gate-options-stack">
+                  <!-- Card 1: New Guest -->
+                  <div class="choice-card-3d" id="gateNewBtn">
+                    <div class="card-icon-emblem">✨</div>
+                    <div class="card-text-block">
+                      <span class="card-tag-pill">First Visit</span>
+                      <div class="card-title">No — First Time Here</div>
+                      <div class="card-subtext">Instant registration with phone number</div>
+                    </div>
+                    <div class="card-arrow">→</div>
+                  </div>
+
+                  <!-- Card 2: Returning Guest -->
+                  <div class="choice-card-3d" id="gateReturnBtn">
+                    <div class="card-icon-emblem">👑</div>
+                    <div class="card-text-block">
+                      <span class="card-tag-pill">Returning Guest</span>
+                      <div class="card-title">Yes — I've Signed In Before</div>
+                      <div class="card-subtext">Access your visit history &amp; perks</div>
+                    </div>
+                    <div class="card-arrow">→</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FACE 2: FIRST VISIT — PHONE REGISTRATION -->
+            <div class="c-face" data-face="2">
+              <div class="step-progress-indicator">
+                <span>Step 1 of 2 · Mobile ID</span>
+                <div class="step-track"><div class="step-fill" style="width:50%"></div></div>
+              </div>
+              <div class="c-biz">
+                <h2>Let's Get You Started</h2>
+                <p>PROOF Membership Pass</p>
+              </div>
+              <div class="c-sub" style="margin:0 auto 16px;text-align:center">
+                Enter your mobile number to begin your PROOF experience.
+              </div>
+              <div class="c-field" id="regPhoneField">
+                <label>Mobile Number</label>
+                <div class="c-phone-row">
+                  <select id="regCountryCode"></select>
+                  <input type="tel" id="regPhone" placeholder="Mobile number" autocomplete="tel-national">
+                </div>
+                <div class="c-field-err" id="regPhoneErr">Please enter a valid phone number.</div>
+              </div>
+              <div class="c-consent">
+                <input type="checkbox" id="regConsent" checked>
+                <label for="regConsent">I agree to receive my PROOF digital pass and visit confirmations via SMS. Reply STOP anytime.</label>
+              </div>
+              <button class="c-btn" id="submitCapture">Sign Up</button>
+            </div>
+
+            <!-- FACE 3: SIGN-UP SUCCESS -->
+            <div class="c-face" data-face="3">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title" style="font-size:26px">You're In!</div>
+                <div class="c-sub" id="signupSuccessMsg">Visit #1 logged. Welcome aboard!</div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">Membership Active</div>
+                  <div class="profile-success-title">Digital Loyalty Pass Created</div>
+                  <div class="profile-success-desc">Your visits will be automatically counted on every NFC tap.</div>
+                </div>
+                <button class="c-btn" id="startSpinBtn" style="margin-top:16px;box-shadow:0 10px 28px rgba(212,175,55,0.45)">Spin &amp; Win →</button>
+              </div>
+            </div>
+
+            <!-- FACE 4: RETURNING CUSTOMER SIGN-IN -->
+            <div class="c-face" data-face="4">
+              <div class="c-center">
+                <div class="c-biz" style="margin-bottom:6px">
+                  <h2>Member Sign-In</h2>
+                  <p>Quick Identification</p>
+                </div>
+                <div class="c-title">Welcome Back!</div>
+                <div class="c-sub">Great to see you again. Let's continue your PROOF experience.</div>
+                <div class="c-field" id="siPhoneField" style="width:100%;margin-top:16px;text-align:left">
+                  <label>Mobile Number</label>
+                  <div class="c-phone-row">
+                    <select id="siCountryCode"></select>
+                    <input type="tel" id="pSignin" placeholder="Mobile number" autocomplete="tel-national">
+                  </div>
+                  <div class="c-field-err" id="siPhoneErr">Please enter a valid phone number.</div>
+                </div>
+                <button class="c-btn" id="signinBtn" style="margin-top:4px">Continue</button>
+                <div class="c-err" id="signinErr">No customer found with that number. Please check and try again.</div>
+              </div>
+            </div>
+
+            <!-- FACE 5: WELCOME BACK (TERMINAL SCREEN) -->
+            <div class="c-face" data-face="5">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>👑</span>
+                </div>
+                <div class="c-title" id="welcomeTitle">Welcome back, <span id="welcomeName">Guest</span></div>
+                <div class="c-sub">Visit #<span id="visitNum">2</span> logged successfully.</div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">VIP Member</div>
+                  <div class="profile-success-title">Visit Confirmed</div>
+                  <div class="profile-success-desc">Thank you for visiting today! Your presence has been registered at the counter.</div>
+                </div>
+                <button class="c-btn" id="returningSpinBtn" style="margin-top:12px;background:linear-gradient(135deg, #f7e7c4 0%, #d4af37 50%, #ab8b52 100%)">Play Spin &amp; Win 🎰</button>
+                <button class="c-btn-ghost" id="backToStart5" style="margin-top:8px">Back to Start →</button>
+              </div>
+            </div>
+
+            <!-- FACE 6: PROFILE COMPLETION INTRO -->
+            <div class="c-face" data-face="6">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>👤</span>
+                </div>
+                <div class="c-title" id="promoGreeting">Welcome Back!</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-primary);margin-top:-4px">
+                  Let's Get to Know You Better
+                </div>
+                <div class="c-sub" style="margin-top:8px">
+                  We'd love to complete your customer profile and make your PROOF experience more personal.
+                </div>
+                <button class="c-btn" id="promoYesBtn" style="margin-top:20px">Continue</button>
+                <button class="c-btn-ghost" id="promoNoBtn">Maybe Later</button>
+              </div>
+            </div>
+
+            <!-- FACE 7: PROFILE DETAILS SCREEN -->
+            <div class="c-face" data-face="7">
+              <div class="step-progress-indicator">
+                <span>Step 2 of 2 · Profile Details</span>
+                <div class="step-track"><div class="step-fill" style="width:100%"></div></div>
+              </div>
+              <div class="c-biz">
+                <h2>Complete Your Profile</h2>
+                <p>Personalized Experience</p>
+              </div>
+              <div class="c-sub" style="margin:0 auto 16px;text-align:center">
+                Just a couple of details to help us personalize your experience.
+              </div>
+              <div class="c-field" id="promoNameField">
+                <label>Your Name</label>
+                <input id="promoName" placeholder="Full name (e.g. Priya Sharma)" autocomplete="name">
+                <div class="c-field-err" id="promoNameErr">Please enter your name (at least 2 characters).</div>
+              </div>
+              <div class="c-field" id="promoEmailField">
+                <label>Email Address</label>
+                <input id="promoEmail" type="email" placeholder="email@example.com" autocomplete="email">
+                <div class="c-field-err" id="promoEmailErr">Please enter a valid email address.</div>
+              </div>
+              <button class="c-btn" id="submitPromoBtn" style="margin-top:6px">Save My Details</button>
+            </div>
+
+            <!-- FACE 8: PROFILE SUCCESS SCREEN -->
+            <div class="c-face" data-face="8">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title" style="font-size:26px">Thank You!</div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-primary);margin-top:-4px">
+                  Your Details Have Been Saved
+                </div>
+                <div class="c-sub" style="margin-top:6px">
+                  Your customer profile has been updated successfully. Thank you for being part of PROOF!
+                </div>
+                <div class="profile-success-card">
+                  <div class="profile-pill-badge">Profile Updated</div>
+                  <div class="profile-success-title">Account Personalized</div>
+                  <div class="profile-success-desc">We've linked your contact details to your NFC identity pass.</div>
+                </div>
+                <button class="c-btn" id="offerDoneBtn" style="margin-top:10px">Continue</button>
+              </div>
+            </div>
+
+            <!-- FACE 9: PROOF LOYALTY WALLET (DIGITAL PASS & 3D STAMP COLLECTIONS) -->
+            <div class="c-face" data-face="9" id="faceLoyaltyWallet">
+              <div class="spin-brand-badge" style="margin-bottom:6px">DIGITAL LOYALTY PASS</div>
+              <div class="c-title" style="font-size:22px;letter-spacing:-0.01em">PROOF LOYALTY PASS</div>
+              <div class="c-sub" style="font-size:12px;margin:2px auto 12px">Your rewards, all in one place.</div>
+
+              <!-- Google Wallet Mock Registration Action Card -->
+              <div class="wallet-reg-action-box" id="walletRegActionBox">
+                <div class="wallet-reg-header">
+                  <span class="gw-badge-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                      <path fill="#4285F4" d="M21.5 12c0-.7-.1-1.4-.2-2H12v4.3h5.4c-.2 1.3-.9 2.5-2 3.2v2.7h3.3c1.9-1.8 3-4.4 3-7.5z"/>
+                      <path fill="#34A853" d="M12 21.6c2.6 0 4.8-.9 6.4-2.4l-3.3-2.7c-.9.6-2 1-3.1 1-2.4 0-4.5-1.6-5.2-3.8H3.3v2.8C5 19.8 8.2 21.6 12 21.6z"/>
+                      <path fill="#FBBC05" d="M6.8 13.7c-.2-.6-.3-1.2-.3-1.9 0-.7.1-1.3.3-1.9V7.1H3.3C2.7 8.3 2.3 9.7 2.3 11.8s.4 3.5 1 4.7l3.5-2.8z"/>
+                      <path fill="#EA4335" d="M12 6.2c1.4 0 2.7.5 3.7 1.5l2.8-2.8C16.8 3.3 14.6 2.4 12 2.4 8.2 2.4 5 4.2 3.3 7.6l3.5 2.8c.7-2.2 2.8-3.8 5.2-3.8z"/>
+                    </svg>
+                  </span>
+                  <span class="wallet-reg-headline" id="walletRegHeadline">Google Wallet Pass</span>
+                </div>
+                <div class="wallet-reg-desc" id="walletRegDesc">Add your PROOF pass to Google Wallet (simulation) to unlock your Spin &amp; Win play.</div>
+                <button class="c-btn wallet-activate-btn" id="activateGoogleWalletBtn" type="button" style="margin-top:10px;padding:10px 14px;font-size:12.5px">
+                  <span id="activateWalletBtnText">Register in Google Wallet</span>
+                </button>
+                <div class="wallet-pass-meta" id="walletPassMeta" style="display:none">
+                  <span class="pass-chip-id" id="walletPassChipId">PASS: GW-PROOF-XXXX</span>
+                  <span class="pass-sync-status">● Live Sync Active</span>
+                </div>
+              </div>
+
+              <!-- 3D Green Stamp Collection Card -->
+              <div class="stamp-3d-card green-stamp-card" id="greenStampCard3d">
+                <div class="stamp-3d-top">
+                  <div class="stamp-3d-emblem green">
+                    <span class="stamp-3d-icon">🟢</span>
+                  </div>
+                  <div class="stamp-3d-meta">
+                    <div class="stamp-3d-label">GREEN STAMP COLLECTION</div>
+                    <div class="stamp-3d-balance" id="face9GreenBalance">0 / 10 Green Stamps</div>
+                  </div>
+                </div>
+                <div class="stamp-3d-progress-track">
+                  <div class="stamp-3d-progress-bar green" id="face9GreenProgress" style="width: 0%"></div>
+                </div>
+                <div class="stamp-3d-instruction" id="face9GreenInstruction">
+                  Collect 10 Green Stamps to redeem your reward.
+                </div>
+                <div class="stamp-3d-reward-banner" id="face9GreenRewardBanner" style="display:none">
+                  🎉 Reward Available!
+                </div>
+                <button class="stamp-3d-redeem-btn green" id="face9RedeemGreenBtn" type="button" disabled style="display:none">
+                  Redeem Reward (10 Stamps)
+                </button>
+              </div>
+
+              <!-- 3D Blue Stamp Collection Card -->
+              <div class="stamp-3d-card blue-stamp-card" id="blueStampCard3d">
+                <div class="stamp-3d-top">
+                  <div class="stamp-3d-emblem blue">
+                    <span class="stamp-3d-icon">🔵</span>
+                  </div>
+                  <div class="stamp-3d-meta">
+                    <div class="stamp-3d-label">BLUE STAMP COLLECTION</div>
+                    <div class="stamp-3d-balance" id="face9BlueBalance">0 / 5 Blue Stamps</div>
+                  </div>
+                </div>
+                <div class="stamp-3d-progress-track">
+                  <div class="stamp-3d-progress-bar blue" id="face9BlueProgress" style="width: 0%"></div>
+                </div>
+                <div class="stamp-3d-instruction" id="face9BlueInstruction">
+                  Collect 5 Blue Stamps to redeem your reward.
+                </div>
+                <div class="stamp-3d-reward-banner" id="face9BlueRewardBanner" style="display:none">
+                  🎉 Reward Available!
+                </div>
+                <button class="stamp-3d-redeem-btn blue" id="face9RedeemBlueBtn" type="button" disabled style="display:none">
+                  Redeem Reward (5 Stamps)
+                </button>
+              </div>
+
+              <!-- Primary Action: Continue to Spin & Win -->
+              <button class="c-btn" id="face9ContinueToSpinBtn" type="button" style="margin-top:12px">
+                Continue to Spin &amp; Win →
+              </button>
+            </div>
+
+            <!-- FACE 13: BIRTHDAY + ADDITIONAL DETAILS (3RD+ VISIT) -->
+            <div class="c-face" data-face="13">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>🎂</span>
+                </div>
+                <div class="c-title" id="bdayGreeting">Help Us Celebrate You</div>
+                <div class="c-sub">Share your birthday and we'll have a special surprise ready for you!</div>
+                <div class="c-field" style="width:100%;margin-top:14px;text-align:left">
+                  <label>Birthday <i>(optional)</i></label>
+                  <input type="date" id="bdayInput">
+                </div>
+                <button class="c-btn" id="bdaySubmitBtn" style="margin-top:4px">Save</button>
+                <button class="c-btn-ghost" id="bdaySkipBtn">Maybe Later</button>
+              </div>
+            </div>
+
+            <!-- FACE 14: ADDITIONAL DETAILS SAVED -->
+            <div class="c-face" data-face="14">
+              <div class="c-center">
+                <div class="medallion-3d">
+                  <div class="medallion-orbit"></div>
+                  <span>✓</span>
+                </div>
+                <div class="c-title">Details Saved!</div>
+                <div class="c-sub" id="bdaySuccessMsg">Thank you! We'll make your next visit extra special.</div>
+                <button class="c-btn" id="bdayDoneBtn" style="margin-top:16px">Continue</button>
+              </div>
+            </div>
+
+            <!-- FACE 11: SPIN & WIN 3D SLOT MACHINE (REFERENCE IMAGE 2) -->
+            <div class="c-face" data-face="11">
+              <div class="spin-header">
+                <div class="spin-brand-badge">PROOF LOYALTY REWARDS</div>
+                <div class="spin-header-row">
+                  <div class="c-title" style="font-size:22px;letter-spacing:-0.01em">PROOF SPIN &amp; WIN</div>
+                  <button class="sound-toggle-btn" id="soundToggleBtn" type="button" aria-label="Toggle sound" title="Mute/Unmute audio">🔇</button>
+                </div>
+                <div class="c-sub" style="font-size:11px;margin:2px auto 6px">Your next reward is just one spin away!</div>
+              </div>
+
+              <!-- 3D Marquee Slot Machine Housing (Reference Image 2) -->
+              <div class="slot-machine-cabinet" id="slotMachineCabinet">
+                <!-- Top Bulbs -->
+                <div class="bulb-row top-bulbs">
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                </div>
+
+                <!-- Middle Row: Left Bulbs + Reels Box + Right Bulbs -->
+                <div class="slot-cabinet-middle">
+                  <div class="bulb-col left-bulbs">
+                    <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  </div>
+
+                  <div class="slot-reels-box">
+                    <div class="reels-accent-dots">···</div>
+                    <div class="reels-stage">
+                      <!-- Reel 1 -->
+                      <div class="slot-reel-frame" id="reel1">
+                        <div class="reel-strip" id="reelStrip1"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                      <!-- Reel 2 -->
+                      <div class="slot-reel-frame" id="reel2">
+                        <div class="reel-strip" id="reelStrip2"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                      <!-- Reel 3 -->
+                      <div class="slot-reel-frame" id="reel3">
+                        <div class="reel-strip" id="reelStrip3"></div>
+                        <div class="reel-overlay"></div>
+                      </div>
+                    </div>
+                    <div class="slot-good-luck">GOOD LUCK !</div>
+                  </div>
+
+                  <div class="bulb-col right-bulbs">
+                    <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  </div>
+                </div>
+
+                <!-- Bottom Bulbs -->
+                <div class="bulb-row bottom-bulbs">
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                  <span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span><span class="slot-bulb"></span>
+                </div>
+              </div>
+
+              <!-- Animated One Spin Availability Message -->
+              <div class="spin-avail-box" id="spinAvailBox">
+                <div class="spin-avail-title">You Have One Spin!</div>
+                <div class="spin-avail-sub">Try your luck and discover your reward.</div>
+              </div>
+
+              <!-- Spin & Win Primary Action Button -->
+              <button class="c-btn spin-btn" id="spinActionBtn" type="button">
+                <span id="spinActionBtnText">SPIN &amp; WIN</span>
+              </button>
+
+              <!-- Wallet Requirement Reminder Notice (Shown if user clicks locked spin) -->
+              <div class="wallet-req-reminder" id="walletReqReminder" style="display:none">
+                <span class="wallet-rem-icon">⚠️</span>
+                <span>Please add your PROOF Loyalty Pass to Google Wallet before spinning.</span>
+              </div>
+
+              <!-- Google Wallet Button Directly Below Spin Button -->
+              <button class="google-wallet-btn" id="googleWalletBtn" type="button">
+                <span class="gw-badge-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="#4285F4" d="M21.5 12c0-.7-.1-1.4-.2-2H12v4.3h5.4c-.2 1.3-.9 2.5-2 3.2v2.7h3.3c1.9-1.8 3-4.4 3-7.5z"/>
+                    <path fill="#34A853" d="M12 21.6c2.6 0 4.8-.9 6.4-2.4l-3.3-2.7c-.9.6-2 1-3.1 1-2.4 0-4.5-1.6-5.2-3.8H3.3v2.8C5 19.8 8.2 21.6 12 21.6z"/>
+                    <path fill="#FBBC05" d="M6.8 13.7c-.2-.6-.3-1.2-.3-1.9 0-.7.1-1.3.3-1.9V7.1H3.3C2.7 8.3 2.3 9.7 2.3 11.8s.4 3.5 1 4.7l3.5-2.8z"/>
+                    <path fill="#EA4335" d="M12 6.2c1.4 0 2.7.5 3.7 1.5l2.8-2.8C16.8 3.3 14.6 2.4 12 2.4 8.2 2.4 5 4.2 3.3 7.6l3.5 2.8c.7-2.2 2.8-3.8 5.2-3.8z"/>
+                  </svg>
+                </span>
+                <span id="googleWalletBtnText">Add to Google Wallet</span>
+              </button>
+            </div>
+
+            <!-- FACE 12: REWARD RESULT SCREEN (STRICT SINGLE REWARD) -->
+            <div class="c-face" data-face="12">
+              <div class="c-center" id="rewardResultCenter">
+                <!-- Dynamic Tier Icon / Medallion -->
+                <div class="medallion-3d" id="resultMedallion">
+                  <div class="medallion-orbit"></div>
+                  <span id="resultMedallionIcon">🎁</span>
+                </div>
+
+                <div class="c-title" id="resultTierHeading" style="font-size:26px">Congratulations!</div>
+                <div id="resultTierSubheading" style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-primary);margin-top:-4px">
+                  You won a reward!
+                </div>
+
+                <!-- Reward Showcase Card (Mutually Exclusive: Either Stamp OR Gift) -->
+                <div class="reward-showcase-card" id="rewardShowcaseCard">
+                  <!-- Mini Winning Symbols -->
+                  <div class="winning-symbols-row" id="winningSymbolsRow">
+                    <span class="win-sym">[7]</span>
+                    <span class="win-sym">[7]</span>
+                    <span class="win-sym">[7]</span>
+                  </div>
+
+                  <!-- Single Reward Showcase Container -->
+                  <div class="dual-reward-bundle" id="singleRewardBundle">
+                    <!-- Option A: Stamp Award Row (Only shown if stamp won) -->
+                    <div class="bundle-row-item" id="bundleStampRow" style="display:none">
+                      <div class="bundle-item-icon" id="bundleStampIcon">🟢</div>
+                      <div class="bundle-item-content">
+                        <div class="bundle-item-type">LOYALTY STAMP AWARDED</div>
+                        <div class="bundle-item-title" id="bundleStampTitle">+1 Green Stamp</div>
+                        <div class="bundle-item-desc" id="bundleStampDesc">Added to Green Stamp Collection. Collect 10 to redeem!</div>
+                      </div>
+                      <div class="bundle-item-status">Added</div>
+                    </div>
+
+                    <!-- Option B: Gift Award Row (Only shown if gift won) -->
+                    <div class="bundle-row-item" id="bundleGiftRow" style="display:none">
+                      <div class="bundle-item-icon" id="bundleGiftIcon">☕</div>
+                      <div class="bundle-item-content">
+                        <div class="bundle-item-type">COMPLIMENTARY GIFT AWARDED</div>
+                        <div class="bundle-item-title" id="bundleGiftTitle">Extra Coffee Powder</div>
+                        <div class="bundle-item-desc" id="bundleGiftDesc">Show pass at checkout to claim with your visit order!</div>
+                      </div>
+                      <div class="bundle-item-status">Ready</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wallet-status-summary">
+                  <span>Loyalty Balance:</span>
+                  <b id="summaryWalletStamps">🟢 0 Green · 🔵 0 Blue</b>
+                </div>
+
+                <button class="c-btn" id="claimRewardBtn" type="button" style="margin-top:12px">
+                  Claim Reward &amp; Finish Visit →
+                </button>
+                <button class="c-btn-ghost" id="viewPassFromRewardBtn" type="button" style="margin-top:6px;font-size:12px;padding:8px">
+                  View Loyalty Pass →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROOF DISPLAY (PANEL 2: PHYSICAL COUNTER KIOSK) ═══ -->
+    <div class="panel">
+      <div class="panel-head device">
+        <div class="panel-label"><b>②</b> PROOF Counter Display — Physical Terminal Screen</div>
+      </div>
+      <div class="device-wrap">
+        <div class="device-shell">
+          <div class="device-kiosk-head">
+            <div class="kiosk-brand">
+              <span class="kiosk-status-dot"></span>
+              <span>PROOF TERMINAL 4K</span>
+            </div>
+            <div class="kiosk-time">COIMBATORE HUB</div>
+          </div>
+          <div class="device-screen" id="deviceScreen">
+            <div class="d-stars">★★★★★</div>
+            <div class="d-label">Google Verified Rating</div>
+            <div class="d-value">4.8★</div>
+            <div class="d-reviews-badge">Based on 1,240+ Customer Reviews</div>
+            <div class="d-nfc-active-bar">
+              <div class="pulse-ring"></div>
+              <span>NFC Sensor Ready · Tap Device</span>
+            </div>
+          </div>
+          <div class="nfc-dot"></div>
+          <div class="device-note">
+            Mounted directly at business checkout. Updates in real-time as customers tap their smartphones.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ VISIT LOG (PANEL 3) ═══ -->
+  <div class="log-panel">
+    <div class="log-head">
+      <div class="log-title">Live Kiosk Audit Log<span>All events persist locally in browser localStorage</span></div>
+      <div><button class="btn-reset" id="resetBtn">Reset All Data</button></div>
+    </div>
+    <div id="logBody">
+      <div class="log-empty">No events yet — walk through the flow above to populate this.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Progressive profile architecture:</b> First visit collects only a phone number. Subsequent visits smoothly prompt for name, email, and birthday without disrupting customer flow. All state is maintained in localStorage with normalized E.164 phone identity.
+  </div>
+
+</main>
+
+<script>
+(function(){
+
+  // ═══════════════════════════════════════════════════════
+  // COUNTRY CODES (WITH EMOJI FLAGS & CLEAN LABELS)
+  // ═══════════════════════════════════════════════════════
+
+  var countryCodes = [
+    { code:'+91',  label:'🇮🇳 +91 (India)',         country:'IN' },
+    { code:'+1',   label:'🇺🇸 +1 (United States)',  country:'US' },
+    { code:'+44',  label:'🇬🇧 +44 (United Kingdom)',country:'GB' },
+    { code:'+1',   label:'🇨🇦 +1 (Canada)',         country:'CA' },
+    { code:'+61',  label:'🇦🇺 +61 (Australia)',      country:'AU' },
+    { code:'+971', label:'🇦🇪 +971 (UAE)',            country:'AE' },
+    { code:'+65',  label:'🇸🇬 +65 (Singapore)',      country:'SG' },
+    { code:'+60',  label:'🇲🇾 +60 (Malaysia)',       country:'MY' },
+    { code:'+81',  label:'🇯🇵 +81 (Japan)',          country:'JP' },
+    { code:'+86',  label:'🇨🇳 +86 (China)',          country:'CN' },
+    { code:'+82',  label:'🇰🇷 +82 (South Korea)',    country:'KR' },
+    { code:'+49',  label:'🇩🇪 +49 (Germany)',        country:'DE' },
+    { code:'+33',  label:'🇫🇷 +33 (France)',         country:'FR' },
+    { code:'+39',  label:'🇮🇹 +39 (Italy)',          country:'IT' },
+    { code:'+34',  label:'🇪🇸 +34 (Spain)',          country:'ES' },
+    { code:'+31',  label:'🇳🇱 +31 (Netherlands)',    country:'NL' },
+    { code:'+46',  label:'🇸🇪 +46 (Sweden)',         country:'SE' },
+    { code:'+47',  label:'🇳🇴 +47 (Norway)',         country:'NO' },
+    { code:'+45',  label:'🇩🇰 +45 (Denmark)',        country:'DK' },
+    { code:'+41',  label:'🇨🇭 +41 (Switzerland)',    country:'CH' },
+    { code:'+43',  label:'🇦🇹 +43 (Austria)',        country:'AT' },
+    { code:'+32',  label:'🇧🇪 +32 (Belgium)',        country:'BE' },
+    { code:'+48',  label:'🇵🇱 +48 (Poland)',         country:'PL' },
+    { code:'+353', label:'🇮🇪 +353 (Ireland)',       country:'IE' },
+    { code:'+351', label:'🇵🇹 +351 (Portugal)',      country:'PT' },
+    { code:'+420', label:'🇨🇿 +420 (Czech Rep)',     country:'CZ' },
+    { code:'+358', label:'🇫🇮 +358 (Finland)',       country:'FI' },
+    { code:'+7',   label:'🇷🇺 +7 (Russia)',          country:'RU' },
+    { code:'+90',  label:'🇹🇷 +90 (Turkey)',         country:'TR' },
+    { code:'+55',  label:'🇧🇷 +55 (Brazil)',         country:'BR' },
+    { code:'+52',  label:'🇲🇽 +52 (Mexico)',         country:'MX' },
+    { code:'+64',  label:'🇳🇿 +64 (New Zealand)',    country:'NZ' },
+    { code:'+27',  label:'🇿🇦 +27 (South Africa)',   country:'ZA' },
+    { code:'+234', label:'🇳🇬 +234 (Nigeria)',       country:'NG' },
+    { code:'+254', label:'🇰🇪 +254 (Kenya)',         country:'KE' },
+    { code:'+20',  label:'🇪🇬 +20 (Egypt)',          country:'EG' },
+    { code:'+966', label:'🇸🇦 +966 (Saudi Arabia)',  country:'SA' },
+    { code:'+972', label:'🇮🇱 +972 (Israel)',        country:'IL' },
+    { code:'+92',  label:'🇵🇰 +92 (Pakistan)',       country:'PK' },
+    { code:'+880', label:'🇧🇩 +880 (Bangladesh)',     country:'BD' },
+    { code:'+94',  label:'🇱🇰 +94 (Sri Lanka)',      country:'LK' },
+    { code:'+977', label:'🇳🇵 +977 (Nepal)',          country:'NP' },
+    { code:'+63',  label:'🇵🇭 +63 (Philippines)',    country:'PH' },
+    { code:'+62',  label:'🇮🇩 +62 (Indonesia)',      country:'ID' },
+    { code:'+66',  label:'🇹🇭 +66 (Thailand)',       country:'TH' },
+    { code:'+84',  label:'🇻🇳 +84 (Vietnam)',        country:'VN' },
+    { code:'+852', label:'🇭🇰 +852 (Hong Kong)',     country:'HK' },
+    { code:'+886', label:'🇹🇼 +886 (Taiwan)',        country:'TW' }
+  ];
+
+  function detectCountry(){
+    var lang = (navigator.language || navigator.userLanguage || 'en-IN');
+    var parts = lang.replace('_','-').split('-');
+    var country = (parts[1] || '').toUpperCase();
+    for(var i = 0; i < countryCodes.length; i++){
+      if(countryCodes[i].country === country) return country;
+    }
+    return 'IN';
+  }
+
+  function populateCountrySelect(selectEl){
+    if(!selectEl) return;
+    var detected = detectCountry();
+    selectEl.innerHTML = '';
+    for(var i = 0; i < countryCodes.length; i++){
+      var opt = document.createElement('option');
+      opt.value = countryCodes[i].code;
+      opt.textContent = countryCodes[i].label;
+      opt.dataset.country = countryCodes[i].country;
+      if(countryCodes[i].country === detected) opt.selected = true;
+      selectEl.appendChild(opt);
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // DATA LAYER — LOCALSTORAGE & NORMALIZATION
+  // ═══════════════════════════════════════════════════════
+
+  var STORAGE_CUSTOMERS = 'proof_customers';
+  var STORAGE_EVENTS    = 'proof_events';
+  var PROMPT_COOLDOWN_VISITS = 3;
+
+  function normalizeCustomerRecord(c){
+    if(!c) return null;
+    if(!c.stampWallet){
+      c.stampWallet = {
+        green: (c.stamps && c.stamps.green) || 0,
+        blue:  (c.stamps && c.stamps.blue)  || 0
+      };
+    }
+    if(!c.stamps){
+      c.stamps = { green: c.stampWallet.green, blue: c.stampWallet.blue };
+    }
+    if(!c.googleWallet){
+      c.googleWallet = { registered: false, passId: null, registeredAt: null };
+    }
+    if(!c.spin){
+      c.spin = { available: true, completed: false };
+    }
+    if(!Array.isArray(c.rewardHistory)) c.rewardHistory = [];
+    if(!Array.isArray(c.redemptionHistory)) c.redemptionHistory = [];
+
+    if(!c.profilePrompt){
+      var profDone = (c.profileStage === 'CONTACT_DETAILS_COMPLETED' || c.profileStage === 'ADDITIONAL_DETAILS_COMPLETED' || !!c.name);
+      c.profilePrompt = {
+        completed: profDone,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+    }
+    if(!c.birthdayPrompt){
+      var bdayDone = (c.profileStage === 'ADDITIONAL_DETAILS_COMPLETED' || !!c.birthday);
+      c.birthdayPrompt = {
+        completed: bdayDone,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+    }
+    return c;
+  }
+
+  function loadCustomers(){
+    try {
+      var raw = JSON.parse(localStorage.getItem(STORAGE_CUSTOMERS)) || [];
+      return raw.map(normalizeCustomerRecord);
+    }
+    catch(e){ return []; }
+  }
+
+  function saveCustomers(list){
+    localStorage.setItem(STORAGE_CUSTOMERS, JSON.stringify(list));
+  }
+
+  function loadEvents(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_EVENTS)) || []; }
+    catch(e){ return []; }
+  }
+
+  function saveEventsData(list){
+    localStorage.setItem(STORAGE_EVENTS, JSON.stringify(list));
+  }
+
+  function normalizePhone(countryCode, localNumber){
+    var digits = (localNumber || '').replace(/[^0-9]/g, '');
+    if(digits.length > 1 && digits[0] === '0') digits = digits.substring(1);
+    return (countryCode || '') + digits;
+  }
+
+  function findCustomerByPhone(normalized){
+    var customers = loadCustomers();
+    for(var i = 0; i < customers.length; i++){
+      if(customers[i].phoneNumber === normalized) return customers[i];
+    }
+    return null;
+  }
+
+  function createCustomer(countryCode, localNumber){
+    var normalized = normalizePhone(countryCode, localNumber);
+    var existing = findCustomerByPhone(normalized);
+    if(existing) return null;
+
+    var now = new Date().toISOString();
+    var customer = {
+      id: 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      phoneNumber: normalized,
+      countryCode: countryCode,
+      localNumber: localNumber.replace(/[^0-9]/g, ''),
+      name: null,
+      email: null,
+      birthday: null,
+      visits: 1,
+      visitHistory: [{ date: now, type: 'signup', visit: 1 }],
+      profileStage: 'PHONE_ONLY',
+      promotionDetails: { offered: false, accepted: false },
+      googleWallet: { registered: false, passId: null, registeredAt: null },
+      stampWallet: { green: 0, blue: 0 },
+      stamps: { green: 0, blue: 0 },
+      spin: { available: true, completed: false },
+      rewardHistory: [],
+      redemptionHistory: [],
+      profilePrompt: { completed: false, skippedAtVisit: null, remindAfterVisit: null },
+      birthdayPrompt: { completed: false, skippedAtVisit: null, remindAfterVisit: null },
+      createdAt: now,
+      updatedAt: now
+    };
+
+    var customers = loadCustomers();
+    customers.push(customer);
+    saveCustomers(customers);
+    return customer;
+  }
+
+  function updateCustomer(customer, updates){
+    var customers = loadCustomers();
+    for(var i = 0; i < customers.length; i++){
+      if(customers[i].id === customer.id){
+        for(var key in updates){
+          if(updates.hasOwnProperty(key)){
+            customers[i][key] = updates[key];
+          }
+        }
+        customers[i].updatedAt = new Date().toISOString();
+        normalizeCustomerRecord(customers[i]);
+        saveCustomers(customers);
+        return customers[i];
+      }
+    }
+    return customer;
+  }
+
+  function recordVisit(customer){
+    var now = new Date().toISOString();
+    var newVisits = customer.visits + 1;
+    var history = (customer.visitHistory || []).slice();
+    history.push({ date: now, type: 'signin', visit: newVisits });
+    return updateCustomer(customer, {
+      visits: newVisits,
+      visitHistory: history
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FORM VALIDATION
+  // ═══════════════════════════════════════════════════════
+
+  function validatePhone(phone){
+    var digits = (phone || '').replace(/[^0-9]/g, '');
+    return digits.length >= 6 && digits.length <= 15;
+  }
+
+  function validateEmail(email){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
+  }
+
+  function validateName(name){
+    return (name || '').trim().length >= 2;
+  }
+
+  function showFieldError(errEl, show, msg){
+    if(!errEl) return;
+    if(msg) errEl.textContent = msg;
+    errEl.classList.toggle('show', show);
+    var field = errEl.closest('.c-field');
+    if(field) field.classList.toggle('invalid', show);
+  }
+
+  function clearFieldError(errEl){
+    showFieldError(errEl, false);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // UI NAVIGATION & RENDERING
+  // ═══════════════════════════════════════════════════════
+
+  var custFaces = document.querySelectorAll('.c-face');
+  var custDots  = document.querySelectorAll('#custDots i');
+
+  function showFace(n, dot){
+    custFaces.forEach(function(f){ f.classList.toggle('on', f.dataset.face == n); });
+    if(dot !== undefined){
+      custDots.forEach(function(d, i){ d.classList.toggle('on', i === dot); });
+    }
+  }
+
+  var tagLabels = {
+    capture: 'SIGNED UP',
+    signin:  'SIGNED IN',
+    promo:   'PROFILE UPDATED',
+    profile: 'PROFILE COMPLETED'
+  };
+
+  function addEvent(name, action, tag){
+    var evts = loadEvents();
+    evts.unshift({
+      time: new Date().toLocaleTimeString(),
+      name: name,
+      action: action,
+      tag: tag,
+      date: new Date().toISOString()
+    });
+    saveEventsData(evts);
+    renderLog();
+  }
+
+  function renderLog(){
+    var evts = loadEvents();
+    var body = document.getElementById('logBody');
+    if(!body) return;
+    if(evts.length === 0){
+      body.innerHTML = '<div class="log-empty">No events yet — walk through the flow above to populate this.</div>';
+      return;
+    }
+    var rows = evts.map(function(e){
+      var label = tagLabels[e.tag] || e.tag;
+      return '<tr><td class="mono">' + e.time + '</td><td>' + escHtml(e.name) + '</td><td>' + escHtml(e.action) + '</td><td><span class="tag ' + e.tag + '">' + label + '</span></td></tr>';
+    }).join('');
+    body.innerHTML = '<table><tr><th>Time</th><th>Customer</th><th>Event</th><th>Type</th></tr>' + rows + '</table>';
+  }
+
+  function escHtml(s){
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  var deviceScreen = document.getElementById('deviceScreen');
+
+  function deviceIdle(){
+    if(!deviceScreen) return;
+    deviceScreen.classList.remove('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-stars">★★★★★</div>' +
+      '<div class="d-label">Google Verified Rating</div>' +
+      '<div class="d-value">4.8★</div>' +
+      '<div class="d-reviews-badge">Based on 1,240+ Customer Reviews</div>' +
+      '<div class="d-nfc-active-bar">' +
+        '<div class="pulse-ring"></div>' +
+        '<span>NFC Sensor Ready · Tap Device</span>' +
+      '</div>';
+  }
+
+  function deviceShow(kind, name, sub, tag){
+    if(!deviceScreen) return;
+    deviceScreen.classList.add('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-icon">✓</div>' +
+      '<div class="d-label">' + escHtml(kind) + '</div>' +
+      '<div class="d-name">' + escHtml(name) + '</div>' +
+      '<div class="d-sub">' + escHtml(sub) + '</div>' +
+      '<div class="d-tag ' + tag + '">' + (tagLabels[tag] || tag) + '</div>';
+  }
+
+  function displayName(cust){
+    if(!cust) return 'Guest';
+    if(cust.name) return cust.name.split(' ')[0];
+    return cust.phoneNumber || 'Guest';
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // STATE MANAGEMENT
+  // ═══════════════════════════════════════════════════════
+
+  var activeCustomer = null;
+
+
+  // ═══════════════════════════════════════════════════════
+  // INITIALIZE ON LOAD
+  // ═══════════════════════════════════════════════════════
+
+  populateCountrySelect(document.getElementById('regCountryCode'));
+  populateCountrySelect(document.getElementById('siCountryCode'));
+  renderLog();
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 0: NFC TAP INTERACTION
+  // ═══════════════════════════════════════════════════════
+
+  var nfcZoneEl = document.getElementById('nfcZone');
+  if(nfcZoneEl){
+    nfcZoneEl.addEventListener('click', function(){
+      var ripple = document.getElementById('ripple');
+      var stagePhone = document.getElementById('stagePhone3d');
+
+      if(stagePhone) stagePhone.classList.add('tapping');
+
+      if(ripple){
+        var zone = this.getBoundingClientRect();
+        ripple.style.left = (zone.width / 2 - 5) + 'px';
+        ripple.style.top  = (zone.height / 2 - 5) + 'px';
+        ripple.classList.remove('go');
+        void ripple.offsetWidth;
+        ripple.classList.add('go');
+      }
+
+      var connText = document.getElementById('connectingText');
+      if(connText) connText.classList.add('show');
+
+      setTimeout(function(){
+        if(stagePhone) stagePhone.classList.remove('tapping');
+        if(connText) connText.classList.remove('show');
+        activeCustomer = null;
+        showFace(1, 1);
+      }, 900);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 1: GATE SELECTION
+  // ═══════════════════════════════════════════════════════
+
+  var gateNewBtn = document.getElementById('gateNewBtn');
+  if(gateNewBtn){
+    gateNewBtn.addEventListener('click', function(){
+      var regP = document.getElementById('regPhone');
+      if(regP) regP.value = '';
+      var regC = document.getElementById('regConsent');
+      if(regC) regC.checked = true;
+      clearFieldError(document.getElementById('regPhoneErr'));
+      showFace(2, 2);
+    });
+  }
+
+  var gateReturnBtn = document.getElementById('gateReturnBtn');
+  if(gateReturnBtn){
+    gateReturnBtn.addEventListener('click', function(){
+      var pSi = document.getElementById('pSignin');
+      if(pSi) pSi.value = '';
+      var siErr = document.getElementById('signinErr');
+      if(siErr) siErr.style.display = 'none';
+      clearFieldError(document.getElementById('siPhoneErr'));
+      showFace(4, 2);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 2: FIRST-TIME REGISTRATION (PHONE ONLY)
+  // ═══════════════════════════════════════════════════════
+
+  var submitCaptureBtn = document.getElementById('submitCapture');
+  if(submitCaptureBtn){
+    submitCaptureBtn.addEventListener('click', function(){
+      var countryCode = document.getElementById('regCountryCode').value;
+      var phone       = document.getElementById('regPhone').value.trim();
+      var errEl       = document.getElementById('regPhoneErr');
+
+      if(!validatePhone(phone)){
+        showFieldError(errEl, true, 'Please enter a valid phone number (6–15 digits).');
+        return;
+      }
+
+      var newCust = createCustomer(countryCode, phone);
+      if(!newCust){
+        showFieldError(errEl, true, "This number is already registered. Please select 'I have Signed In Before'.");
+        return;
+      }
+      clearFieldError(errEl);
+
+      activeCustomer = newCust;
+      var label = displayName(activeCustomer);
+
+      var sMsg = document.getElementById('signupSuccessMsg');
+      if(sMsg) sMsg.textContent = 'Visit #1 logged. Welcome aboard!';
+      addEvent(label, 'Signed up — loyalty pass issued', 'capture');
+      deviceShow('New Member', label, 'Visit #1 · Loyalty Pass Created', 'capture');
+      showFace(3, 3);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 3: SIGN-UP SUCCESS (SPIN & WIN PRIMARY ONLY)
+  // ═══════════════════════════════════════════════════════
+
+  var bts3 = document.getElementById('backToStart3');
+  if(bts3){
+    bts3.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 4: RETURNING CUSTOMER SIGN-IN WITH COOLDOWN LOGIC
+  // ═══════════════════════════════════════════════════════
+
+  var signinBtn = document.getElementById('signinBtn');
+  if(signinBtn){
+    signinBtn.addEventListener('click', function(){
+      var countryCode = document.getElementById('siCountryCode').value;
+      var phone       = document.getElementById('pSignin').value.trim();
+      var phoneErr    = document.getElementById('siPhoneErr');
+      var notFoundErr = document.getElementById('signinErr');
+
+      if(!validatePhone(phone)){
+        showFieldError(phoneErr, true, 'Please enter a valid phone number (6–15 digits).');
+        if(notFoundErr) notFoundErr.style.display = 'none';
+        return;
+      }
+      clearFieldError(phoneErr);
+
+      var normalized = normalizePhone(countryCode, phone);
+      var customer = findCustomerByPhone(normalized);
+
+      if(!customer){
+        if(notFoundErr) notFoundErr.style.display = 'block';
+        return;
+      }
+      if(notFoundErr) notFoundErr.style.display = 'none';
+      activeCustomer = customer;
+
+      // Increment visit strictly once on sign-in
+      activeCustomer = recordVisit(activeCustomer);
+
+      var label = displayName(activeCustomer);
+      addEvent(label, 'Signed in — visit #' + activeCustomer.visits, 'signin');
+      deviceShow('Welcome Back VIP', label, 'Visit #' + activeCustomer.visits + ' Logged', 'signin');
+
+      // Progressive profile routing with independent 3-visit cooldowns
+      var needsProfile = !activeCustomer.profilePrompt.completed;
+      var profileSuppressed = false;
+      if(needsProfile && activeCustomer.profilePrompt.remindAfterVisit !== null){
+        if(activeCustomer.visits < activeCustomer.profilePrompt.remindAfterVisit){
+          profileSuppressed = true;
+        }
+      }
+
+      var needsBirthday = activeCustomer.profilePrompt.completed && !activeCustomer.birthdayPrompt.completed;
+      var birthdaySuppressed = false;
+      if(needsBirthday && activeCustomer.birthdayPrompt.remindAfterVisit !== null){
+        if(activeCustomer.visits < activeCustomer.birthdayPrompt.remindAfterVisit){
+          birthdaySuppressed = true;
+        }
+      }
+
+      if(needsProfile && !profileSuppressed){
+        var greeting = activeCustomer.name
+          ? ('Welcome back, ' + activeCustomer.name.split(' ')[0] + '!')
+          : 'Welcome Back!';
+        var pGreet = document.getElementById('promoGreeting');
+        if(pGreet) pGreet.textContent = greeting;
+        showFace(6, 3);
+
+      } else if(needsBirthday && !birthdaySuppressed){
+        var bdayName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+        var bGreet = document.getElementById('bdayGreeting');
+        if(bGreet) bGreet.textContent = bdayName ? ('Hey ' + bdayName + ', Help Us Celebrate You!') : 'Help Us Celebrate You';
+        var bIn = document.getElementById('bdayInput');
+        if(bIn) bIn.value = '';
+        showFace(13, 3); // Face 13 is dedicated Birthday screen
+
+      } else {
+        showWelcomeBack(3);
+      }
+    });
+  }
+
+  function showWelcomeBack(dot){
+    if(!activeCustomer) return;
+    var label = activeCustomer.name
+      ? activeCustomer.name.split(' ')[0]
+      : 'VIP Member';
+    var wName = document.getElementById('welcomeName');
+    var vNum  = document.getElementById('visitNum');
+    if(wName) wName.textContent = label;
+    if(vNum)  vNum.textContent  = activeCustomer.visits;
+    showFace(5, dot);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 5: WELCOME BACK TERMINAL → BACK TO START
+  // ═══════════════════════════════════════════════════════
+
+  var bts5 = document.getElementById('backToStart5');
+  if(bts5){
+    bts5.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 6: PROFILE COMPLETION INTRO
+  // ═══════════════════════════════════════════════════════
+
+  var promoYesBtn = document.getElementById('promoYesBtn');
+  if(promoYesBtn){
+    promoYesBtn.addEventListener('click', function(){
+      activeCustomer = updateCustomer(activeCustomer, {
+        promotionDetails: { offered: true, accepted: true }
+      });
+
+      var pName  = document.getElementById('promoName');
+      var pEmail = document.getElementById('promoEmail');
+      if(pName)  pName.value  = activeCustomer.name || '';
+      if(pEmail) pEmail.value = activeCustomer.email || '';
+      clearFieldError(document.getElementById('promoNameErr'));
+      clearFieldError(document.getElementById('promoEmailErr'));
+      showFace(7, 4);
+    });
+  }
+
+  var promoNoBtn = document.getElementById('promoNoBtn');
+  if(promoNoBtn){
+    promoNoBtn.addEventListener('click', function(){
+      var skippedVisit = activeCustomer.visits;
+      var remindVisit  = skippedVisit + PROMPT_COOLDOWN_VISITS;
+      activeCustomer.profilePrompt = {
+        completed: false,
+        skippedAtVisit: skippedVisit,
+        remindAfterVisit: remindVisit
+      };
+      activeCustomer = updateCustomer(activeCustomer, {
+        profilePrompt: activeCustomer.profilePrompt,
+        promotionDetails: { offered: true, accepted: false }
+      });
+      addEvent(displayName(activeCustomer), 'Deferred profile info (remind after visit #' + remindVisit + ')', 'promo');
+      showWelcomeBack(4);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 7: NAME & EMAIL FORM
+  // ═══════════════════════════════════════════════════════
+
+  var submitPromoBtn = document.getElementById('submitPromoBtn');
+  if(submitPromoBtn){
+    submitPromoBtn.addEventListener('click', function(){
+      var name     = document.getElementById('promoName').value.trim();
+      var email    = document.getElementById('promoEmail').value.trim();
+      var nameErr  = document.getElementById('promoNameErr');
+      var emailErr = document.getElementById('promoEmailErr');
+
+      var valid = true;
+
+      if(!validateName(name)){
+        showFieldError(nameErr, true);
+        valid = false;
+      } else {
+        clearFieldError(nameErr);
+      }
+
+      if(!validateEmail(email)){
+        showFieldError(emailErr, true);
+        valid = false;
+      } else {
+        clearFieldError(emailErr);
+      }
+
+      if(!valid) return;
+
+      activeCustomer.profilePrompt = {
+        completed: true,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+
+      activeCustomer = updateCustomer(activeCustomer, {
+        name: name,
+        email: email,
+        profileStage: 'CONTACT_DETAILS_COMPLETED',
+        profilePrompt: activeCustomer.profilePrompt,
+        promotionDetails: { offered: true, accepted: true }
+      });
+
+      var firstName = name.split(' ')[0];
+      addEvent(firstName, 'Completed profile details', 'promo');
+      deviceShow('Profile Updated', firstName, 'Profile Linked · Visit #' + activeCustomer.visits, 'promo');
+
+      showFace(8, 5);
+    });
+  }
+
+  var offerDoneBtn = document.getElementById('offerDoneBtn');
+  if(offerDoneBtn){
+    offerDoneBtn.addEventListener('click', function(){
+      showWelcomeBack(6);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 13 & 14: BIRTHDAY DETAILS (PRESERVED)
+  // ═══════════════════════════════════════════════════════
+
+  var bdaySubmitBtn = document.getElementById('bdaySubmitBtn');
+  if(bdaySubmitBtn){
+    bdaySubmitBtn.addEventListener('click', function(){
+      var bday = document.getElementById('bdayInput').value;
+
+      if(!bday){
+        showWelcomeBack(4);
+        return;
+      }
+
+      activeCustomer.birthdayPrompt = {
+        completed: true,
+        skippedAtVisit: null,
+        remindAfterVisit: null
+      };
+
+      activeCustomer = updateCustomer(activeCustomer, {
+        birthday: bday,
+        profileStage: 'ADDITIONAL_DETAILS_COMPLETED',
+        birthdayPrompt: activeCustomer.birthdayPrompt
+      });
+
+      var label = displayName(activeCustomer);
+      addEvent(label, 'Birthday saved — profile completed', 'profile');
+      deviceShow('Profile Completed', label, 'Birthday Saved · Visit #' + activeCustomer.visits, 'profile');
+
+      var firstName = activeCustomer.name ? activeCustomer.name.split(' ')[0] : '';
+      var bMsg = document.getElementById('bdaySuccessMsg');
+      if(bMsg){
+        bMsg.textContent = firstName
+          ? ('Thank you, ' + firstName + "! We'll make your birthday extra special.")
+          : "Thank you! We'll make your next visit extra special.";
+      }
+
+      showFace(14, 4);
+    });
+  }
+
+  var bdaySkipBtn = document.getElementById('bdaySkipBtn');
+  if(bdaySkipBtn){
+    bdaySkipBtn.addEventListener('click', function(){
+      var skippedVisit = activeCustomer.visits;
+      var remindVisit  = skippedVisit + PROMPT_COOLDOWN_VISITS;
+      activeCustomer.birthdayPrompt = {
+        completed: false,
+        skippedAtVisit: skippedVisit,
+        remindAfterVisit: remindVisit
+      };
+      activeCustomer = updateCustomer(activeCustomer, {
+        birthdayPrompt: activeCustomer.birthdayPrompt
+      });
+      addEvent(displayName(activeCustomer), 'Deferred birthday info (remind after visit #' + remindVisit + ')', 'profile');
+      showWelcomeBack(4);
+    });
+  }
+
+  var bdayDoneBtn = document.getElementById('bdayDoneBtn');
+  if(bdayDoneBtn){
+    bdayDoneBtn.addEventListener('click', function(){
+      showWelcomeBack(5);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // RESET ALL DATA
+  // ═══════════════════════════════════════════════════════
+
+  var resetBtn = document.getElementById('resetBtn');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Reset all customer records and event audit log? This cannot be undone.')){
+        localStorage.removeItem(STORAGE_CUSTOMERS);
+        localStorage.removeItem(STORAGE_EVENTS);
+        activeCustomer = null;
+        renderLog();
+        deviceIdle();
+        showFace(0, 0);
+      }
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // SOUND SYNTHESIZER
+  // ═══════════════════════════════════════════════════════
+
+  var SoundFX = (function(){
+    var audioCtx = null;
+    var isMuted = true;
+
+    function initCtx(){
+      if(!audioCtx && (window.AudioContext || window.webkitAudioContext)){
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e){}
+      }
+      if(audioCtx && audioCtx.state === 'suspended'){
+        audioCtx.resume();
+      }
+    }
+
+    function playTick(){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(620, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.035);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.035);
+      } catch(e){}
+    }
+
+    function playReelStop(){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(170, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e){}
+    }
+
+    function playWinFanfare(tier){
+      if(isMuted) return;
+      initCtx();
+      if(!audioCtx) return;
+      try {
+        var now = audioCtx.currentTime;
+        var notes = (tier === 'MEGA_JACKPOT' || tier === 'JACKPOT')
+          ? [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98]
+          : [523.25, 659.25, 783.99];
+        var noteLen = 0.12;
+        notes.forEach(function(freq, i){
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * noteLen);
+          gain.gain.setValueAtTime(0.12, now + i * noteLen);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i + 1) * noteLen + 0.1);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * noteLen);
+          osc.stop(now + (i + 1) * noteLen + 0.1);
+        });
+      } catch(e){}
+    }
+
+    return {
+      init: initCtx,
+      tick: playTick,
+      stop: playReelStop,
+      win: playWinFanfare,
+      toggleMute: function(){
+        isMuted = !isMuted;
+        initCtx();
+        return isMuted;
+      },
+      isMuted: function(){ return isMuted; }
+    };
+  })();
+
+
+  // ═══════════════════════════════════════════════════════
+  // REWARD ENGINE: STRICTLY MUTUALLY EXCLUSIVE REWARD
+  // A CUSTOMER RECEIVES EITHER A STAMP OR A GIFT — NEVER BOTH!
+  // ═══════════════════════════════════════════════════════
+
+  var SYMBOLS = ['7', '♥', '♣', '♠', '♦'];
+  var NON_SEVEN_SUITS = ['♥', '♣', '♠', '♦'];
+
+  function getRandomElement(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function pickRewardTier(){
+    var r = Math.random();
+    if(r < 0.005) return 'MEGA_JACKPOT'; // 0.5%
+    if(r < 0.005 + 0.015) return 'JACKPOT'; // 1.5%
+    if(r < 0.005 + 0.015 + 0.15) return 'MEDIUM'; // 15%
+    return 'SMALL'; // 83%
+  }
+
+  function generateSymbolsForTier(tier){
+    if(tier === 'MEGA_JACKPOT'){
+      return ['7', '7', '7'];
+    }
+    if(tier === 'JACKPOT'){
+      var suit = getRandomElement(NON_SEVEN_SUITS);
+      return [suit, suit, suit];
+    }
+    if(tier === 'MEDIUM'){
+      var pairSymbol = getRandomElement(['7', '♥']);
+      var otherSymbols = SYMBOLS.filter(function(s){ return s !== pairSymbol; });
+      var odd = getRandomElement(otherSymbols);
+      var layouts = [
+        [pairSymbol, pairSymbol, odd],
+        [odd, pairSymbol, pairSymbol],
+        [pairSymbol, odd, pairSymbol]
+      ];
+      return getRandomElement(layouts);
+    }
+    // SMALL
+    if(Math.random() < 0.65){
+      var lowPair = getRandomElement(['♣', '♠', '♦']);
+      var rest = SYMBOLS.filter(function(s){ return s !== lowPair; });
+      var oddS = getRandomElement(rest);
+      var pos = [
+        [lowPair, lowPair, oddS],
+        [oddS, lowPair, lowPair],
+        [lowPair, oddS, lowPair]
+      ];
+      return getRandomElement(pos);
+    } else {
+      var shuffled = SYMBOLS.slice().sort(function(){ return 0.5 - Math.random(); });
+      return [shuffled[0], shuffled[1], shuffled[2]];
+    }
+  }
+
+  function getSymbolHtml(sym){
+    if(sym === '7') return '<span class="sym-7">7</span>';
+    if(sym === '♥') return '<span class="sym-heart">♥</span>';
+    if(sym === '♣') return '<span class="sym-clover">♣</span>';
+    if(sym === '♠') return '<span class="sym-spade">♠</span>';
+    if(sym === '♦') return '<span class="sym-diamond">♦</span>';
+    return sym;
+  }
+
+  // Mutually Exclusive Single Reward Generator
+  function pickSingleRewardOutcome(){
+    var tier = pickRewardTier();
+    var symbols = generateSymbolsForTier(tier);
+    var outcome = null;
+
+    if(tier === 'SMALL'){
+      // 83% total probability: 50% chance of Option A (Stamp) vs Option B (Gift)
+      var isStamp = Math.random() < 0.5;
+      if(isStamp){
+        outcome = {
+          rewardCategory: 'SMALL',
+          rewardType: 'STAMP',
+          stampColor: 'GREEN',
+          stampCount: 1,
+          gift: null,
+          label: 'SMALL REWARD (STAMP)',
+          heading: 'Congratulations!',
+          subheading: 'You won a loyalty stamp!',
+          symbols: symbols,
+          medallionIcon: '🟢'
+        };
+      } else {
+        var smallGifts = [
+          { name: 'Extra Coffee Powder & Roast Bag', desc: 'Freshly ground complimentary sample pack of house roast.' },
+          { name: 'Artisan Flavor Syrup Shot', desc: 'Add Madagascar Vanilla or Salted Caramel to your beverage.' },
+          { name: 'Gourmet Dark Chocolate Treat', desc: 'Handcrafted mini dark chocolate square with your visit.' }
+        ];
+        var g = getRandomElement(smallGifts);
+        outcome = {
+          rewardCategory: 'SMALL',
+          rewardType: 'GIFT',
+          stampColor: null,
+          stampCount: 0,
+          gift: g,
+          label: 'SMALL REWARD (GIFT)',
+          heading: 'Congratulations!',
+          subheading: 'You won a complimentary gift!',
+          symbols: symbols,
+          medallionIcon: '☕'
+        };
+      }
+
+    } else if(tier === 'MEDIUM'){
+      // 15% total probability: 50% chance of Option A (Stamp) vs Option B (Gift)
+      var isStampM = Math.random() < 0.5;
+      if(isStampM){
+        outcome = {
+          rewardCategory: 'MEDIUM',
+          rewardType: 'STAMP',
+          stampColor: 'BLUE',
+          stampCount: 1,
+          gift: null,
+          label: 'MEDIUM REWARD (STAMP)',
+          heading: 'Great Win!',
+          subheading: 'You won a blue loyalty stamp!',
+          symbols: symbols,
+          medallionIcon: '🔵'
+        };
+      } else {
+        var medGifts = [
+          { name: 'Complimentary Size Upgrade', desc: 'Order any regular beverage and enjoy a large size for free!' },
+          { name: 'Free Oat or Specialty Milk Upgrade', desc: 'Upgrade your latte or cappuccino with dairy-free artisan milk.' }
+        ];
+        var gm = getRandomElement(medGifts);
+        outcome = {
+          rewardCategory: 'MEDIUM',
+          rewardType: 'GIFT',
+          stampColor: null,
+          stampCount: 0,
+          gift: gm,
+          label: 'MEDIUM REWARD (GIFT)',
+          heading: 'Great Win!',
+          subheading: 'You won a special upgrade gift!',
+          symbols: symbols,
+          medallionIcon: '✨'
+        };
+      }
+
+    } else if(tier === 'JACKPOT'){
+      // 1.5% probability: Jackpot Gift
+      var jackpotGifts = [
+        { name: 'Complimentary Single-Origin Pour Over', desc: 'Craft brewed by our head barista for your visit.' },
+        { name: 'Fresh French Bakery Pastry of the Day', desc: 'Pair your favorite coffee with freshly baked artisan pastry.' }
+      ];
+      var gj = getRandomElement(jackpotGifts);
+      outcome = {
+        rewardCategory: 'JACKPOT',
+        rewardType: 'GIFT',
+        stampColor: null,
+        stampCount: 0,
+        gift: gj,
+        label: 'JACKPOT REWARD (GIFT)',
+        heading: 'Jackpot!',
+        subheading: 'Fantastic! You won a premium gift!',
+        symbols: symbols,
+        medallionIcon: '🏆'
+      };
+
+    } else { // MEGA_JACKPOT (0.5%)
+      var megaGifts = [
+        { name: 'Buy One Get One VIP Pass', desc: 'Enjoy any signature coffee on the house when you bring a guest!' },
+        { name: 'PROOF Deluxe Coffee Gift Hamper', desc: 'Artisan beans, ceramic mug & premium travel tumbler.' }
+      ];
+      var gmj = getRandomElement(megaGifts);
+      outcome = {
+        rewardCategory: 'MEGA_JACKPOT',
+        rewardType: 'GIFT',
+        stampColor: null,
+        stampCount: 0,
+        gift: gmj,
+        label: 'MEGA JACKPOT (GIFT)',
+        heading: 'MEGA JACKPOT!',
+        subheading: "Unbelievable! You've won our grand reward!",
+        symbols: symbols,
+        medallionIcon: '👑'
+      };
+    }
+
+    outcome.spinId = 'spin-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+    outcome.createdAt = new Date().toISOString();
+    return outcome;
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // REEL MANAGEMENT & ATTRACT STATE
+  // ═══════════════════════════════════════════════════════
+
+  var REEL_ITEM_H = 44;
+  var REEL_WIN_H  = 102;
+  var isSpinning  = false;
+
+  function calcTranslateY(index){
+    return -(index * REEL_ITEM_H - (REEL_WIN_H - REEL_ITEM_H) / 2);
+  }
+
+  function renderReelStrip(stripEl, symbolList){
+    if(!stripEl) return;
+    var htmlStr = '';
+    for(var i = 0; i < symbolList.length; i++){
+      htmlStr += '<div class="reel-sym-card">' + getSymbolHtml(symbolList[i]) + '</div>';
+    }
+    stripEl.innerHTML = htmlStr;
+  }
+
+  function resetReelsToAttract(){
+    var initList1 = ['♥', '7', '♠'];
+    var initList2 = ['♣', '7', '♦'];
+    var initList3 = ['♦', '7', '♥'];
+
+    var s1 = document.getElementById('reelStrip1');
+    var s2 = document.getElementById('reelStrip2');
+    var s3 = document.getElementById('reelStrip3');
+
+    if(!s1 || !s2 || !s3) return;
+
+    [s1, s2, s3].forEach(function(strip){
+      strip.style.transition = 'none';
+      strip.style.transform = 'translateY(' + calcTranslateY(1) + 'px)';
+    });
+
+    renderReelStrip(s1, initList1);
+    renderReelStrip(s2, initList2);
+    renderReelStrip(s3, initList3);
+
+    var cabinet = document.getElementById('slotMachineCabinet');
+    if(cabinet) {
+      cabinet.classList.remove('spinning');
+      cabinet.classList.remove('celebrating');
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 9: PROOF LOYALTY WALLET RENDERING & REDEMPTION
+  // ═══════════════════════════════════════════════════════
+
+  function renderFace9LoyaltyWallet(){
+    if(!activeCustomer) return;
+    var isRegistered = activeCustomer.googleWallet && activeCustomer.googleWallet.registered;
+
+    // Google Wallet Mock Action Box
+    var actionBox = document.getElementById('walletRegActionBox');
+    var headline  = document.getElementById('walletRegHeadline');
+    var desc      = document.getElementById('walletRegDesc');
+    var actBtn    = document.getElementById('activateGoogleWalletBtn');
+    var passMeta  = document.getElementById('walletPassMeta');
+    var chipId    = document.getElementById('walletPassChipId');
+
+    if(isRegistered){
+      if(actionBox) actionBox.classList.add('registered');
+      if(headline) headline.textContent = '✓ Google Wallet Pass Active';
+      if(desc) desc.textContent = 'Your digital loyalty pass is saved to Google Wallet (mock simulation). Ready to play!';
+      if(actBtn) actBtn.style.display = 'none';
+      if(passMeta) passMeta.style.display = 'flex';
+      if(chipId) chipId.textContent = 'PASS ID: ' + (activeCustomer.googleWallet.passId || 'GW-PROOF-PASS');
+    } else {
+      if(actionBox) actionBox.classList.remove('registered');
+      if(headline) headline.textContent = 'Google Wallet Registration';
+      if(desc) desc.textContent = 'Register your PROOF pass to Google Wallet (simulated demo) to unlock Spin & Win!';
+      if(actBtn){
+        actBtn.style.display = 'inline-flex';
+        actBtn.disabled = false;
+        var actBtnTxt = document.getElementById('activateWalletBtnText');
+        if(actBtnTxt) actBtnTxt.textContent = 'Register in Google Wallet';
+      }
+      if(passMeta) passMeta.style.display = 'none';
+    }
+
+    // 3D Green Stamp Collection Card
+    var greenCount = (activeCustomer.stampWallet && activeCustomer.stampWallet.green) || 0;
+    var gBal = document.getElementById('face9GreenBalance');
+    var gProg = document.getElementById('face9GreenProgress');
+    var gBanner = document.getElementById('face9GreenRewardBanner');
+    var gRedeem = document.getElementById('face9RedeemGreenBtn');
+
+    if(gBal) gBal.textContent = greenCount + ' / 10 Green Stamps';
+    var gPct = Math.min(100, Math.round((greenCount / 10) * 100));
+    if(gProg) gProg.style.width = gPct + '%';
+
+    if(greenCount >= 10){
+      if(gBanner) gBanner.style.display = 'block';
+      if(gRedeem){
+        gRedeem.style.display = 'block';
+        gRedeem.disabled = false;
+      }
+    } else {
+      if(gBanner) gBanner.style.display = 'none';
+      if(gRedeem){
+        gRedeem.style.display = 'none';
+        gRedeem.disabled = true;
+      }
+    }
+
+    // 3D Blue Stamp Collection Card
+    var blueCount = (activeCustomer.stampWallet && activeCustomer.stampWallet.blue) || 0;
+    var bBal = document.getElementById('face9BlueBalance');
+    var bProg = document.getElementById('face9BlueProgress');
+    var bBanner = document.getElementById('face9BlueRewardBanner');
+    var bRedeem = document.getElementById('face9RedeemBlueBtn');
+
+    if(bBal) bBal.textContent = blueCount + ' / 5 Blue Stamps';
+    var bPct = Math.min(100, Math.round((blueCount / 5) * 100));
+    if(bProg) bProg.style.width = bPct + '%';
+
+    if(blueCount >= 5){
+      if(bBanner) bBanner.style.display = 'block';
+      if(bRedeem){
+        bRedeem.style.display = 'block';
+        bRedeem.disabled = false;
+      }
+    } else {
+      if(bBanner) bBanner.style.display = 'none';
+      if(bRedeem){
+        bRedeem.style.display = 'none';
+        bRedeem.disabled = true;
+      }
+    }
+  }
+
+  function handleActivateGoogleWallet(){
+    if(!activeCustomer) return;
+    var btn = document.getElementById('activateGoogleWalletBtn');
+    var btnTxt = document.getElementById('activateWalletBtnText');
+
+    if(activeCustomer.googleWallet && activeCustomer.googleWallet.registered){
+      alert('PROOF Loyalty Pass is already registered in Google Wallet (Simulation).\nPass ID: ' + activeCustomer.googleWallet.passId);
+      return;
+    }
+
+    if(btnTxt) btnTxt.textContent = 'Registering Pass in Google Wallet...';
+    if(btn) btn.disabled = true;
+
+    setTimeout(function(){
+      var passId = 'GW-PROOF-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      activeCustomer.googleWallet = {
+        registered: true,
+        passId: passId,
+        registeredAt: new Date().toISOString()
+      };
+      activeCustomer = updateCustomer(activeCustomer, {
+        googleWallet: activeCustomer.googleWallet
+      });
+
+      addEvent(displayName(activeCustomer), 'Registered loyalty pass in Google Wallet (' + passId + ')', 'promo');
+
+      renderFace9LoyaltyWallet();
+      updateSpinButtonState();
+      SoundFX.win('JACKPOT');
+      alert('✓ Success! Your PROOF Loyalty Pass has been registered to Google Wallet.\nSpin & Win is now unlocked!');
+    }, 600);
+  }
+
+  function redeemFace9StampReward(type){
+    if(!activeCustomer || !activeCustomer.stampWallet) return;
+
+    var custName = displayName(activeCustomer);
+    var cost = (type === 'green') ? 10 : 5;
+    var current = (type === 'green') ? activeCustomer.stampWallet.green : activeCustomer.stampWallet.blue;
+
+    if(current < cost){
+      alert('You need ' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' Stamps to redeem your reward. Current balance: ' + current);
+      return;
+    }
+
+    if(type === 'green'){
+      activeCustomer.stampWallet.green -= cost;
+    } else {
+      activeCustomer.stampWallet.blue -= cost;
+    }
+
+    activeCustomer.stamps = {
+      green: activeCustomer.stampWallet.green,
+      blue:  activeCustomer.stampWallet.blue
+    };
+
+    var record = {
+      redemptionId: 'rdm-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+      rewardType: (type === 'green') ? 'GREEN_STAMP_REWARD' : 'BLUE_STAMP_REWARD',
+      stampsDeducted: cost,
+      redeemedAt: new Date().toISOString()
+    };
+    if(!Array.isArray(activeCustomer.redemptionHistory)) activeCustomer.redemptionHistory = [];
+    activeCustomer.redemptionHistory.unshift(record);
+
+    activeCustomer = updateCustomer(activeCustomer, {
+      stampWallet: activeCustomer.stampWallet,
+      stamps: activeCustomer.stamps,
+      redemptionHistory: activeCustomer.redemptionHistory
+    });
+
+    addEvent(custName, 'Redeemed ' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' Stamps for Loyalty Reward', 'promo');
+
+    if(deviceScreen){
+      deviceScreen.classList.add('st-event');
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #2ecc71 60%, #1e8449 100%)">🎁</div>' +
+        '<div class="d-label">STAMP REWARD REDEEMED</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-weight:600;margin:6px 0">Loyalty Reward Unlocked</div>' +
+        '<div class="d-sub" style="font-size:11px;color:#fff">' + cost + ' ' + (type === 'green' ? 'Green' : 'Blue') + ' Stamps Deducted</div>' +
+        '<div class="d-tag promo">CLAIM AT COUNTER</div>';
+    }
+
+    SoundFX.win('JACKPOT');
+    renderFace9LoyaltyWallet();
+    alert('🎉 Congratulations! You redeemed ' + cost + ' stamps for your loyalty reward.\nPlease claim it from the barista at the counter!');
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FACE 11: SPIN & WIN STATE (MANDATORY WALLET CHECK)
+  // ═══════════════════════════════════════════════════════
+
+  function updateSpinButtonState(){
+    var spinBtn = document.getElementById('spinActionBtn');
+    var spinBtnText = document.getElementById('spinActionBtnText');
+    var reminder = document.getElementById('walletReqReminder');
+    var gwBtn = document.getElementById('googleWalletBtn');
+    var gwBtnText = document.getElementById('googleWalletBtnText');
+
+    var isRegistered = activeCustomer && activeCustomer.googleWallet && activeCustomer.googleWallet.registered;
+
+    if(!isRegistered){
+      if(spinBtn){
+        spinBtn.classList.add('locked');
+      }
+      if(spinBtnText) spinBtnText.innerHTML = '🔒 SPIN &amp; WIN (WALLET REQUIRED)';
+      if(gwBtn){
+        gwBtn.classList.remove('added');
+        gwBtn.classList.add('needs-reg');
+      }
+      if(gwBtnText) gwBtnText.textContent = 'Add to Google Wallet';
+    } else {
+      if(spinBtn){
+        spinBtn.classList.remove('locked');
+      }
+      if(spinBtnText) spinBtnText.innerHTML = 'SPIN &amp; WIN';
+      if(reminder) reminder.style.display = 'none';
+      if(gwBtn){
+        gwBtn.classList.add('added');
+        gwBtn.classList.remove('needs-reg');
+      }
+      if(gwBtnText) gwBtnText.textContent = '✓ Pass in Google Wallet · View Stamps';
+    }
+  }
+
+  function openSpinAndWin(){
+    updateSpinButtonState();
+    resetReelsToAttract();
+    var spinBtn = document.getElementById('spinActionBtn');
+    if(spinBtn){
+      spinBtn.classList.remove('spinning');
+    }
+    isSpinning = false;
+    showFace(11, 4);
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // COUNTER DISPLAY SPIN SYNCHRONIZATION
+  // ═══════════════════════════════════════════════════════
+
+  function deviceShowSpinning(custName){
+    if(!deviceScreen) return;
+    deviceScreen.classList.add('st-event');
+    deviceScreen.innerHTML =
+      '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #f1c40f 60%, #b7950b 100%)">🎰</div>' +
+      '<div class="d-label">LOYALTY SPIN IN PROGRESS</div>' +
+      '<div class="d-name">' + escHtml(custName) + '</div>' +
+      '<div class="d-sub" style="font-size:16px;letter-spacing:6px;margin:8px 0;animation:pulse-text 0.5s infinite">⟳ ⟳ ⟳</div>' +
+      '<div class="d-tag promo">SYNCHRONIZING REELS</div>';
+  }
+
+  function deviceShowReward(custName, symbols, outcome){
+    if(!deviceScreen) return;
+    deviceScreen.classList.add('st-event');
+    var symStr = symbols.join(' · ');
+
+    if(outcome.rewardType === 'STAMP'){
+      var stampName = (outcome.stampColor === 'GREEN') ? '+1 Green Loyalty Stamp' : '+1 Blue Loyalty Stamp';
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #2ecc71 60%, #1e8449 100%)">🟢</div>' +
+        '<div class="d-label">LOYALTY STAMP WON</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="font-size:16px;letter-spacing:4px;color:#fff;margin:4px 0">[' + symStr + ']</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-weight:600">' + escHtml(stampName) + '</div>' +
+        '<div class="d-sub" style="font-size:11px;color:#2ecc71;margin-top:2px">Added to Stamp Collection</div>' +
+        '<div class="d-tag signin">STAMP CREDITED</div>';
+    } else {
+      deviceScreen.innerHTML =
+        '<div class="d-icon" style="background:radial-gradient(circle at 35% 35%, #fff 0%, #d4af37 60%, #7d5e23 100%)">🎁</div>' +
+        '<div class="d-label">COMPLIMENTARY GIFT WON</div>' +
+        '<div class="d-name">' + escHtml(custName) + '</div>' +
+        '<div class="d-sub" style="font-size:16px;letter-spacing:4px;color:#fff;margin:4px 0">[' + symStr + ']</div>' +
+        '<div class="d-sub" style="color:var(--gold-primary);font-weight:600">' + escHtml(outcome.gift.name) + '</div>' +
+        '<div class="d-sub" style="font-size:11px;color:#fff;margin-top:2px">Show Pass at Checkout</div>' +
+        '<div class="d-tag promo">CLAIM AT COUNTER</div>';
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // SPIN EXECUTION (STRICTLY MUTUALLY EXCLUSIVE REWARD)
+  // ═══════════════════════════════════════════════════════
+
+  function executeSpin(){
+    if(isSpinning) return;
+
+    // Check mandatory wallet registration
+    if(!activeCustomer || !activeCustomer.googleWallet || !activeCustomer.googleWallet.registered){
+      var reminder = document.getElementById('walletReqReminder');
+      if(reminder){
+        reminder.style.display = 'flex';
+        reminder.classList.remove('shake');
+        void reminder.offsetWidth;
+        reminder.classList.add('shake');
+      }
+      var gwBtn = document.getElementById('googleWalletBtn');
+      if(gwBtn) gwBtn.classList.add('needs-reg');
+      return;
+    }
+
+    isSpinning = true;
+
+    var spinBtn = document.getElementById('spinActionBtn');
+    var spinBtnText = document.getElementById('spinActionBtnText');
+    if(spinBtn){
+      spinBtn.disabled = true;
+      spinBtn.classList.add('spinning');
+    }
+    if(spinBtnText) spinBtnText.textContent = 'SPINNING...';
+
+    var cabinet = document.getElementById('slotMachineCabinet');
+    if(cabinet) cabinet.classList.add('spinning');
+
+    // 1. Determine Mutually Exclusive Reward
+    var outcome = pickSingleRewardOutcome();
+    var symbols = outcome.symbols;
+    var custName = activeCustomer ? displayName(activeCustomer) : 'Lucky Guest';
+
+    // 2. Synchronize Counter Screen
+    deviceShowSpinning(custName);
+
+    // 3. Audio tick interval
+    var tickTimer = setInterval(function(){
+      SoundFX.tick();
+    }, 85);
+
+    // 4. Construct strips ending on target symbols
+    var s1 = document.getElementById('reelStrip1');
+    var s2 = document.getElementById('reelStrip2');
+    var s3 = document.getElementById('reelStrip3');
+
+    var targetIdx1 = 20;
+    var targetIdx2 = 24;
+    var targetIdx3 = 28;
+
+    function buildSpinStrip(targetSym, count){
+      var list = [];
+      for(var i = 0; i < count; i++){
+        list.push(getRandomElement(SYMBOLS));
+      }
+      list[count - 2] = targetSym;
+      list[count - 1] = getRandomElement(SYMBOLS);
+      return list;
+    }
+
+    renderReelStrip(s1, buildSpinStrip(symbols[0], targetIdx1 + 2));
+    renderReelStrip(s2, buildSpinStrip(symbols[1], targetIdx2 + 2));
+    renderReelStrip(s3, buildSpinStrip(symbols[2], targetIdx3 + 2));
+
+    [s1, s2, s3].forEach(function(strip){
+      if(!strip) return;
+      strip.style.transition = 'none';
+      strip.style.transform = 'translateY(' + calcTranslateY(0) + 'px)';
+    });
+
+    if(s1) void s1.offsetWidth; // Force reflow
+
+    // 5. Staggered Deceleration
+    if(s1){
+      s1.style.transition = 'transform 1.5s cubic-bezier(0.12, 0.8, 0.2, 1.04)';
+      s1.style.transform  = 'translateY(' + calcTranslateY(targetIdx1) + 'px)';
+    }
+    if(s2){
+      s2.style.transition = 'transform 2.1s cubic-bezier(0.12, 0.8, 0.2, 1.04)';
+      s2.style.transform  = 'translateY(' + calcTranslateY(targetIdx2) + 'px)';
+    }
+    if(s3){
+      s3.style.transition = 'transform 2.7s cubic-bezier(0.12, 0.8, 0.2, 1.04)';
+      s3.style.transform  = 'translateY(' + calcTranslateY(targetIdx3) + 'px)';
+    }
+
+    setTimeout(function(){ SoundFX.stop(); }, 1500);
+    setTimeout(function(){ SoundFX.stop(); }, 2100);
+
+    setTimeout(function(){
+      clearInterval(tickTimer);
+      SoundFX.stop();
+      SoundFX.win(outcome.rewardCategory);
+
+      if(cabinet){
+        cabinet.classList.remove('spinning');
+        cabinet.classList.add('celebrating');
+        setTimeout(function(){
+          cabinet.classList.remove('celebrating');
+        }, 2200);
+      }
+
+      // 6. ATOMIC MUTUALLY EXCLUSIVE UPDATE
+      if(activeCustomer){
+        if(!activeCustomer.stampWallet) activeCustomer.stampWallet = { green: 0, blue: 0 };
+        if(!Array.isArray(activeCustomer.rewardHistory)) activeCustomer.rewardHistory = [];
+
+        // STRICT LOGIC: IF STAMP -> INCREMENT STAMP. IF GIFT -> NO STAMP INCREASE.
+        if(outcome.rewardType === 'STAMP'){
+          if(outcome.stampColor === 'GREEN'){
+            activeCustomer.stampWallet.green = (activeCustomer.stampWallet.green || 0) + outcome.stampCount;
+          } else if(outcome.stampColor === 'BLUE'){
+            activeCustomer.stampWallet.blue = (activeCustomer.stampWallet.blue || 0) + outcome.stampCount;
+          }
+        }
+
+        activeCustomer.stamps = {
+          green: activeCustomer.stampWallet.green,
+          blue:  activeCustomer.stampWallet.blue
+        };
+
+        var rewardRecord = {
+          spinId: outcome.spinId,
+          rewardCategory: outcome.rewardCategory,
+          rewardType: outcome.rewardType,
+          stampColor: outcome.stampColor,
+          stampCount: outcome.stampCount,
+          gift: outcome.gift ? { name: outcome.gift.name, desc: outcome.gift.desc } : null,
+          symbols: outcome.symbols,
+          createdAt: outcome.createdAt
+        };
+        activeCustomer.rewardHistory.unshift(rewardRecord);
+
+        if(!activeCustomer.spin) activeCustomer.spin = {};
+        activeCustomer.spin.available = false;
+        activeCustomer.spin.completed = true;
+
+        activeCustomer = updateCustomer(activeCustomer, {
+          stampWallet: activeCustomer.stampWallet,
+          stamps: activeCustomer.stamps,
+          spin: activeCustomer.spin,
+          rewardHistory: activeCustomer.rewardHistory
+        });
+      }
+
+      // 7. Update Audit Log with Single Reward
+      var eventText = (outcome.rewardType === 'STAMP')
+        ? (outcome.rewardCategory + ' REWARD (STAMP): ' + (outcome.stampColor === 'GREEN' ? '+1 Green Stamp' : '+1 Blue Stamp'))
+        : (outcome.rewardCategory + ' REWARD (GIFT): ' + outcome.gift.name);
+
+      addEvent(
+        custName,
+        'Spin & Win [' + symbols.join(' ') + '] · ' + eventText,
+        outcome.rewardType === 'STAMP' ? 'signin' : 'promo'
+      );
+
+      // 8. Update Counter Screen with Single Reward
+      deviceShowReward(custName, symbols, outcome);
+
+      // 9. Populate Reward Result Screen (Face 12)
+      renderRewardResultScreen(symbols, outcome);
+
+      // 10. Transition smoothly to Face 12
+      setTimeout(function(){
+        showFace(12, 5);
+        isSpinning = false;
+        if(spinBtn){
+          spinBtn.disabled = false;
+          spinBtn.classList.remove('spinning');
+        }
+        if(spinBtnText) spinBtnText.textContent = 'SPIN & WIN';
+      }, 500);
+
+    }, 2750);
+  }
+
+  function renderRewardResultScreen(symbols, outcome){
+    var medIcon   = document.getElementById('resultMedallionIcon');
+    var heading   = document.getElementById('resultTierHeading');
+    var subhead   = document.getElementById('resultTierSubheading');
+    var symRow    = document.getElementById('winningSymbolsRow');
+    var sumWallet = document.getElementById('summaryWalletStamps');
+
+    if(medIcon) medIcon.textContent = outcome.medallionIcon;
+    if(heading) heading.textContent = outcome.heading;
+    if(subhead) subhead.textContent = outcome.subheading;
+
+    if(symRow){
+      symRow.innerHTML =
+        '<span class="win-sym">' + getSymbolHtml(symbols[0]) + '</span>' +
+        '<span class="win-sym">' + getSymbolHtml(symbols[1]) + '</span>' +
+        '<span class="win-sym">' + getSymbolHtml(symbols[2]) + '</span>';
+    }
+
+    var stampRow = document.getElementById('bundleStampRow');
+    var giftRow  = document.getElementById('bundleGiftRow');
+
+    if(outcome.rewardType === 'STAMP'){
+      // Show Stamp Row ONLY
+      if(stampRow) stampRow.style.display = 'flex';
+      if(giftRow)  giftRow.style.display  = 'none';
+
+      var stampIcon  = document.getElementById('bundleStampIcon');
+      var stampTitle = document.getElementById('bundleStampTitle');
+      var stampDesc  = document.getElementById('bundleStampDesc');
+
+      if(outcome.stampColor === 'GREEN'){
+        if(stampIcon)  stampIcon.textContent = '🟢';
+        if(stampTitle) stampTitle.textContent = '+1 Green Loyalty Stamp';
+        if(stampDesc)  stampDesc.textContent  = 'Added to your Green Stamp Collection. Collect 10 to redeem your reward!';
+      } else {
+        if(stampIcon)  stampIcon.textContent = '🔵';
+        if(stampTitle) stampTitle.textContent = '+1 Blue Loyalty Stamp';
+        if(stampDesc)  stampDesc.textContent  = 'Added to your Blue Stamp Collection. Collect 5 to redeem your reward!';
+      }
+    } else {
+      // Show Gift Row ONLY
+      if(stampRow) stampRow.style.display = 'none';
+      if(giftRow)  giftRow.style.display  = 'flex';
+
+      var giftIcon  = document.getElementById('bundleGiftIcon');
+      var giftTitle = document.getElementById('bundleGiftTitle');
+      var giftDesc  = document.getElementById('bundleGiftDesc');
+
+      if(giftIcon)  giftIcon.textContent  = outcome.medallionIcon;
+      if(giftTitle) giftTitle.textContent = outcome.gift.name;
+      if(giftDesc)  giftDesc.textContent  = outcome.gift.desc + ' · Claim at checkout!';
+    }
+
+    var greenTotal = (activeCustomer && activeCustomer.stampWallet) ? activeCustomer.stampWallet.green : 0;
+    var blueTotal  = (activeCustomer && activeCustomer.stampWallet) ? activeCustomer.stampWallet.blue : 0;
+    if(sumWallet){
+      sumWallet.textContent = '🟢 ' + greenTotal + ' Green · 🔵 ' + blueTotal + ' Blue';
+    }
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // EVENT LISTENERS & NAVIGATION
+  // ═══════════════════════════════════════════════════════
+
+  // Launch Spin from Registration Success (Face 3)
+  var startSpinBtn = document.getElementById('startSpinBtn');
+  if(startSpinBtn){
+    startSpinBtn.addEventListener('click', function(){
+      openSpinAndWin();
+    });
+  }
+
+  // Launch Spin from Returning Member (Face 5)
+  var retSpinBtn = document.getElementById('returningSpinBtn');
+  if(retSpinBtn){
+    retSpinBtn.addEventListener('click', function(){
+      openSpinAndWin();
+    });
+  }
+
+  // Spin Action Button
+  var spinActBtn = document.getElementById('spinActionBtn');
+  if(spinActBtn){
+    spinActBtn.addEventListener('click', function(){
+      executeSpin();
+    });
+  }
+
+  // Google Wallet Button (opens Face 9)
+  var gwBtn = document.getElementById('googleWalletBtn');
+  if(gwBtn){
+    gwBtn.addEventListener('click', function(){
+      renderFace9LoyaltyWallet();
+      showFace(9, 4);
+    });
+  }
+
+  // Face 9: Activate Google Wallet Button
+  var activateWalletBtn = document.getElementById('activateGoogleWalletBtn');
+  if(activateWalletBtn){
+    activateWalletBtn.addEventListener('click', function(){
+      handleActivateGoogleWallet();
+    });
+  }
+
+  // Face 9: Continue to Spin & Win
+  var face9ContinueBtn = document.getElementById('face9ContinueToSpinBtn');
+  if(face9ContinueBtn){
+    face9ContinueBtn.addEventListener('click', function(){
+      openSpinAndWin();
+    });
+  }
+
+  // Face 9: Stamp Redemption Buttons
+  var f9RedeemG = document.getElementById('face9RedeemGreenBtn');
+  if(f9RedeemG){
+    f9RedeemG.addEventListener('click', function(){
+      redeemFace9StampReward('green');
+    });
+  }
+
+  var f9RedeemB = document.getElementById('face9RedeemBlueBtn');
+  if(f9RedeemB){
+    f9RedeemB.addEventListener('click', function(){
+      redeemFace9StampReward('blue');
+    });
+  }
+
+  // Sound Toggle Button
+  var soundBtn = document.getElementById('soundToggleBtn');
+  if(soundBtn){
+    soundBtn.addEventListener('click', function(){
+      var muted = SoundFX.toggleMute();
+      soundBtn.textContent = muted ? '🔇' : '🔊';
+    });
+  }
+
+  // Face 12: Claim Reward & Finish Visit
+  var claimBtn = document.getElementById('claimRewardBtn');
+  if(claimBtn){
+    claimBtn.addEventListener('click', function(){
+      deviceIdle();
+      showFace(0, 0);
+    });
+  }
+
+  // Face 12: View Loyalty Pass Button
+  var viewPassRewardBtn = document.getElementById('viewPassFromRewardBtn');
+  if(viewPassRewardBtn){
+    viewPassRewardBtn.addEventListener('click', function(){
+      renderFace9LoyaltyWallet();
+      showFace(9, 4);
+    });
+  }
+
+
+  // ═══════════════════════════════════════════════════════
+  // FUTURE MQTT & ARCHITECTURE PREPARATION INTERFACE
+  // ═══════════════════════════════════════════════════════
+
+  window.ProofSpinEngine = {
+    requestSpin: function(customerId){
+      console.log('[MQTT PREP] spin.requested for:', customerId);
+    },
+    onSpinStarted: function(payload){
+      console.log('[MQTT PREP] spin.started:', payload);
+    },
+    onSpinResult: function(payload){
+      console.log('[MQTT PREP] spin.result:', payload);
+    },
+    onSpinCompleted: function(payload){
+      console.log('[MQTT PREP] spin.completed:', payload);
+    },
+    simulateSpins: function(trials){
+      trials = trials || 10000;
+      var counts = {
+        SMALL_STAMP: 0,
+        SMALL_GIFT: 0,
+        MEDIUM_STAMP: 0,
+        MEDIUM_GIFT: 0,
+        JACKPOT_GIFT: 0,
+        MEGA_JACKPOT_GIFT: 0
+      };
+      for(var i = 0; i < trials; i++){
+        var outcome = pickSingleRewardOutcome();
+        if(outcome.rewardCategory === 'SMALL'){
+          if(outcome.rewardType === 'STAMP') counts.SMALL_STAMP++;
+          else counts.SMALL_GIFT++;
+        } else if(outcome.rewardCategory === 'MEDIUM'){
+          if(outcome.rewardType === 'STAMP') counts.MEDIUM_STAMP++;
+          else counts.MEDIUM_GIFT++;
+        } else if(outcome.rewardCategory === 'JACKPOT'){
+          counts.JACKPOT_GIFT++;
+        } else {
+          counts.MEGA_JACKPOT_GIFT++;
+        }
+      }
+      console.log('--- PROOF EXCLUSIVE SINGLE REWARD MONTE CARLO TEST (' + trials + ' spins) ---');
+      console.table({
+        'SMALL - Stamp (Green)': { count: counts.SMALL_STAMP, pct: (counts.SMALL_STAMP / trials * 100).toFixed(2) + '%' },
+        'SMALL - Gift': { count: counts.SMALL_GIFT, pct: (counts.SMALL_GIFT / trials * 100).toFixed(2) + '%' },
+        'MEDIUM - Stamp (Blue)': { count: counts.MEDIUM_STAMP, pct: (counts.MEDIUM_STAMP / trials * 100).toFixed(2) + '%' },
+        'MEDIUM - Gift': { count: counts.MEDIUM_GIFT, pct: (counts.MEDIUM_GIFT / trials * 100).toFixed(2) + '%' },
+        'JACKPOT - Gift': { count: counts.JACKPOT_GIFT, pct: (counts.JACKPOT_GIFT / trials * 100).toFixed(2) + '%' },
+        'MEGA JACKPOT - Gift': { count: counts.MEGA_JACKPOT_GIFT, pct: (counts.MEGA_JACKPOT_GIFT / trials * 100).toFixed(2) + '%' }
+      });
+      return counts;
+    }
+  };
+
+})();
+</script>
+
+</body>
+</html>
